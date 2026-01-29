@@ -1,0 +1,33 @@
+{
+  "url": "https://developers.google.com/gmail/api/reference/quota",
+  "title": "Gmail API Usage Limits",
+  "retrieved_date": "2026-01-29",
+  "published_date": "2025-12-11",
+  "description": "Complete quota limits and per-method usage costs for Gmail API",
+  "key_concepts": [
+    "quota_units",
+    "rate_limiting",
+    "per_project_limits",
+    "per_user_limits",
+    "method_costs"
+  ],
+  "quota_limits": {
+    "per_project_rate_limit": "1,200,000 quota units per minute",
+    "per_user_rate_limit": "15,000 quota units per user per minute"
+  },
+  "highest_cost_operations": {
+    "drafts.send": 100,
+    "messages.send": 100,
+    "settings.delegates.create": 100,
+    "settings.forwardingAddresses.create": 100,
+    "settings.sendAs.create": 100,
+    "settings.sendAs.update": 100,
+    "settings.sendAs.verify": 100,
+    "settings.updatePop": 100,
+    "watch": 100
+  },
+  "batch_operations": {
+    "messages.batchDelete": 50,
+    "messages.batchModify": 50
+  }
+}

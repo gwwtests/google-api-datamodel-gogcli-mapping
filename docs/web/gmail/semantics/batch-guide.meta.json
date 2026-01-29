@@ -1,0 +1,28 @@
+{
+  "url": "https://developers.google.com/gmail/api/guides/batch",
+  "title": "Batching Requests",
+  "retrieved_date": "2026-01-29",
+  "published_date": "2025-12-11",
+  "description": "Gmail API guide on batching multiple API calls into a single HTTP request for improved performance",
+  "key_concepts": [
+    "batch_requests",
+    "multipart_mixed",
+    "request_limits",
+    "rate_limiting",
+    "execution_order",
+    "content_id",
+    "nested_http_requests"
+  ],
+  "limits_documented": {
+    "max_calls_per_batch": 100,
+    "recommended_max_calls": 50,
+    "note": "Batches count as n requests toward quotas, not 1"
+  },
+  "important_semantics": [
+    "Server may execute batch calls in any order (non-deterministic)",
+    "Batch calls count as separate requests for quota purposes",
+    "All inner requests must go to same Google API",
+    "Full URLs not allowed in batch requests, only paths",
+    "Larger batches (>50) likely to trigger rate limiting"
+  ]
+}
