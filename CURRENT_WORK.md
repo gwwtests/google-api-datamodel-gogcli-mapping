@@ -2,84 +2,74 @@
 
 **Last Updated**: 2025-01-29
 
-## Current Focus: Gmail API Data Model
+## Current Focus: Calendar API Data Model
 
-We are starting with Gmail as it's the most commonly used feature of `gog` and has complex data model questions (messages vs threads, labels, identifiers).
+Gmail research is ~95% complete. Moving to Calendar API.
 
-### Status
+### Gmail Status
 
 ```
-[■■■■■■■■□□] 80% - Gmail API Research (Documentation Phase)
+[■■■■■■■■■□] 95% - Gmail API Research
 ```
 
-### Completed
+**Completed**:
+- [x] Basic API reference archived
+- [x] Deep semantics archived (labels, batch, quotas, delegation, bandwidth)
+- [x] Data model findings synthesized
+- [x] gogcli source analysis (how it handles Gmail data)
+- [x] Identifier semantics documented
 
-- [x] Repository structure created
-- [x] Agent methodology documented (AGENTS.md)
-- [x] Analyzed gogcli source for Gmail API usage
-- [x] Created initial research requests
-- [x] Archived Gmail API official documentation
-  - Messages, Threads, Labels, History references
-  - Sync guide, Push notifications guide
-  - Filtering guide
-- [x] Created comprehensive data model analysis (`docs/gmail-data-model-findings.md`)
-- [x] Updated research requests with findings
+**Remaining** (empirical testing needed):
+- [ ] Verify ID uniqueness across accounts
+- [ ] Document all system label IDs
+- [ ] Test thread splitting behavior
 
-### Key Findings
+**Key Finding**: ID uniqueness scope NOT documented - use composite keys `(userId, messageId)`
 
-**Answered Questions** (12 of 25):
-- Identifiers are immutable (messageId, threadId, labelId)
-- Timestamps are epoch milliseconds in UTC
-- Threading based on References/In-Reply-To headers + Subject
-- History available for ~1 week, monotonically increasing
-- Labels: system vs user types, max 10K user labels
+### Calendar API Status
 
-**Critical Gap** (9 questions need empirical testing):
-- **ID uniqueness scope NOT documented** - we don't know if messageId/threadId are globally unique or per-user
-- Recommendation: Always use composite keys `(userId, messageId)` until verified
+```
+[□□□□□□□□□□] 0% - Calendar API Research (Starting)
+```
+
+**To Research**:
+- [ ] Event data model (times, timezones, attendees)
+- [ ] Calendar IDs and uniqueness
+- [ ] Recurring events (RRULE handling)
+- [ ] Shared calendars and event IDs
+- [ ] Timezone handling (critical!)
+- [ ] Free/busy queries
 
 ### Next Steps
 
-1. [ ] Create test harness to empirically verify:
-   - ID uniqueness across accounts
-   - System label ID consistency
-   - Thread behavior edge cases
+1. Archive Calendar API documentation:
+   - Events reference
+   - Calendars reference
+   - Recurring events guide
+   - Timezone handling
 
-2. [ ] Move to Calendar API research (Phase 2)
+2. Analyze gogcli Calendar commands
+
+3. Document Calendar data model
 
 ### Research Tracking
 
-See: `research/RESEARCH_REQUESTS.md` - 12 completed, 4 partial, 9 need testing
+See: `research/RESEARCH_REQUESTS.md`
 
-### Key Files
+**Gmail**: 13 completed, 3 partial, 9 need testing
+**Calendar**: Not started
 
-* `docs/gmail-data-model-findings.md` - **Main findings document**
+### Key Gmail Files
+
+* `docs/gmail-data-model-findings.md` - Main findings
+* `docs/datamodel/gmail/identifiers.md` - ID semantics
+* `docs/datamodel/gmail/gogcli-data-handling.md` - How gogcli handles data
 * `docs/web/gmail/INDEX.md` - Archive inventory
-* `research/RESEARCH_REQUESTS.md` - Question tracking
-* `research/gogcli-analysis/gmail-api-usage.md` - How gogcli uses Gmail API
+* `docs/web/gmail/semantics/INDEX.md` - Deep semantics inventory
 
 ## How to Resume Work
 
-If starting a new session:
-
 1. Read this file (CURRENT_WORK.md)
-2. Read `docs/gmail-data-model-findings.md` for current understanding
-3. Check `research/RESEARCH_REQUESTS.md` for open questions
-4. Continue from "Next Steps" above
-
-## Quick Context
-
-**gogcli Gmail commands** (from source analysis):
-- `gog gmail search` - Search messages
-- `gog gmail messages` - List messages
-- `gog gmail thread` - View thread
-- `gog gmail get` - Get message details
-- `gog gmail labels` - Manage labels
-- `gog gmail send` - Send email
-- Plus admin commands: filters, forwarding, delegates, vacation, watch
-
-**Multi-Account Recommendation**:
-Always use composite keys until ID uniqueness is verified:
-- Message: `(userId, messageId)`
-- Thread: `(userId, threadId)`
-- Label: `(userId, labelId)`
+2. For Gmail: Read `docs/gmail-data-model-findings.md`
+3. For Calendar: Start with `docs/web/calendar/` (once archived)
+4. Check `research/RESEARCH_REQUESTS.md` for open questions
