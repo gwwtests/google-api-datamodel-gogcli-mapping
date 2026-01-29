@@ -1,0 +1,18 @@
+source_url: "https://developers.google.com/gmail/api/guides/push"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Push Notifications - Gmail API Guide"
+covered_api_calls:
+  - "users.watch"
+  - "users.stop"
+key_concepts:
+  - "push notifications"
+  - "pub/sub integration"
+  - "real-time updates"
+  - "watch requests"
+related_docs:
+  - "sync-guide.md"
+  - "../history/history-reference.md"
+notes: |
+  Guide for receiving real-time notifications about mailbox changes.
+  Uses Google Cloud Pub/Sub for push notifications.
+  Complements incremental sync using historyId.

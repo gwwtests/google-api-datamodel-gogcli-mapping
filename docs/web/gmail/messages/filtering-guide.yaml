@@ -1,0 +1,14 @@
+source_url: "https://developers.google.com/gmail/api/guides/filtering"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Search for Messages - Gmail API Guide"
+covered_api_calls:
+  - "users.messages.list"
+key_concepts:
+  - "search queries"
+  - "message filtering"
+  - "query syntax"
+related_docs:
+  - "messages-reference.md"
+notes: |
+  Guide for searching and filtering messages using Gmail query syntax.
+  Supports filtering by labels, dates, senders, subjects, etc.
