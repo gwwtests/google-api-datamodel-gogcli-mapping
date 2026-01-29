@@ -1,0 +1,50 @@
+# System/shell dotfiles (mounted, not ours)
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.profile
+.ripgreprc
+.zprofile
+.zshrc
+.mcp.json
+
+# IDE and editor (top level)
+.idea/
+.vscode/
+.claude/
+
+# Temporary and cache directories
+tmp/
+cache/
+node_modules/
+__pycache__/
+*.pyc
+
+# Build artifacts
+target/
+build/
+dist/
+out/
+*.o
+*.a
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local configuration (not shared)
+CLAUDE.local.md
+*.local.md
+*.local.yaml
+
+# Logs
+*.log
+logs/
