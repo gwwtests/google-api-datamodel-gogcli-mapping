@@ -1,10 +1,10 @@
 # Current Work
 
-**Last Updated**: 2025-01-29
+**Last Updated**: 2026-01-29
 
 ## Current Focus: Calendar API Data Model
 
-Gmail research is ~95% complete. Moving to Calendar API.
+Gmail research is ~95% complete. Calendar API core research now ~85% complete.
 
 ### Gmail Status
 
@@ -29,35 +29,55 @@ Gmail research is ~95% complete. Moving to Calendar API.
 ### Calendar API Status
 
 ```
-[□□□□□□□□□□] 0% - Calendar API Research (Starting)
+[■■■■■■■■□□] 85% - Calendar API Research
 ```
 
-**To Research**:
-- [ ] Event data model (times, timezones, attendees)
-- [ ] Calendar IDs and uniqueness
-- [ ] Recurring events (RRULE handling)
-- [ ] Shared calendars and event IDs
-- [ ] Timezone handling (critical!)
-- [ ] Free/busy queries
+**Completed**:
+- [x] API reference archived (Events, Calendars, CalendarList)
+- [x] Core concepts archived (Events & Calendars, Sharing)
+- [x] Recurring events guide archived
+- [x] Identifier semantics documented
+- [x] Timezone handling documented
+- [x] Archive index created
+
+**Remaining** (empirical testing/deeper analysis needed):
+- [ ] gogcli Calendar command analysis
+- [ ] Free/busy API details
+- [ ] Verify event ID uniqueness scope empirically
+- [ ] ACL API reference
+- [ ] Settings API reference
+
+### Key Calendar Findings
+
+**CRITICAL**: Event IDs are unique **per calendar**, NOT globally unique
+* **Solution**: Use composite key `(calendarId, eventId)` for global uniqueness
+* Calendar IDs are email addresses (globally unique)
+* Shared calendar events: same IDs for all users (same calendar)
+
+**Timezone Handling**:
+* **All-day events**: Use `date` field, timezone has **NO significance**
+* **Timed events**: Use `dateTime` (RFC3339) with timezone (inline offset or `timeZone` field)
+* **Recurring events**: `timeZone` field **REQUIRED** for proper DST handling
+
+**Calendars vs CalendarList**:
+* Calendars = global metadata (title, timezone)
+* CalendarList = user-specific properties (color, reminders)
+* Same calendar appears differently in each user's CalendarList
 
 ### Next Steps
 
-1. Archive Calendar API documentation:
-   - Events reference
-   - Calendars reference
-   - Recurring events guide
-   - Timezone handling
-
-2. Analyze gogcli Calendar commands
-
-3. Document Calendar data model
+1. [x] Archive Calendar API documentation
+2. [x] Document Calendar data model (identifiers, timezones)
+3. [ ] Analyze gogcli Calendar commands
+4. [ ] Archive ACL and Settings API references
+5. [ ] Empirical testing of event ID uniqueness
 
 ### Research Tracking
 
 See: `research/RESEARCH_REQUESTS.md`
 
 **Gmail**: 13 completed, 3 partial, 9 need testing
-**Calendar**: Not started
+**Calendar**: 6 completed, 4 need testing/deeper analysis
 
 ### Key Gmail Files
 
@@ -67,9 +87,17 @@ See: `research/RESEARCH_REQUESTS.md`
 * `docs/web/gmail/INDEX.md` - Archive inventory
 * `docs/web/gmail/semantics/INDEX.md` - Deep semantics inventory
 
+### Key Calendar Files
+
+* `docs/web/calendar/INDEX.md` - Archive inventory with Q&A
+* `docs/datamodel/calendar/identifiers.md` - ID semantics (composite key requirement!)
+* `docs/datamodel/calendar/timezones.md` - Timezone handling (all-day vs timed, DST)
+* `docs/web/calendar/events/events-reference.md` - Event resource reference
+* `docs/web/calendar/events/events-calendars-concepts.md` - Fundamental concepts
+
 ## How to Resume Work
 
 1. Read this file (CURRENT_WORK.md)
-2. For Gmail: Read `docs/gmail-data-model-findings.md`
-3. For Calendar: Start with `docs/web/calendar/` (once archived)
+2. For Gmail: Read `docs/gmail-data-model-findings.md` and `docs/web/gmail/INDEX.md`
+3. For Calendar: Read `docs/web/calendar/INDEX.md` and `docs/datamodel/calendar/identifiers.md`
 4. Check `research/RESEARCH_REQUESTS.md` for open questions
