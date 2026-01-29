@@ -40,7 +40,7 @@ Tracking questions that need official documentation to answer.
 
 | ID | Question | Status | Source |
 |----|----------|--------|--------|
-| GM-LB-001 | What system labels exist? Complete list? | ⚠️ PARTIAL | Examples: INBOX, SENT, DRAFTS, TRASH, SPAM, UNREAD. Complete list not documented - `docs/web/gmail/labels/labels-reference.md` |
+| GM-LB-001 | What system labels exist? Complete list? | ⚠️ PARTIAL | 13 documented: INBOX, SENT, DRAFT, SPAM, TRASH, UNREAD, STARRED, IMPORTANT, CATEGORY_{PERSONAL,SOCIAL,PROMOTIONS,UPDATES,FORUMS}. Docs note "not exhaustive" - `docs/web/gmail/semantics/labels-guide.md` |
 | GM-LB-002 | How do system label IDs differ from user label IDs? | 🔵 NEEDS_TESTING | Not specified, needs empirical comparison |
 | GM-LB-003 | Can the same label name exist in multiple accounts? | 🟢 COMPLETED | Yes, label names are per-account. User labels max 10,000 per mailbox - `docs/web/gmail/labels/labels-reference.md` |
 | GM-LB-004 | Are label IDs sequential or random? | 🔵 NEEDS_TESTING | Not specified in docs |
@@ -49,9 +49,9 @@ Tracking questions that need official documentation to answer.
 
 | ID | Question | Status | Source |
 |----|----------|--------|--------|
-| GM-MA-001 | If I export messages from two accounts, can messageIds collide? | 🔵 NEEDS_TESTING | Not specified. Recommendation: use composite key (userId, messageId) - `docs/gmail-data-model-findings.md` |
-| GM-MA-002 | If I export threads from two accounts, can threadIds collide? | 🔵 NEEDS_TESTING | Not specified. Recommendation: use composite key (userId, threadId) - `docs/gmail-data-model-findings.md` |
-| GM-MA-003 | How do I identify which account a message came from in the API response? | 🟢 COMPLETED | API calls are scoped to userId, response doesn't include it - application must track context - `docs/gmail-data-model-findings.md` |
+| GM-MA-001 | If I export messages from two accounts, can messageIds collide? | 🔵 NEEDS_TESTING | Not specified. Recommendation: use composite key (userId, messageId) - `docs/datamodel/gmail/identifiers.md` |
+| GM-MA-002 | If I export threads from two accounts, can threadIds collide? | 🔵 NEEDS_TESTING | Not specified. Recommendation: use composite key (userId, threadId) - `docs/datamodel/gmail/identifiers.md` |
+| GM-MA-003 | How do I identify which account a message came from in the API response? | 🟢 COMPLETED | API calls are scoped to userId, response doesn't include it - application must track context - `docs/datamodel/gmail/identifiers.md`, `docs/web/gmail/semantics/delegation-guide.md` |
 
 ### Timestamps
 
