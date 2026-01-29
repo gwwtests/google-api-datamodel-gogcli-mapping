@@ -1,0 +1,212 @@
+{
+  "source": "Gmail API Official Documentation",
+  "archive_date": "2026-01-29",
+  "archive_location": "docs/web/gmail/",
+  "api_version": "v1",
+
+  "identifiers": {
+    "message_id": {
+      "field_name": "id",
+      "data_type": "string",
+      "format": "opaque (unspecified)",
+      "stability": "immutable",
+      "uniqueness": "unspecified (assumed per-user)",
+      "description": "The immutable ID of the message",
+      "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.messages",
+      "multi_account_safe": false,
+      "recommendation": "Prefix with userId in export data model"
+    },
+
+    "thread_id": {
+      "field_name": "threadId",
+      "data_type": "string",
+      "format": "opaque (unspecified)",
+      "stability": "immutable (assumed)",
+      "uniqueness": "unspecified (assumed per-user)",
+      "description": "The ID of the thread the message belongs to",
+      "threading_criteria": [
+        "Matching threadId in request",
+        "RFC 2822 compliant References and In-Reply-To headers",
+        "Matching Subject headers"
+      ],
+      "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.threads",
+      "multi_account_safe": false,
+      "recommendation": "Prefix with userId in export data model"
+    },
+
+    "label_id": {
+      "field_name": "id",
+      "data_type": "string",
+      "format": "opaque (unspecified)",
+      "stability": "immutable",
+      "uniqueness": "unspecified (assumed per-user)",
+      "description": "The immutable ID of the label",
+      "types": ["system", "user"],
+      "max_labels_per_mailbox": 10000,
+      "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.labels",
+      "multi_account_safe": false,
+      "recommendation": "Store both labelId and name; system labels may have consistent IDs"
+    },
+
+    "history_id": {
+      "field_name": "historyId",
+      "data_type": "string",
+      "format": "opaque (unspecified)",
+      "behavior": "monotonically increasing",
+      "description": "ID of the last history record that modified this message/thread",
+      "retention": "at least one week, often longer",
+      "retention_guaranteed": false,
+      "appears_on": ["Message", "Thread"],
+      "purpose": "incremental synchronization",
+      "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.history",
+      "multi_account_safe": false,
+      "recommendation": "Track per account; cannot compare across accounts"
+    }
+  },
+
+  "timestamps": {
+    "internal_date": {
+      "field_name": "internalDate",
+      "data_type": "string (int64 format)",
+      "format": "epoch milliseconds",
+      "timezone": "UTC (implicit)",
+      "semantics": {
+        "smtp_email": "Time message originally accepted by Google (reliable)",
+        "api_migrated": "Can be configured based on Date header"
+      },
+      "purpose": "Determines inbox ordering",
+      "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.messages",
+      "multi_account_safe": true,
+      "recommendation": "Use as-is; already timezone-independent"
+    }
+  },
+
+  "labels": {
+    "types": {
+      "system": {
+        "description": "Created by Gmail; cannot be added, modified, or deleted",
+        "examples": ["INBOX", "SENT", "DRAFTS", "TRASH", "SPAM", "UNREAD"],
+        "modifiable_by_user": {
+          "can_apply_remove": ["INBOX", "UNREAD"],
+          "cannot_apply_remove": ["DRAFTS", "SENT"]
+        },
+        "color_support": false
+      },
+      "user": {
+        "description": "Created by user or application; can be modified and deleted",
+        "color_support": true,
+        "max_per_mailbox": 10000
+      }
+    },
+    "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.labels"
+  },
+
+  "synchronization": {
+    "full_sync": {
+      "when_required": [
+        "First time application connects",
+        "Partial sync unavailable (history expired)",
+        "HTTP 404 from history.list"
+      ],
+      "steps": [
+        "Call messages.list or threads.list",
+        "Batch messages.get requests",
+        "Use format=FULL or format=RAW for first retrieval",
+        "Use format=MINIMAL for re-fetches",
+        "Store historyId from most recent message"
+      ],
+      "source_url": "https://developers.google.com/gmail/api/guides/sync"
+    },
+
+    "partial_sync": {
+      "when_available": "After recent full or partial sync",
+      "steps": [
+        "Call history.list with startHistoryId",
+        "Process history records (added/deleted/modified)",
+        "Merge updates into cache",
+        "Update stored historyId"
+      ],
+      "history_record_types": [
+        "message added",
+        "message deleted",
+        "labels modified"
+      ],
+      "source_url": "https://developers.google.com/gmail/api/guides/sync"
+    },
+
+    "push_notifications": {
+      "mechanism": "Google Cloud Pub/Sub",
+      "api_methods": {
+        "watch": "users.watch - Start receiving notifications",
+        "stop": "users.stop - Stop receiving notifications"
+      },
+      "usage": "Real-time updates without polling; triggers partial sync",
+      "source_url": "https://developers.google.com/gmail/api/guides/push"
+    }
+  },
+
+  "threading": {
+    "structure": {
+      "description": "A collection of messages representing a conversation",
+      "fields": {
+        "id": "unique thread identifier",
+        "snippet": "preview text",
+        "historyId": "sync tracking",
+        "messages": "array of Message objects"
+      }
+    },
+    "algorithm": {
+      "criteria": [
+        "Matching threadId specified in request",
+        "RFC 2822 compliant References and In-Reply-To headers",
+        "Matching Subject headers"
+      ]
+    },
+    "message_ordering": "Inferred to be by internalDate (newest to oldest)",
+    "source_url": "https://developers.google.com/gmail/api/reference/rest/v1/users.threads"
+  },
+
+  "multi_account_recommendations": {
+    "id_scoping": "Always prefix messageId/threadId/labelId with userId",
+    "composite_keys": {
+      "message": "(userId, messageId)",
+      "thread": "(userId, threadId)",
+      "label": "(userId, labelId)"
+    },
+    "timestamp_handling": "Use internalDate as-is (already UTC epoch ms)",
+    "label_storage": "Store both labelId and name",
+    "thread_handling": "Don't assume thread continuity across accounts",
+    "sync_state": "Track historyId per account independently"
+  },
+
+  "unanswered_questions": {
+    "identifier_uniqueness": [
+      "Is messageId globally unique across all Gmail accounts?",
+      "Is threadId globally unique across all Gmail accounts?",
+      "Do shared/delegated messages have the same messageId?",
+      "What is the relationship between API messageId and Message-ID header?"
+    ],
+    "threading_behavior": [
+      "Can a message be moved from one thread to another?",
+      "Does threads.get always return ALL messages?",
+      "What happens to threadId when conversation is forwarded separately?",
+      "Are there size limits on threads?"
+    ],
+    "label_details": [
+      "Complete list of all system labels?",
+      "Format differences between system and user label IDs?",
+      "Are system label IDs consistent across accounts?"
+    ],
+    "multi_account": [
+      "Can messageIds collide across accounts?",
+      "How to identify which account a message came from in response?"
+    ]
+  },
+
+  "testing_needed": [
+    "Export same message from multiple accounts to compare IDs",
+    "List labels from multiple fresh accounts to compare system label IDs",
+    "Export large datasets from multiple accounts to check for collisions",
+    "Experiment with thread modifications to observe behavior"
+  ]
+}
