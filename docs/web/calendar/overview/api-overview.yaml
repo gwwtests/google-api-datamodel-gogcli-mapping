@@ -1,0 +1,26 @@
+source_url: "https://developers.google.com/calendar/api/guides/overview"
+download_timestamp: "2026-01-29T21:46:18Z"
+document_title: "Google Calendar API Overview"
+covered_api_calls:
+  - "Overview of all Calendar API capabilities"
+key_concepts:
+  - "Event resources"
+  - "Calendar resources"
+  - "Calendar List resources"
+  - "Setting resources"
+  - "ACL (Access Control) resources"
+  - "API introduction"
+  - "authentication"
+  - "authorization scopes"
+  - "recurring events"
+  - "single events"
+related_docs:
+  - "../events/events-reference.md"
+  - "../calendars/calendars-reference.md"
+  - "../calendarList/calendarList-reference.md"
+  - "../recurring/recurring-events.md"
+  - "../sharing/calendar-sharing.md"
+notes: |
+  Entry point documentation for Calendar API.
+  Defines core resource types: Event, Calendar, Calendar List, Setting, ACL.
+  Calendar List is user-specific metadata (color, notifications) vs Calendar metadata (description, timezone).

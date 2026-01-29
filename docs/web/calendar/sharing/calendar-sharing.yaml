@@ -1,0 +1,49 @@
+source_url: "https://developers.google.com/calendar/api/concepts/sharing"
+download_timestamp: "2026-01-29T21:48:00Z"
+document_title: "Calendar Sharing - Calendar API Concepts"
+covered_api_calls:
+  - "acl.insert"
+  - "acl.list"
+  - "acl.get"
+  - "acl.update"
+  - "acl.delete"
+  - "freebusy.query"
+  - "calendarList.insert"
+key_concepts:
+  - "ACL (Access Control List)"
+  - "access roles: none, freeBusyReader, reader, writer, owner"
+  - "calendar data owner vs owner role"
+  - "grantee types: user, group, domain, public"
+  - "event visibility: default, public, private"
+  - "sharing vs inviting"
+  - "attendee copies of events"
+  - "CalendarList insertion for shared calendars"
+  - "domain sharing restrictions"
+  - "ACL limit: 6000 per calendar"
+related_docs:
+  - "../events/events-reference.md"
+  - "../calendars/calendars-reference.md"
+  - "../calendarList/calendarList-reference.md"
+notes: |
+  CRITICAL for multi-user scenarios:
+
+  Calendar sharing (two methods):
+  1. Share entire calendar via ACL with access levels
+  2. Invite users to individual events (creates copy on attendee calendar)
+
+  Access roles (increasing privilege):
+  - none: no access
+  - freeBusyReader: see busy/free only
+  - reader: read events
+  - writer: read/write events + see ACLs
+  - owner: all writer permissions + modify ACLs
+
+  Event visibility (for shared calendars):
+  - default: determined by calendar ACL (can differ per attendee)
+  - public: visible to anyone with freeBusyReader+ access
+  - private: only visible to writer+ access
+
+  IMPORTANT: Sharing calendar doesn't auto-insert to CalendarList.
+  Must explicitly call calendarList.insert for user to see it.
+
+  Primary calendar: user always has owner role, cannot be removed.

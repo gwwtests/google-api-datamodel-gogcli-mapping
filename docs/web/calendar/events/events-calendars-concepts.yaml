@@ -1,0 +1,38 @@
+source_url: "https://developers.google.com/calendar/api/concepts/events-calendars"
+download_timestamp: "2026-01-29T21:48:00Z"
+document_title: "Calendars & Events - Calendar API Concepts"
+covered_api_calls:
+  - "Conceptual overview (no specific methods)"
+key_concepts:
+  - "calendar as email address ID"
+  - "event unique ID"
+  - "primary calendar vs other calendars"
+  - "calendar data owner"
+  - "single vs recurring events"
+  - "timed vs all-day events"
+  - "start.dateTime vs start.date"
+  - "end.dateTime vs end.date"
+  - "timezone field significance"
+  - "event organizer"
+  - "event attendees"
+  - "Calendars collection vs CalendarList collection"
+  - "calendar global properties vs user-specific properties"
+  - "RRULE, RDATE, EXDATE (RFC 5545)"
+related_docs:
+  - "../calendars/calendars-reference.md"
+  - "../calendarList/calendarList-reference.md"
+  - "../events/events-reference.md"
+  - "../recurring/recurring-events.md"
+notes: |
+  FUNDAMENTAL CONCEPTS DOCUMENT - Read first!
+
+  Key distinctions:
+  1. Calendar ID = email address format
+  2. Primary calendar: user's main calendar, ID = user email, cannot be deleted
+  3. Other calendars: have single data owner, can be deleted/transferred
+  4. Timed events: use dateTime fields with timezone
+  5. All-day events: use date fields (timezone has NO significance)
+  6. Calendars collection: global metadata (title, timezone)
+  7. CalendarList collection: user-specific properties (color, reminders)
+
+  CRITICAL: Same calendar appears in multiple users' CalendarLists with different properties.

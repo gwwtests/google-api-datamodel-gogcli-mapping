@@ -1,0 +1,27 @@
+source_url: "https://developers.google.com/calendar/api/v3/reference/calendarList"
+download_timestamp: "2026-01-29T21:47:00Z"
+document_title: "CalendarList - Calendar API v3 Reference"
+covered_api_calls:
+  - "calendarList.delete"
+  - "calendarList.get"
+  - "calendarList.insert"
+  - "calendarList.list"
+  - "calendarList.patch"
+  - "calendarList.update"
+  - "calendarList.watch"
+key_concepts:
+  - "CalendarListEntry resource"
+  - "user-specific calendar properties"
+  - "calendar color"
+  - "notification settings"
+  - "calendar visibility in UI"
+  - "primary calendar"
+  - "default reminders"
+related_docs:
+  - "../calendars/calendars-reference.md"
+  - "../events/events-reference.md"
+notes: |
+  CRITICAL: CalendarList represents USER-SPECIFIC view of calendars.
+  Same calendar may appear differently for different users.
+  Contains: colorId, backgroundColor, foregroundColor, hidden, selected, defaultReminders.
+  Primary calendar: user's main calendar (id = user email).

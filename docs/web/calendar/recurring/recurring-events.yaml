@@ -1,0 +1,29 @@
+source_url: "https://developers.google.com/calendar/api/guides/recurringevents"
+download_timestamp: "2026-01-29T21:48:00Z"
+document_title: "Recurring Events - Calendar API Guide"
+covered_api_calls:
+  - "events.insert (with recurrence field)"
+  - "events.instances"
+  - "events.update (recurring instances)"
+  - "events.delete (recurring instances)"
+key_concepts:
+  - "RRULE format (RFC 5545)"
+  - "recurring event vs instances"
+  - "recurringEventId field"
+  - "originalStartTime field"
+  - "FREQ, UNTIL, COUNT, INTERVAL"
+  - "modifying single instances"
+  - "exceptions (EXDATE)"
+  - "expanding recurring events"
+  - "instance queries"
+related_docs:
+  - "../events/events-reference.md"
+  - "../events/events-calendars-concepts.md"
+notes: |
+  CRITICAL for recurring events understanding:
+  - recurrence field contains RRULE strings (RFC 5545 format)
+  - Recurring event has recurrence field set
+  - Instances have recurringEventId pointing to parent
+  - Instances have originalStartTime for exception handling
+  - Use events.instances to expand recurring event to instances
+  - Modified instances are separate event resources

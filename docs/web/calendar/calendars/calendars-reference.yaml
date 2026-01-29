@@ -1,0 +1,25 @@
+source_url: "https://developers.google.com/calendar/api/v3/reference/calendars"
+download_timestamp: "2026-01-29T21:47:00Z"
+document_title: "Calendars - Calendar API v3 Reference"
+covered_api_calls:
+  - "calendars.clear"
+  - "calendars.delete"
+  - "calendars.get"
+  - "calendars.insert"
+  - "calendars.patch"
+  - "calendars.update"
+key_concepts:
+  - "calendar resource structure"
+  - "calendar ID"
+  - "calendar summary"
+  - "calendar description"
+  - "default timezone"
+  - "calendar location"
+related_docs:
+  - "../calendarList/calendarList-reference.md"
+  - "../events/events-reference.md"
+  - "../sharing/calendar-sharing.md"
+notes: |
+  Calendar resource metadata: description, location, summary, timezone.
+  Important: Calendar vs CalendarList distinction.
+  Calendar = base metadata, CalendarList = user-specific presentation.

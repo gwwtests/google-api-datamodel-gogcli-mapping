@@ -1,0 +1,46 @@
+source_url: "https://developers.google.com/calendar/api/v3/reference/events"
+download_timestamp: "2026-01-29T21:46:18Z"
+document_title: "Events - Calendar API v3 Reference"
+covered_api_calls:
+  - "events.delete"
+  - "events.get"
+  - "events.import"
+  - "events.insert"
+  - "events.instances"
+  - "events.list"
+  - "events.move"
+  - "events.patch"
+  - "events.quickAdd"
+  - "events.update"
+  - "events.watch"
+key_concepts:
+  - "event resource structure"
+  - "event ID"
+  - "start and end times"
+  - "timezone handling"
+  - "all-day events (date vs dateTime)"
+  - "recurring events (recurrence field)"
+  - "recurringEventId"
+  - "originalStartTime"
+  - "attendees"
+  - "organizer vs creator"
+  - "iCalUID"
+  - "conferenceData"
+  - "reminders"
+  - "extendedProperties"
+  - "visibility"
+  - "transparency"
+related_docs:
+  - "../calendars/calendars-reference.md"
+  - "../recurring/recurring-events.md"
+  - "../sharing/calendar-sharing.md"
+notes: |
+  CRITICAL REFERENCE: Complete Event resource representation.
+
+  Key findings for data model:
+  - Event has "id" field (string) - uniqueness scope TBD
+  - Event has "iCalUID" field - for iCalendar compatibility
+  - Event has "recurringEventId" - links instances to recurring event
+  - Times use "date" (all-day) OR "dateTime" (timed) with optional "timeZone"
+  - Attendees array contains email, responseStatus, organizer flag
+  - "creator" vs "organizer" distinction important for shared calendars
