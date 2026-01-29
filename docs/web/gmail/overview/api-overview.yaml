@@ -1,0 +1,19 @@
+source_url: "https://developers.google.com/gmail/api/guides"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Gmail API Overview - Developer Guides"
+covered_api_calls:
+  - "Overview of all Gmail API capabilities"
+key_concepts:
+  - "API introduction"
+  - "authentication"
+  - "authorization scopes"
+  - "rate limits"
+  - "best practices"
+related_docs:
+  - "../messages/messages-reference.md"
+  - "../threads/threads-reference.md"
+  - "../labels/labels-reference.md"
+  - "../sync/sync-guide.md"
+notes: |
+  Entry point documentation for Gmail API.
+  Provides architectural overview and links to specific guides.

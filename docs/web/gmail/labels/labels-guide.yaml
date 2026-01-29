@@ -1,0 +1,15 @@
+source_url: "https://developers.google.com/gmail/api/guides/labels"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Labels - Gmail API Guide"
+covered_api_calls:
+  - "users.labels.list"
+  - "users.labels.create"
+key_concepts:
+  - "label management"
+  - "system labels"
+  - "custom labels"
+related_docs:
+  - "labels-reference.md"
+  - "../messages/messages-reference.md"
+notes: |
+  Practical guide for managing labels in Gmail API.

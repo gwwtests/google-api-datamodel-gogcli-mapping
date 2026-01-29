@@ -1,0 +1,15 @@
+source_url: "https://developers.google.com/gmail/api/guides/threads"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Threads - Gmail API Guide"
+covered_api_calls:
+  - "users.threads.list"
+  - "users.threads.get"
+key_concepts:
+  - "thread organization"
+  - "conversation grouping"
+  - "message threading algorithm"
+related_docs:
+  - "threads-reference.md"
+  - "../messages/messages-reference.md"
+notes: |
+  Practical guide for working with threaded conversations.

@@ -1,0 +1,46 @@
+source_url: "https://developers.google.com/gmail/api/reference/rest/v1/users.labels"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "REST Resource: users.labels - Gmail API Reference"
+covered_api_calls:
+  - "users.labels.list"
+  - "users.labels.get"
+  - "users.labels.create"
+  - "users.labels.delete"
+  - "users.labels.update"
+  - "users.labels.patch"
+key_concepts:
+  - "label id - immutable identifier"
+  - "label types - system vs user"
+  - "label visibility"
+  - "label limitations - 10000 per mailbox"
+related_docs:
+  - "../messages/messages-reference.md"
+  - "labels-guide.md"
+notes: |
+  Critical findings for data model:
+
+  1. LABEL ID:
+     - Field: "id" (string)
+     - Described as "immutable ID of the label"
+     - No explicit format specification
+     - No statement about global vs per-user uniqueness
+
+  2. LABEL TYPES:
+     - "system" - Created by Gmail, cannot be added/modified/deleted
+     - "user" - Custom labels created by user/application, fully modifiable
+     - System labels: INBOX, UNREAD, DRAFTS, SENT, etc.
+
+  3. LABEL CONSTRAINTS:
+     - Maximum 10,000 labels per user's mailbox
+     - System labels have restricted operations
+     - Only user labels can have custom colors
+
+  4. LABEL STRUCTURE:
+     - id: immutable identifier
+     - name: display name
+     - type: system or user
+     - messageListVisibility: show/hide in message list
+     - labelListVisibility: show/showIfUnread/hide in label list
+     - messagesTotal, messagesUnread: counts
+     - threadsTotal, threadsUnread: counts
+     - color: custom colors for user labels only

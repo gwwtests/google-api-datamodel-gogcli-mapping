@@ -1,0 +1,41 @@
+source_url: "https://developers.google.com/gmail/api/reference/rest/v1/users.threads"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "REST Resource: users.threads - Gmail API Reference"
+covered_api_calls:
+  - "users.threads.list"
+  - "users.threads.get"
+  - "users.threads.delete"
+  - "users.threads.modify"
+  - "users.threads.trash"
+  - "users.threads.untrash"
+key_concepts:
+  - "thread id - unique conversation identifier"
+  - "thread messages - collection of related messages"
+  - "thread history id - sync tracking for threads"
+  - "thread snippet - preview text"
+related_docs:
+  - "../messages/messages-reference.md"
+  - "../sync/sync-guide.md"
+  - "threads-guide.md"
+notes: |
+  Critical findings for data model:
+
+  1. THREAD ID:
+     - Field: "id" (string)
+     - Described as "unique ID of the thread"
+     - No explicit statement about global vs per-user uniqueness
+     - No format specification
+
+  2. THREAD STRUCTURE:
+     - Contains array of Message objects
+     - Messages within thread share the thread ID
+     - Threading determined by: threadId + RFC 2822 headers + Subject matching
+
+  3. THREAD HISTORY ID:
+     - Field: "historyId" (string)
+     - ID of last history record that modified this thread
+     - Incremental sync mechanism
+
+  4. THREAD SNIPPET:
+     - Field: "snippet" (string)
+     - Short preview of message text

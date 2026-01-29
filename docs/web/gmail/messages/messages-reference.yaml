@@ -1,0 +1,58 @@
+source_url: "https://developers.google.com/gmail/api/reference/rest/v1/users.messages"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "REST Resource: users.messages - Gmail API Reference"
+covered_api_calls:
+  - "users.messages.list"
+  - "users.messages.get"
+  - "users.messages.batchDelete"
+  - "users.messages.batchModify"
+  - "users.messages.delete"
+  - "users.messages.import"
+  - "users.messages.insert"
+  - "users.messages.modify"
+  - "users.messages.send"
+  - "users.messages.trash"
+  - "users.messages.untrash"
+key_concepts:
+  - "message id - immutable identifier"
+  - "thread id - thread association"
+  - "label ids - message categorization"
+  - "history id - sync tracking"
+  - "internal date - epoch milliseconds timestamp"
+  - "message part - MIME structure"
+  - "message payload - email content structure"
+related_docs:
+  - "../threads/threads-reference.md"
+  - "../labels/labels-reference.md"
+  - "../history/history-reference.md"
+  - "../sync/sync-guide.md"
+notes: |
+  Critical findings for data model:
+
+  1. MESSAGE ID:
+     - Field: "id" (string)
+     - Described as "immutable ID of the message"
+     - No explicit statement about global vs per-user uniqueness
+     - No format specification (appears to be opaque string)
+
+  2. THREAD ID:
+     - Field: "threadId" (string)
+     - Associates message with conversation thread
+     - Threading criteria: matching threadId + RFC 2822 References/In-Reply-To headers + matching Subject
+
+  3. INTERNAL DATE:
+     - Field: "internalDate" (string in int64 format)
+     - Epoch milliseconds timestamp
+     - For SMTP email: time message accepted by Google (more reliable than Date header)
+     - For API-migrated mail: can be configured based on Date header
+     - Determines inbox ordering
+
+  4. HISTORY ID:
+     - Field: "historyId" (string)
+     - ID of last history record that modified this message
+     - Used for incremental sync
+
+  5. LABEL IDS:
+     - Field: "labelIds[]" (array of strings)
+     - List of label IDs applied to message
+     - Can be system or user labels

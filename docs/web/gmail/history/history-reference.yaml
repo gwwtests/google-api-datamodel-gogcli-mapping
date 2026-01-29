@@ -1,0 +1,31 @@
+source_url: "https://developers.google.com/gmail/api/reference/rest/v1/users.history"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "REST Resource: users.history - Gmail API Reference"
+covered_api_calls:
+  - "users.history.list"
+key_concepts:
+  - "history id - incremental sync marker"
+  - "history records - change tracking"
+  - "mailbox synchronization"
+related_docs:
+  - "../sync/sync-guide.md"
+  - "../messages/messages-reference.md"
+notes: |
+  Critical findings for data model:
+
+  1. HISTORY ID:
+     - Opaque identifier for mailbox state
+     - Used to track changes since last sync
+     - Monotonically increasing (newer changes have higher IDs)
+     - Required for incremental sync operations
+
+  2. HISTORY RECORDS:
+     - Track message/thread/label changes
+     - Include added/deleted messages
+     - Include label modifications
+     - Limited retention period
+
+  3. SYNC MECHANISM:
+     - Pass last known historyId to get changes
+     - Returns all changes since that point
+     - Must handle history expiration

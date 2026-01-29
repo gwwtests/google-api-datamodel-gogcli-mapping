@@ -1,0 +1,30 @@
+source_url: "https://developers.google.com/gmail/api/guides/sync"
+download_timestamp: "2026-01-29T20:45:12Z"
+document_title: "Synchronizing Clients with Gmail - API Guide"
+covered_api_calls:
+  - "users.history.list"
+  - "users.messages.list"
+  - "users.getProfile"
+key_concepts:
+  - "incremental sync"
+  - "history id tracking"
+  - "mailbox synchronization strategy"
+  - "push notifications"
+  - "full sync vs partial sync"
+related_docs:
+  - "../history/history-reference.md"
+  - "../messages/messages-reference.md"
+notes: |
+  Critical guide for implementing efficient mailbox synchronization.
+
+  KEY SYNC CONCEPTS:
+  1. Initial sync: Fetch all messages, store historyId
+  2. Incremental sync: Use history.list with last historyId
+  3. Handle history expiration: Fall back to full sync
+  4. Push notifications: Watch for changes, then sync
+
+  BEST PRACTICES:
+  - Store historyId after each successful sync
+  - Handle 404 errors (history expired) gracefully
+  - Use partial sync for better performance
+  - Combine with push notifications for real-time updates
