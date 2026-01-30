@@ -2,7 +2,7 @@
 
 Archive of official Google Calendar API documentation for understanding the data model.
 
-**Archive Date**: 2026-01-29
+**Archive Date**: 2026-01-29 (updated 2026-01-30)
 
 **Purpose**: Research data model questions about identifiers, timezones, recurring events, sharing, and calendar relationships.
 
@@ -50,6 +50,16 @@ Archive of official Google Calendar API documentation for understanding the data
 * `sharing/calendar-sharing.md` - Calendar sharing concepts
   * Source: https://developers.google.com/calendar/api/concepts/sharing
   * Key topics: ACL (Access Control List), access roles (none, freeBusyReader, reader, writer, owner), event visibility (default, public, private), calendar data owner
+
+### Guides
+
+* `guides/create-events.md` - Creating calendar events guide
+  * Source: https://developers.google.com/workspace/calendar/api/guides/create-events
+  * Key topics: Event creation workflow, calendarId parameter, timed vs all-day events, dateTime vs date fields, timeZone field, RFC3339 format, IANA timezone names, custom event IDs, attendees, Drive attachments, conferenceData, OAuth scopes
+
+* `guides/event-types.md` - Event types reference
+  * Source: https://developers.google.com/workspace/calendar/api/guides/event-types
+  * Key topics: eventType property, default/birthday/fromGmail event types, birthday constraints (annual recurrence, all-day, private, transparent), birthdayProperties field, People API integration, eventTypes filter parameter
 
 ## File Naming Convention
 
