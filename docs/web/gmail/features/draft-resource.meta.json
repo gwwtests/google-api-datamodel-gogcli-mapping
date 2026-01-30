@@ -1,0 +1,9 @@
+{
+  "url": "https://developers.google.com/gmail/api/reference/rest/v1/users.drafts",
+  "title": "REST Resource: users.drafts",
+  "api_version": "v1",
+  "retrieved": "2026-01-30",
+  "description": "Official Gmail API documentation for Draft resource structure",
+  "extraction_method": "WebFetch",
+  "resource_type": "users.drafts"
+}

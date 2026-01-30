@@ -1,0 +1,9 @@
+{
+  "url": "https://issuetracker.google.com/issues/140922183",
+  "title": "Expose functionality for creating scheduled emails",
+  "issue_id": "140922183",
+  "status": "blocked",
+  "retrieved": "2026-01-30",
+  "description": "Feature request for Gmail API to expose scheduled email functionality",
+  "extraction_method": "WebFetch"
+}
