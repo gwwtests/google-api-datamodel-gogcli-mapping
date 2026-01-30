@@ -270,6 +270,244 @@ Account: bob@gmail.com
 
 ---
 
+### 8. Thread IDs Are USER-SPECIFIC (Critical!)
+
+**What User Might Assume**:
+"If Alice and Bob are in the same email thread, they share the same thread ID"
+
+**What's Actually True**:
+```
+Alice sends email to Bob about "Project Update"
+
+Alice's account:
+  threadId: "18d5abc111111111"
+
+Bob's account (same conversation!):
+  threadId: "18d5xyz999999999"  ← DIFFERENT thread ID!
+```
+
+**⚠️ Critical Discovery** (from community research):
+- Thread IDs are **user-specific**, NOT conversation-universal
+- Same email thread has **different IDs** for sender vs recipient
+- `gmail.users.threads.get(alice_thread_id)` from Bob's account → 404 NOT FOUND
+
+**Cross-Account Correlation**:
+- Use SMTP `Message-ID` header (RFC 5322), not Gmail `threadId`
+- `In-Reply-To` and `References` headers link across accounts
+- Thread ID encodes timestamp (first 11 hex digits) + sequence (last 5)
+
+---
+
+### 9. Categories and Tabs: Hidden Label System
+
+**What User Sees (UI)**:
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Primary  │  Social  │  Promotions  │  Updates  │  Forums  │
+└─────────────────────────────────────────────────────────────┘
+```
+User sees "tabs" that look like separate inboxes.
+
+**What's in the Data (API)**:
+```json
+{
+  "id": "msg_newsletter_123",
+  "labelIds": [
+    "INBOX",
+    "CATEGORY_PROMOTIONS"    // ← This is what makes it appear in Promotions tab
+  ]
+}
+```
+
+**System Labels for Categories**:
+| Tab | Label ID |
+|-----|----------|
+| Primary | `CATEGORY_PERSONAL` |
+| Social | `CATEGORY_SOCIAL` |
+| Promotions | `CATEGORY_PROMOTIONS` |
+| Updates | `CATEGORY_UPDATES` |
+| Forums | `CATEGORY_FORUMS` |
+
+**⚠️ Counterintuitive Aspects**:
+- Categories are just system labels, not separate mailboxes
+- Message can only be in ONE category at a time
+- Gmail ML automatically assigns category on delivery
+- You CAN move messages between categories via label modification
+
+---
+
+### 10. Priority Inbox and "Important" Markers
+
+**What User Sees (UI)**:
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ▶ Important and unread                                      │
+│   ★ [Important email from boss]                            │
+├─────────────────────────────────────────────────────────────┤
+│ ▶ Everything else                                           │
+│   [Newsletter]                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**What's in the Data (API)**:
+```json
+{
+  "id": "msg_from_boss",
+  "labelIds": [
+    "INBOX",
+    "IMPORTANT"              // ← ML-assigned importance marker
+  ]
+}
+```
+
+**How Gmail Determines "Important"**:
+- Machine learning algorithm (~80% accuracy reported)
+- Factors: sender relationship, engagement history, keywords
+- Users can train by marking important/not important
+
+**⚠️ Counterintuitive Aspects**:
+- `IMPORTANT` is a system label, not user-created
+- ML assignment happens on delivery (can't control via API on send)
+- Manual override = adding/removing `IMPORTANT` label
+
+---
+
+### 11. Snooze: The Missing API Feature
+
+**What User Sees (UI)**:
+```
+┌─────────────────────────────────────────────┐
+│ Snooze until...                             │
+│   ○ Later today                             │
+│   ○ Tomorrow                                │
+│   ○ This weekend                            │
+│   ○ Next week                               │
+│   ○ Pick date & time                        │
+└─────────────────────────────────────────────┘
+```
+
+**What's in the Data (API)**:
+```json
+{
+  "id": "msg_snoozed_123",
+  "labelIds": [
+    "SNOOZED"                // ← Label exists, but...
+  ]
+  // NO snooze time information!
+  // NO way to set snooze via API!
+}
+```
+
+**⚠️ API Limitation**:
+- `SNOOZED` label indicates message is snoozed
+- **NO API access to snooze time**
+- **NO API method to snooze a message**
+- Feature requests #109952618 and #287304309 are BLOCKED
+
+**Workaround** (third-party apps):
+- Custom labels + external scheduler
+- NOT compatible with Gmail's native snooze
+
+---
+
+### 12. Send As: Multiple Sender Addresses
+
+**What User Sees (UI)**:
+```
+From: [dropdown menu]
+  ├── alice@company.com (default)
+  ├── alice@personal.com
+  └── team@company.com
+```
+
+**What's in the Data (API)**:
+
+```json
+// GET users.settings.sendAs.list
+{
+  "sendAs": [
+    {
+      "sendAsEmail": "alice@company.com",
+      "displayName": "Alice Smith",
+      "isPrimary": true,
+      "isDefault": true
+    },
+    {
+      "sendAsEmail": "alice@personal.com",
+      "displayName": "Alice",
+      "replyToAddress": "alice@company.com",
+      "verificationStatus": "accepted"
+    }
+  ]
+}
+```
+
+**⚠️ Key Concepts**:
+- Full API support via `users.settings.sendAs`
+- `isPrimary` = the Gmail account's email (cannot change)
+- `isDefault` = which address is pre-selected for new emails
+- `verificationStatus` = "accepted" for verified addresses
+- Can configure custom SMTP for external domains
+
+---
+
+### 13. Draft Lifecycle: ID Transformation
+
+**What User Expects**:
+"Draft ID stays the same when I send it"
+
+**What Actually Happens**:
+```
+BEFORE SEND:
+  Draft ID: "r1234567890"
+  Message ID: "m9876543210"
+
+AFTER drafts.send():
+  Draft: DELETED
+  New Message ID: "m_COMPLETELY_DIFFERENT"  ← New ID!
+```
+
+**⚠️ Critical for Tracking**:
+- Cannot track draft→sent via message ID (changes!)
+- Use `threadId` for correlation
+- Or add custom header before sending
+
+**Temporary ID Trap**:
+- Inline reply creates temporary message ID
+- API returns 404 for temporary ID
+- Real ID appears after brief delay
+
+---
+
+### 14. Threading Requires SMTP Headers for Recipients
+
+**What Developer Expects**:
+"Setting `threadId` in API will thread the email for everyone"
+
+**What Actually Happens**:
+```
+Developer sends via API with threadId: "abc123"
+
+Sender's mailbox: ✓ Message appears in thread abc123
+Recipient's mailbox: ✗ Message appears as NEW thread!
+```
+
+**Why**: `threadId` only affects sender's view. Recipients need SMTP headers.
+
+**Required Headers for Recipient-Side Threading**:
+```
+In-Reply-To: <original-message-id@domain.com>
+References: <grandparent@domain> <parent@domain>
+Subject: Re: Original Subject
+```
+
+**Common Mistakes**:
+- Using Gmail API `message.id` instead of `Message-ID` header value
+- Missing angle brackets: `msg-id@domain` vs `<msg-id@domain>`
+- Incomplete `References` chain
+
+---
+
 ## Entity Relationship Diagram
 
 ```
@@ -324,12 +562,25 @@ Account: bob@gmail.com
 | Open email | `messages.get` | Nothing (read only) |
 | Mark as read | `messages.modify` | Remove `UNREAD` from labelIds |
 | Star | `messages.modify` | Add `STARRED` to labelIds |
+| Mark important | `messages.modify` | Add `IMPORTANT` to labelIds |
 | Archive | `messages.modify` | Remove `INBOX` from labelIds |
 | Delete | `messages.trash` | Add `TRASH`, remove other labels |
 | Move to folder | `messages.modify` | Add label, optionally remove `INBOX` |
-| Reply | `messages.send` | New message with same `threadId` |
+| Move to category | `messages.modify` | Remove old `CATEGORY_*`, add new one |
+| Reply | `messages.send` | New message with same `threadId` + headers |
 | Forward | `messages.send` | New message, may have new `threadId` |
 | Label | `messages.modify` | Add label to labelIds |
+| Snooze | ❌ NO API | Cannot snooze via API |
+| Schedule send | ❌ NO API | Cannot schedule via API |
+| Send as alias | `messages.send` + header | Set `From` header to alias address |
+
+## Features Without API Support
+
+| Feature | API Status | Workaround |
+|---------|------------|------------|
+| Snooze | SNOOZED label only, no timing | External scheduler + custom labels |
+| Scheduled Send | No support | External scheduler + drafts.send |
+| Confidential Mode | No support | None (use CSE for encryption) |
 
 ---
 
@@ -337,4 +588,5 @@ Account: bob@gmail.com
 
 * `identifiers.md` - Detailed ID semantics
 * `gogcli-data-handling.md` - How gogcli handles these structures
+* `advanced-features.md` - Snooze, categories, send-as details
 * `../examples/` - Example API responses
