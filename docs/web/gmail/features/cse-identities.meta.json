@@ -1,0 +1,9 @@
+{
+  "url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.cse.identities",
+  "title": "REST Resource: users.settings.cse.identities",
+  "api_version": "v1",
+  "retrieved": "2026-01-30",
+  "description": "Official Gmail API documentation for Client-Side Encryption identities resource",
+  "extraction_method": "WebFetch",
+  "resource_type": "users.settings.cse.identities"
+}
