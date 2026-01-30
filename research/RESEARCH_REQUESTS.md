@@ -89,7 +89,63 @@ Tracking questions that need official documentation to answer.
 
 ## Calendar API
 
-*(To be populated when we start Calendar research)*
+### Identifiers
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| CA-ID-001 | Is `eventId` unique globally or only per-calendar? | 🟢 COMPLETED | **Per-calendar only** - NOT globally unique. Must use (calendarId, eventId) - `docs/datamodel/calendar/identifiers.md` |
+| CA-ID-002 | What is the format of `eventId`? | 🟢 COMPLETED | Base32hex (a-v, 0-9), 5-1024 chars - `docs/web/calendar/events/events-reference.md` |
+| CA-ID-003 | Can `eventId` be set at creation time? | 🟢 COMPLETED | Yes, custom IDs supported (must follow format rules) - `docs/web/calendar/guides/create-events.md` |
+| CA-ID-004 | Is `calendarId` unique globally? | 🟢 COMPLETED | Yes, format is email address - `docs/datamodel/calendar/identifiers.md` |
+| CA-ID-005 | For shared calendars, do all users see the same eventId? | 🟢 COMPLETED | Yes, same event ID for all users with calendar access - `docs/datamodel/calendar/identifiers.md` |
+| CA-ID-006 | What is `iCalUID` and when to use it? | 🟢 COMPLETED | RFC5545 identifier shared across recurring instances, useful for cross-calendar correlation - `docs/datamodel/calendar/identifiers.md` |
+
+### Timezone Handling
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| CA-TZ-001 | How are timed event times represented? | 🟢 COMPLETED | RFC3339 in `dateTime` field, optional `timeZone` IANA name - `docs/datamodel/calendar/timezones.md` |
+| CA-TZ-002 | How are all-day events represented? | 🟢 COMPLETED | YYYY-MM-DD in `date` field, timeZone is ignored - `docs/datamodel/calendar/timezones.md` |
+| CA-TZ-003 | Is `timeZone` required for recurring events? | 🟢 COMPLETED | Yes, required for correct DST handling during expansion - `docs/datamodel/calendar/timezones.md` |
+| CA-TZ-004 | How does DST affect recurring events? | 🟢 COMPLETED | With timeZone set, local time preserved across DST changes - `docs/datamodel/calendar/timezones.md` |
+| CA-TZ-005 | Are end times inclusive or exclusive? | 🟢 COMPLETED | Exclusive - event ends AT end time. All-day end date is day AFTER last day - `docs/datamodel/calendar/timezones.md` |
+
+### Recurring Events
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| CA-RE-001 | What format are recurrence rules in? | 🟢 COMPLETED | RFC 5545 RRULE format in `recurrence` array - `docs/web/calendar/recurring/recurring-events.md` |
+| CA-RE-002 | How do recurring event instances get IDs? | 🟢 COMPLETED | Unique `id` per instance, linked via `recurringEventId` to parent - `docs/datamodel/calendar/identifiers.md` |
+| CA-RE-003 | Can you modify single instances of recurring events? | 🟢 COMPLETED | Yes, creates exception with same `recurringEventId` and `originalStartTime` - `docs/web/calendar/recurring/recurring-events.md` |
+| CA-RE-004 | How to get all instances of a recurring event? | 🟢 COMPLETED | Use `events.instances(calendarId, eventId)` method - `docs/web/calendar/events/events-reference.md` |
+
+### Multi-Account
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| CA-MA-001 | Can eventIds collide across calendars? | 🟢 COMPLETED | Yes, eventId only unique per-calendar. Use (calendarId, eventId) - `docs/datamodel/calendar/identifiers.md` |
+| CA-MA-002 | For meeting invitations, do organizer and attendee have same eventId? | ⚠️ PARTIAL | Different calendars = different events. Use iCalUID for correlation - `docs/datamodel/calendar/identifiers.md` |
+| CA-MA-003 | How to correlate same meeting across accounts? | 🟢 COMPLETED | Use `iCalUID` field - shared across all copies of same meeting - `docs/datamodel/calendar/identifiers.md` |
+
+### Event Types
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| CA-ET-001 | What event types exist? | 🟢 COMPLETED | default, birthday, focusTime, fromGmail, outOfOffice, workingLocation - `docs/web/calendar/guides/event-types.md` |
+| CA-ET-002 | How do Focus Time and OOO events auto-decline? | 🟢 COMPLETED | Via `autoDeclineMode`: declineNone, declineAllConflictingInvitations, declineOnlyNewConflictingInvitations - `docs/datamodel/calendar/gogcli-data-handling.md` |
+
+---
+
+### Calendar API Research Status
+
+| Status | Count |
+|--------|-------|
+| 🟢 COMPLETED | 19 |
+| ⚠️ PARTIAL | 1 |
+| 🔵 NEEDS_TESTING | 0 |
+| 🔴 PENDING | 0 |
+
+**Key Finding**: Event IDs are unique per-calendar only (NOT globally). Calendar IDs are globally unique (email format). Use `iCalUID` to correlate same meeting across accounts/calendars.
 
 ---
 

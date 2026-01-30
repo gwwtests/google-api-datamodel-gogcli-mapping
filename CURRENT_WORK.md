@@ -29,21 +29,21 @@ Gmail research is ~95% complete. Calendar API core research now ~85% complete.
 ### Calendar API Status
 
 ```
-[■■■■■■■■□□] 85% - Calendar API Research
+[■■■■■■■■■■] 100% - Calendar API Research (Documentation Phase)
 ```
 
 **Completed**:
 - [x] API reference archived (Events, Calendars, CalendarList)
 - [x] Core concepts archived (Events & Calendars, Sharing)
 - [x] Recurring events guide archived
+- [x] Create events and event types guides archived
 - [x] Identifier semantics documented
 - [x] Timezone handling documented
 - [x] Archive index created
+- [x] gogcli Calendar command analysis
 
-**Remaining** (empirical testing/deeper analysis needed):
-- [ ] gogcli Calendar command analysis
+**Optional deeper analysis**:
 - [ ] Free/busy API details
-- [ ] Verify event ID uniqueness scope empirically
 - [ ] ACL API reference
 - [ ] Settings API reference
 
@@ -68,16 +68,16 @@ Gmail research is ~95% complete. Calendar API core research now ~85% complete.
 
 1. [x] Archive Calendar API documentation
 2. [x] Document Calendar data model (identifiers, timezones)
-3. [ ] Analyze gogcli Calendar commands
-4. [ ] Archive ACL and Settings API references
-5. [ ] Empirical testing of event ID uniqueness
+3. [x] Analyze gogcli Calendar commands
+4. [ ] Optional: Archive ACL and Settings API references
+5. [ ] Start next service (Drive, Tasks, or Contacts per FUTURE_WORK.md)
 
 ### Research Tracking
 
 See: `research/RESEARCH_REQUESTS.md`
 
-**Gmail**: 13 completed, 3 partial, 9 need testing
-**Calendar**: 6 completed, 4 need testing/deeper analysis
+**Gmail**: 12 completed, 4 partial, 9 need testing
+**Calendar**: 19 completed, 1 partial, 0 need testing
 
 ### Key Gmail Files
 
@@ -92,6 +92,7 @@ See: `research/RESEARCH_REQUESTS.md`
 * `docs/web/calendar/INDEX.md` - Archive inventory with Q&A
 * `docs/datamodel/calendar/identifiers.md` - ID semantics (composite key requirement!)
 * `docs/datamodel/calendar/timezones.md` - Timezone handling (all-day vs timed, DST)
+* `docs/datamodel/calendar/gogcli-data-handling.md` - How gogcli handles Calendar data
 * `docs/web/calendar/events/events-reference.md` - Event resource reference
 * `docs/web/calendar/events/events-calendars-concepts.md` - Fundamental concepts
 
