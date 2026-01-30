@@ -1,0 +1,101 @@
+{
+  "_comment": "Example Gmail message with full format",
+  "_source": "Synthetic example based on API documentation",
+
+  "id": "18d5abc123def456",
+  "threadId": "18d5abc123def456",
+  "labelIds": [
+    "INBOX",
+    "UNREAD",
+    "IMPORTANT",
+    "Label_1"
+  ],
+  "snippet": "Thanks for the update! I'll review the document and get back to you by...",
+  "historyId": "987654",
+  "internalDate": "1706547000000",
+  "sizeEstimate": 15234,
+
+  "payload": {
+    "partId": "",
+    "mimeType": "multipart/alternative",
+    "filename": "",
+    "headers": [
+      {
+        "name": "Delivered-To",
+        "value": "recipient@gmail.com"
+      },
+      {
+        "name": "Received",
+        "value": "by 2002:a05:6a20:8f07:0:0:0:0 with SMTP id l7csp123456pzk; Wed, 29 Jan 2025 10:30:00 -0800 (PST)"
+      },
+      {
+        "name": "Date",
+        "value": "Wed, 29 Jan 2025 13:30:00 -0500"
+      },
+      {
+        "name": "From",
+        "value": "\"Alice Smith\" <alice@example.com>"
+      },
+      {
+        "name": "To",
+        "value": "\"Bob Jones\" <recipient@gmail.com>"
+      },
+      {
+        "name": "Subject",
+        "value": "Re: Project Update"
+      },
+      {
+        "name": "Message-ID",
+        "_comment": "RFC 2822 Message-ID is DIFFERENT from API 'id' field!",
+        "value": "<CAG8+N1Lx234abc@mail.example.com>"
+      },
+      {
+        "name": "In-Reply-To",
+        "value": "<CAG8+N1Kabc123@mail.gmail.com>"
+      },
+      {
+        "name": "References",
+        "value": "<CAG8+N1Kabc123@mail.gmail.com>"
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/alternative; boundary=\"0000000000001234567890abcdef\""
+      }
+    ],
+    "body": {
+      "size": 0
+    },
+    "parts": [
+      {
+        "partId": "0",
+        "mimeType": "text/plain",
+        "filename": "",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "text/plain; charset=\"UTF-8\""
+          }
+        ],
+        "body": {
+          "size": 234,
+          "data": "VGhhbmtzIGZvciB0aGUgdXBkYXRlISBJJ2xsIHJldmlldyB0aGUgZG9jdW1lbnQgYW5kIGdldCBiYWNrIHRvIHlvdSBieSBlbmQgb2YgZGF5Lg=="
+        }
+      },
+      {
+        "partId": "1",
+        "mimeType": "text/html",
+        "filename": "",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "text/html; charset=\"UTF-8\""
+          }
+        ],
+        "body": {
+          "size": 456,
+          "data": "PGRpdiBkaXI9Imx0ciI-VGhhbmtzIGZvciB0aGUgdXBkYXRlISBJJ2xsIHJldmlldyB0aGUgZG9jdW1lbnQgYW5kIGdldCBiYWNrIHRvIHlvdSBieSBlbmQgb2YgZGF5LjwvZGl2Pg=="
+        }
+      }
+    ]
+  }
+}

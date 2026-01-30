@@ -1,0 +1,132 @@
+{
+  "_comment": "Comparison of system labels vs user labels",
+  "_source": "Synthetic example based on API documentation",
+
+  "labels": [
+    {
+      "_comment": "System label - INBOX",
+      "id": "INBOX",
+      "name": "INBOX",
+      "type": "system",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow"
+    },
+    {
+      "_comment": "System label - SENT",
+      "id": "SENT",
+      "name": "SENT",
+      "type": "system",
+      "messageListVisibility": "hide",
+      "labelListVisibility": "labelShow"
+    },
+    {
+      "_comment": "System label - UNREAD (no visibility settings)",
+      "id": "UNREAD",
+      "name": "UNREAD",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - STARRED",
+      "id": "STARRED",
+      "name": "STARRED",
+      "type": "system",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow"
+    },
+    {
+      "_comment": "System label - IMPORTANT",
+      "id": "IMPORTANT",
+      "name": "IMPORTANT",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - DRAFT",
+      "id": "DRAFT",
+      "name": "DRAFT",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - SPAM",
+      "id": "SPAM",
+      "name": "SPAM",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - TRASH",
+      "id": "TRASH",
+      "name": "TRASH",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - CATEGORY_PERSONAL",
+      "id": "CATEGORY_PERSONAL",
+      "name": "CATEGORY_PERSONAL",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - CATEGORY_SOCIAL",
+      "id": "CATEGORY_SOCIAL",
+      "name": "CATEGORY_SOCIAL",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - CATEGORY_PROMOTIONS",
+      "id": "CATEGORY_PROMOTIONS",
+      "name": "CATEGORY_PROMOTIONS",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - CATEGORY_UPDATES",
+      "id": "CATEGORY_UPDATES",
+      "name": "CATEGORY_UPDATES",
+      "type": "system"
+    },
+    {
+      "_comment": "System label - CATEGORY_FORUMS",
+      "id": "CATEGORY_FORUMS",
+      "name": "CATEGORY_FORUMS",
+      "type": "system"
+    },
+    {
+      "_comment": "User label - has different ID format",
+      "id": "Label_1",
+      "name": "Work",
+      "type": "user",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow",
+      "color": {
+        "textColor": "#ffffff",
+        "backgroundColor": "#fb4c2f"
+      }
+    },
+    {
+      "_comment": "User label - nested label uses / separator",
+      "id": "Label_2",
+      "name": "Work/Projects",
+      "type": "user",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow",
+      "color": {
+        "textColor": "#ffffff",
+        "backgroundColor": "#16a765"
+      }
+    },
+    {
+      "_comment": "User label - another example",
+      "id": "Label_15",
+      "name": "Personal",
+      "type": "user",
+      "messageListVisibility": "show",
+      "labelListVisibility": "labelShow"
+    }
+  ],
+
+  "_observations": {
+    "system_label_ids": "System labels use uppercase names as IDs (INBOX, SENT, etc.)",
+    "user_label_ids": "User labels use 'Label_N' format where N is numeric",
+    "nested_labels": "Nested labels use '/' in name but flat ID structure",
+    "id_immutable": "Label IDs cannot change after creation",
+    "name_mutable": "Label names can be changed, ID stays same",
+    "max_labels": "Maximum 10,000 user labels per mailbox"
+  }
+}

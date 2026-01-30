@@ -1,0 +1,128 @@
+{
+  "_comment": "Example showing recurring event parent vs instance",
+  "_source": "Synthetic example based on API documentation",
+  "_critical_note": "Parent and instances have DIFFERENT event IDs",
+
+  "recurring_event_parent": {
+    "_comment": "The recurring event definition",
+    "kind": "calendar#event",
+    "id": "recurring_abc123",
+    "status": "confirmed",
+    "summary": "Weekly Standup",
+
+    "start": {
+      "dateTime": "2025-01-29T10:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2025-01-29T10:30:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "recurrence": [
+      "RRULE:FREQ=WEEKLY;BYDAY=WE;COUNT=10"
+    ],
+
+    "iCalUID": "recurring_abc123@google.com",
+
+    "_observations": {
+      "recurrence_field": "RRULE in RFC 5545 format",
+      "timeZone_required": "Required for recurring events (DST handling)",
+      "this_is_parent": "This is the recurring event definition, not an instance"
+    }
+  },
+
+  "instance_1_unchanged": {
+    "_comment": "First instance (Jan 29) - not modified",
+    "kind": "calendar#event",
+    "id": "recurring_abc123_20250129T180000Z",
+    "status": "confirmed",
+    "summary": "Weekly Standup",
+
+    "start": {
+      "dateTime": "2025-01-29T10:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2025-01-29T10:30:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "recurringEventId": "recurring_abc123",
+    "originalStartTime": {
+      "dateTime": "2025-01-29T10:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "iCalUID": "recurring_abc123@google.com",
+
+    "_observations": {
+      "different_id": "Instance ID includes timestamp suffix",
+      "recurringEventId": "Points back to parent event",
+      "originalStartTime": "Identifies which occurrence this is",
+      "same_iCalUID": "All instances share same iCalUID"
+    }
+  },
+
+  "instance_2_modified": {
+    "_comment": "Second instance (Feb 5) - moved to 11 AM",
+    "kind": "calendar#event",
+    "id": "recurring_abc123_20250205T180000Z",
+    "status": "confirmed",
+    "summary": "Weekly Standup (Rescheduled)",
+
+    "start": {
+      "dateTime": "2025-02-05T11:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2025-02-05T11:30:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "recurringEventId": "recurring_abc123",
+    "originalStartTime": {
+      "dateTime": "2025-02-05T10:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "iCalUID": "recurring_abc123@google.com",
+
+    "_observations": {
+      "original_vs_actual": "originalStartTime shows original (10 AM), start shows new (11 AM)",
+      "modified_instance": "This is an exception - differs from recurrence pattern",
+      "id_unchanged": "Instance ID still based on ORIGINAL time, not new time",
+      "summary_changed": "Instance can have different summary than parent"
+    }
+  },
+
+  "instance_3_cancelled": {
+    "_comment": "Third instance (Feb 12) - cancelled",
+    "kind": "calendar#event",
+    "id": "recurring_abc123_20250212T180000Z",
+    "status": "cancelled",
+    "summary": "Weekly Standup",
+
+    "recurringEventId": "recurring_abc123",
+    "originalStartTime": {
+      "dateTime": "2025-02-12T10:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "iCalUID": "recurring_abc123@google.com",
+
+    "_observations": {
+      "status_cancelled": "Instance exists but is marked cancelled",
+      "still_has_id": "Cancelled instance retains its ID",
+      "no_start_end": "May or may not have start/end when cancelled"
+    }
+  },
+
+  "_key_patterns": {
+    "get_all_instances": "Use events.instances(calendarId, recurringEventId)",
+    "identify_instance": "Use originalStartTime, not id or current start",
+    "modify_single": "PATCH the instance, not the parent",
+    "modify_all_future": "Truncate parent recurrence + create new series",
+    "modify_all": "PATCH the parent event"
+  }
+}

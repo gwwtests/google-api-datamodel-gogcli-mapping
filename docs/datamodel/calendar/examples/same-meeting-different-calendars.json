@@ -1,0 +1,133 @@
+{
+  "_comment": "Same meeting invitation appears differently on organizer vs attendee calendars",
+  "_source": "Synthetic example based on API documentation",
+  "_critical_note": "Same meeting has DIFFERENT event IDs on different calendars",
+
+  "organizer_view": {
+    "_comment": "How the meeting appears on Alice's calendar (organizer)",
+    "_query": "GET /calendars/alice@company.com/events/meeting_xyz",
+
+    "kind": "calendar#event",
+    "id": "meeting_xyz",
+    "status": "confirmed",
+    "summary": "Project Review",
+
+    "creator": {
+      "email": "alice@company.com",
+      "self": true
+    },
+    "organizer": {
+      "email": "alice@company.com",
+      "self": true
+    },
+
+    "start": {
+      "dateTime": "2025-01-29T14:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2025-01-29T15:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "attendees": [
+      {
+        "email": "alice@company.com",
+        "organizer": true,
+        "self": true,
+        "responseStatus": "accepted"
+      },
+      {
+        "email": "bob@company.com",
+        "responseStatus": "accepted"
+      },
+      {
+        "email": "carol@company.com",
+        "responseStatus": "tentative"
+      }
+    ],
+
+    "iCalUID": "meeting_xyz@google.com"
+  },
+
+  "attendee_view": {
+    "_comment": "How the SAME meeting appears on Bob's calendar (attendee)",
+    "_query": "GET /calendars/bob@company.com/events/bob_copy_123",
+    "_note": "DIFFERENT event ID!",
+
+    "kind": "calendar#event",
+    "id": "bob_copy_123",
+    "status": "confirmed",
+    "summary": "Project Review",
+
+    "creator": {
+      "email": "alice@company.com"
+    },
+    "organizer": {
+      "email": "alice@company.com"
+    },
+
+    "start": {
+      "dateTime": "2025-01-29T14:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2025-01-29T15:00:00-08:00",
+      "timeZone": "America/Los_Angeles"
+    },
+
+    "attendees": [
+      {
+        "email": "alice@company.com",
+        "organizer": true,
+        "responseStatus": "accepted"
+      },
+      {
+        "email": "bob@company.com",
+        "self": true,
+        "responseStatus": "accepted"
+      },
+      {
+        "email": "carol@company.com",
+        "responseStatus": "tentative"
+      }
+    ],
+
+    "iCalUID": "meeting_xyz@google.com"
+  },
+
+  "_comparison": {
+    "event_id": {
+      "organizer": "meeting_xyz",
+      "attendee": "bob_copy_123",
+      "_note": "DIFFERENT - each calendar has its own event ID"
+    },
+    "calendar_id": {
+      "organizer": "alice@company.com",
+      "attendee": "bob@company.com",
+      "_note": "Event is on attendee's PRIMARY calendar"
+    },
+    "iCalUID": {
+      "organizer": "meeting_xyz@google.com",
+      "attendee": "meeting_xyz@google.com",
+      "_note": "SAME - use this to correlate across calendars"
+    },
+    "self_field": {
+      "_note": "'self: true' appears on different attendee depending on who queries"
+    }
+  },
+
+  "_how_to_correlate": {
+    "method_1": "Use iCalUID - same across all copies",
+    "method_2": "Match by organizer email + start time + summary",
+    "warning": "Do NOT assume event IDs match across calendars"
+  },
+
+  "_shared_calendar_different": {
+    "_comment": "Contrast: Shared calendar (not invitation) uses SAME event ID",
+    "_scenario": "Alice shares her calendar with Bob",
+    "both_query_same": "GET /calendars/alice@company.com/events/meeting_xyz",
+    "both_see_same_id": "meeting_xyz",
+    "_key_difference": "Shared calendar = same ID, Invitation = different ID"
+  }
+}

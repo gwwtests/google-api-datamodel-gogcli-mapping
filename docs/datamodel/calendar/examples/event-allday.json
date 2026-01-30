@@ -1,0 +1,57 @@
+{
+  "_comment": "Example all-day calendar event",
+  "_source": "Synthetic example based on API documentation",
+  "_critical_note": "End date is EXCLUSIVE - this is a 2-day event (Jan 29-30)",
+
+  "kind": "calendar#event",
+  "id": "allday123456",
+  "status": "confirmed",
+  "summary": "Team Offsite",
+  "description": "Annual team building retreat",
+  "location": "Mountain Resort",
+
+  "creator": {
+    "email": "alice@company.com"
+  },
+  "organizer": {
+    "email": "alice@company.com"
+  },
+
+  "start": {
+    "date": "2025-01-29"
+  },
+  "end": {
+    "date": "2025-01-31"
+  },
+
+  "iCalUID": "allday123456@google.com",
+  "eventType": "default",
+  "transparency": "transparent",
+
+  "_observations": {
+    "date_vs_dateTime": "All-day events use 'date' field, not 'dateTime'",
+    "no_timezone": "timeZone field has NO effect on all-day events",
+    "end_date_exclusive": "Jan 31 means event ENDS before Jan 31, so last day is Jan 30",
+    "duration_calculation": "Days = end_date - start_date = 2 days",
+    "transparency_transparent": "Shows as 'free' (doesn't block time)",
+    "common_mistake": "Setting end=start creates 0-day (invisible) event!"
+  },
+
+  "_example_durations": {
+    "1_day_event": {
+      "start": {"date": "2025-01-29"},
+      "end": {"date": "2025-01-30"},
+      "_result": "Event on Jan 29 only"
+    },
+    "3_day_event": {
+      "start": {"date": "2025-01-29"},
+      "end": {"date": "2025-02-01"},
+      "_result": "Event on Jan 29, 30, 31"
+    },
+    "WRONG_0_day_event": {
+      "start": {"date": "2025-01-29"},
+      "end": {"date": "2025-01-29"},
+      "_result": "INVISIBLE - 0 duration!"
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "_comment": "Example timed calendar event with meeting invitation",
+  "_source": "Synthetic example based on API documentation",
+
+  "kind": "calendar#event",
+  "etag": "\"3123456789000000\"",
+  "id": "abc123def456ghi789",
+  "status": "confirmed",
+  "htmlLink": "https://www.google.com/calendar/event?eid=YWJjMTIzZGVmNDU2Z2hpNzg5",
+  "created": "2025-01-28T10:00:00.000Z",
+  "updated": "2025-01-28T10:05:00.000Z",
+  "summary": "Team Standup",
+  "description": "Daily sync meeting for the engineering team",
+  "location": "Conference Room A",
+
+  "creator": {
+    "email": "alice@company.com",
+    "displayName": "Alice Smith"
+  },
+  "organizer": {
+    "email": "alice@company.com",
+    "displayName": "Alice Smith",
+    "self": true
+  },
+
+  "start": {
+    "dateTime": "2025-01-29T10:00:00-08:00",
+    "timeZone": "America/Los_Angeles"
+  },
+  "end": {
+    "dateTime": "2025-01-29T10:30:00-08:00",
+    "timeZone": "America/Los_Angeles"
+  },
+
+  "iCalUID": "abc123def456ghi789@google.com",
+
+  "attendees": [
+    {
+      "email": "alice@company.com",
+      "displayName": "Alice Smith",
+      "organizer": true,
+      "self": true,
+      "responseStatus": "accepted"
+    },
+    {
+      "email": "bob@company.com",
+      "displayName": "Bob Jones",
+      "responseStatus": "accepted"
+    },
+    {
+      "email": "carol@company.com",
+      "displayName": "Carol Williams",
+      "responseStatus": "tentative"
+    },
+    {
+      "email": "dave@company.com",
+      "displayName": "Dave Brown",
+      "responseStatus": "needsAction"
+    }
+  ],
+
+  "conferenceData": {
+    "conferenceId": "abc-defg-hij",
+    "conferenceSolution": {
+      "key": {
+        "type": "hangoutsMeet"
+      },
+      "name": "Google Meet",
+      "iconUri": "https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-512dp/logo_meet_2020q4_color_2x_web_512dp.png"
+    },
+    "entryPoints": [
+      {
+        "entryPointType": "video",
+        "uri": "https://meet.google.com/abc-defg-hij",
+        "label": "meet.google.com/abc-defg-hij"
+      }
+    ]
+  },
+
+  "reminders": {
+    "useDefault": false,
+    "overrides": [
+      {"method": "email", "minutes": 1440},
+      {"method": "popup", "minutes": 10}
+    ]
+  },
+
+  "eventType": "default",
+  "visibility": "default",
+  "transparency": "opaque",
+  "guestsCanModify": false,
+  "guestsCanInviteOthers": true,
+  "guestsCanSeeOtherGuests": true,
+
+  "_observations": {
+    "id_format": "Base32hex characters (a-v, 0-9), opaque string",
+    "iCalUID": "Used to correlate same meeting across calendars",
+    "creator_vs_organizer": "Usually same for single-user events",
+    "self_field": "Indicates this is the querying user's entry",
+    "response_status_values": "needsAction, declined, tentative, accepted",
+    "end_time_exclusive": "Meeting ENDS at 10:30, doesn't extend past it"
+  }
+}

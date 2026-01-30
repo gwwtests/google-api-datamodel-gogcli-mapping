@@ -1,0 +1,72 @@
+{
+  "_comment": "Example Gmail thread containing multiple messages",
+  "_source": "Synthetic example based on API documentation",
+  "_note": "Thread ID often equals first message ID",
+
+  "id": "18d5abc123def456",
+  "historyId": "987654",
+  "snippet": "Thanks for the update! I'll review...",
+
+  "messages": [
+    {
+      "_comment": "First message in thread (original email)",
+      "id": "18d5abc123def456",
+      "threadId": "18d5abc123def456",
+      "labelIds": ["SENT"],
+      "snippet": "Hi team, here's the project update...",
+      "internalDate": "1706540400000",
+      "payload": {
+        "headers": [
+          {"name": "From", "value": "bob@gmail.com"},
+          {"name": "To", "value": "alice@example.com"},
+          {"name": "Subject", "value": "Project Update"},
+          {"name": "Date", "value": "Wed, 29 Jan 2025 11:00:00 -0500"}
+        ]
+      }
+    },
+    {
+      "_comment": "Reply from Alice",
+      "id": "18d5def789abc123",
+      "threadId": "18d5abc123def456",
+      "labelIds": ["INBOX", "IMPORTANT"],
+      "snippet": "Thanks for the update! I'll review...",
+      "internalDate": "1706547000000",
+      "payload": {
+        "headers": [
+          {"name": "From", "value": "alice@example.com"},
+          {"name": "To", "value": "bob@gmail.com"},
+          {"name": "Subject", "value": "Re: Project Update"},
+          {"name": "Date", "value": "Wed, 29 Jan 2025 13:30:00 -0500"},
+          {"name": "In-Reply-To", "value": "<msg1@gmail.com>"},
+          {"name": "References", "value": "<msg1@gmail.com>"}
+        ]
+      }
+    },
+    {
+      "_comment": "Second reply from Bob",
+      "id": "18d5ghi012jkl345",
+      "threadId": "18d5abc123def456",
+      "labelIds": ["SENT"],
+      "snippet": "Great, let me know if you have questions...",
+      "internalDate": "1706550600000",
+      "payload": {
+        "headers": [
+          {"name": "From", "value": "bob@gmail.com"},
+          {"name": "To", "value": "alice@example.com"},
+          {"name": "Subject", "value": "Re: Project Update"},
+          {"name": "Date", "value": "Wed, 29 Jan 2025 14:30:00 -0500"},
+          {"name": "In-Reply-To", "value": "<msg2@example.com>"},
+          {"name": "References", "value": "<msg1@gmail.com> <msg2@example.com>"}
+        ]
+      }
+    }
+  ],
+
+  "_observations": {
+    "thread_id_pattern": "Thread ID typically equals first message ID",
+    "message_ids_unique": "Each message has distinct ID within thread",
+    "labels_per_message": "Labels are on individual messages, not thread",
+    "internalDate_order": "Messages ordered by internalDate (oldest first in array)",
+    "subject_threading": "Replies have 'Re: ' prefix, same base subject"
+  }
+}
