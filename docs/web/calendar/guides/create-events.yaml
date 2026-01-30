@@ -1,0 +1,53 @@
+source_url: "https://developers.google.com/workspace/calendar/api/guides/create-events"
+download_timestamp: "2026-01-30T09:18:04Z"
+document_title: "Create events - Calendar API Guide"
+covered_api_calls:
+  - "events.insert"
+  - "events.update"
+  - "calendarList.list"
+  - "calendarList.get"
+key_concepts:
+  - "event creation workflow"
+  - "calendarId parameter"
+  - "primary calendar keyword"
+  - "start and end times (required fields)"
+  - "timed events vs all-day events"
+  - "start.dateTime and end.dateTime"
+  - "start.date and end.date"
+  - "timeZone field usage"
+  - "RFC3339 datetime format"
+  - "IANA timezone names"
+  - "event metadata (location, summary, description)"
+  - "custom event ID format"
+  - "event ID requirements"
+  - "attendees and sendUpdates parameter"
+  - "Drive attachments"
+  - "conferenceData for video meetings"
+  - "OAuth scope requirements"
+  - "accessRole verification"
+related_docs:
+  - "../events/events-reference.md"
+  - "../events/events-calendars-concepts.md"
+  - "./event-types.md"
+notes: |
+  PRACTICAL GUIDE: Step-by-step guide for creating calendar events.
+
+  Key requirements:
+  - OAuth scope: https://www.googleapis.com/auth/calendar (for edit access)
+  - calendarId: email address or 'primary' keyword
+  - event object with start and end times (only two required fields)
+  - User must have write access to the calendar
+
+  Event metadata options:
+  - location: Enables "time to leave" feature and map directions
+  - custom event ID: Conform to format requirements, enables local DB sync
+  - attendees: Event appears on all attendees' calendars with same ID
+  - sendUpdates: "all" or "externalOnly" triggers email notifications
+
+  DateTime handling:
+  - Timed events: Use start.dateTime and end.dateTime (RFC3339)
+  - All-day events: Use start.date and end.date (yyyy-mm-dd)
+  - TimeZone: IANA format (e.g., "America/Los_Angeles")
+  - Can include offset in dateTime OR use separate timeZone field
+
+  Example code included for multiple languages (Go, Java, JavaScript, Python, PHP).

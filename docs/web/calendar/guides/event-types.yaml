@@ -1,0 +1,81 @@
+source_url: "https://developers.google.com/workspace/calendar/api/guides/event-types"
+download_timestamp: "2026-01-30T09:18:04Z"
+document_title: "Event types - Calendar API Guide"
+covered_api_calls:
+  - "events.insert (with eventType)"
+  - "events.update (with eventType)"
+  - "events.list (with eventTypes filter)"
+  - "events.watch (with eventTypes filter)"
+  - "events.get"
+  - "events.instances"
+  - "events.delete"
+  - "events.move"
+  - "events.patch"
+  - "events.import"
+key_concepts:
+  - "eventType property"
+  - "default event type"
+  - "birthday event type"
+  - "fromGmail event type"
+  - "focusTime event type"
+  - "outOfOffice event type"
+  - "workingLocation event type"
+  - "eventTypes filter parameter"
+  - "birthdayProperties field"
+  - "birthday event constraints"
+  - "annual recurrence for birthdays"
+  - "all-day events spanning one day"
+  - "event visibility (private)"
+  - "event transparency (transparent)"
+  - "birthday sync with Google Contacts"
+  - "birthday sync with Google Account profile"
+  - "People API integration"
+  - "events from Gmail auto-generation"
+  - "primary calendar only features"
+related_docs:
+  - "../events/events-reference.md"
+  - "../recurring/recurring-events.md"
+  - "./create-events.md"
+  - "./calendar-status.md"
+notes: |
+  COMPREHENSIVE GUIDE: All event types supported by Calendar API.
+
+  Event Type Overview:
+  - eventType field returned in all events
+  - eventType set during creation/update (defaults to 'default')
+  - eventTypes filter in list/watch calls
+
+  Default Events:
+  - Main Calendar API resource
+  - Wide range of customizable properties
+  - Most flexible event type
+
+  Birthday Events:
+  - Special all-day events with annual recurrence
+  - Synced with Google Contacts and Account profile
+  - Read-only: get, instances, list methods supported
+  - Create constraints:
+    * Must span exactly one day
+    * visibility: 'private'
+    * transparency: 'transparent'
+    * recurrence: 'RRULE:FREQ=YEARLY'
+    * Feb 29 birthdays: 'RRULE:FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=-1'
+  - Update allowed: colorId, summary, reminders, start/end date
+  - birthdayProperties field:
+    * type: birthday/anniversary/custom
+    * customTypeName: user label
+    * contact: People API resource name (format: 'people/c12345')
+  - Cannot change organizer (move not supported)
+
+  Events from Gmail:
+  - Auto-generated from Gmail content
+  - Cannot create via API
+  - Update allowed: colorId, reminders, visibility, transparency, status, attendees, extended properties
+  - Cannot change organizer
+
+  Focus Time, Out of Office, Working Location:
+  - Primary calendars only
+  - User-specific availability
+  - See calendar-status guide for details
+
+  Google Apps Script integration examples included.
