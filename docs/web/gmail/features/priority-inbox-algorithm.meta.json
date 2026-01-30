@@ -1,0 +1,14 @@
+{
+  "url": "https://research.google.com/pubs/archive/36955.pdf",
+  "title": "The Learning Behind Gmail Priority Inbox",
+  "authors": ["Douglas Aberdeen", "Ondrej Pacovsky"],
+  "retrieved": "2026-01-30",
+  "description": "Google Research paper on Gmail Priority Inbox machine learning algorithm",
+  "extraction_method": "Direct download",
+  "file_format": "PDF",
+  "related_urls": [
+    "http://mikhailian.mova.org/node/256",
+    "https://www.newmail.ai/blog/gmail-ai-smart-sorting-organization",
+    "https://getemil.io/guides/master-the-gmail-priority-inbox/"
+  ]
+}
