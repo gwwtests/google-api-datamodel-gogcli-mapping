@@ -370,6 +370,237 @@ Meeting: 2:00 PM - 3:00 PM
 
 ---
 
+### 8. Guest Permissions: UI vs API Behavior Mismatch
+
+**What User Sees (UI)**:
+```
+Event Settings:
+  ☑ Guests can modify event
+  ☑ Guests can invite others
+  ☑ Guests can see other guests
+```
+User enables "Guests can modify event" → expects guests can edit the event.
+
+**What's in the Data (API)**:
+```json
+{
+  "summary": "Team Meeting",
+  "guestsCanModify": true,
+  "guestsCanInviteOthers": true,
+  "guestsCanSeeOtherGuests": true
+}
+```
+
+**⚠️ Counterintuitive Aspect - API vs UI Asymmetry**:
+
+| Action | Result |
+|--------|--------|
+| Guest edits via **Calendar UI** | Changes sync to organizer and all attendees ✅ |
+| Guest edits via **API** | Changes only affect guest's LOCAL copy! ❌ |
+
+```python
+# Bob (guest) tries to modify via API:
+event = service.events().get(calendarId='bob@example.com', eventId='bobs_copy').execute()
+event['summary'] = 'Updated Title'
+service.events().update(calendarId='bob@example.com', eventId='bobs_copy', body=event).execute()
+
+# Result:
+# - Bob sees: "Updated Title"
+# - Alice (organizer) sees: Original title (unchanged!)
+# - Carol (other attendee) sees: Original title (unchanged!)
+```
+
+This is a known limitation. The `guestsCanModify` flag is fully functional in the Calendar UI, but API calls by guests only modify their local copy.
+
+---
+
+### 9. Moving Events: Organizer Changes
+
+**What User Sees (UI)**:
+```
+Right-click event → Move to calendar → Select "Team Calendar"
+```
+User moves event from personal calendar to team calendar.
+
+**What's in the Data (API)**:
+```python
+# events.move method
+moved_event = service.events().move(
+    calendarId='alice@example.com',       # Source
+    eventId='meeting_123',
+    destination='team@example.com'        # Destination
+).execute()
+```
+
+**⚠️ Counterintuitive Aspects**:
+
+1. **Organizer Changes**: After move, the destination calendar's owner becomes the new organizer
+2. **Event Disappears from Source**: Not a copy - original is deleted
+3. **Event ID May Change**: Don't rely on ID staying the same
+4. **Not All Events Can Move**:
+
+| Event Type | Movable? |
+|------------|----------|
+| Default events | ✅ Yes |
+| Birthday events | ❌ No |
+| Out of Office | ❌ No |
+| Working Location | ❌ No |
+| Focus Time | ❌ No |
+
+---
+
+### 10. Copying Events: No Native Support
+
+**What User Sees (UI)**:
+```
+In Calendar UI (or most apps):
+  Ctrl+C → Ctrl+V  or  "Duplicate" option
+```
+User expects a simple copy operation.
+
+**What's in the Data (API)**:
+```python
+# NO events.copy endpoint exists!
+# Must do: GET → clean fields → INSERT
+
+# 1. Get original
+event = service.events().get(calendarId='source@example.com', eventId='abc123').execute()
+
+# 2. Remove system-managed fields
+for field in ['id', 'etag', 'created', 'updated', 'htmlLink', 'iCalUID', 'creator', 'organizer']:
+    event.pop(field, None)
+
+# 3. Insert as new event
+new_event = service.events().insert(calendarId='dest@example.com', body=event).execute()
+```
+
+**⚠️ Counterintuitive Aspects**:
+
+* **New iCalUID**: Copy gets entirely new identifier (can't correlate with original)
+* **No Sync**: Changes to original don't affect copy (and vice versa)
+* **Must Remove Fields**: System fields will cause errors if included
+
+---
+
+### 11. Video Conferencing: Meet Link Lifecycle
+
+**What User Sees (UI)**:
+```
+☑ Add Google Meet video conferencing
+  → Link appears: meet.google.com/abc-defg-hij
+```
+
+**What's in the Data (API)**:
+
+```json
+{
+  "hangoutLink": "https://meet.google.com/abc-defg-hij",
+  "conferenceData": {
+    "entryPoints": [
+      {
+        "entryPointType": "video",
+        "uri": "https://meet.google.com/abc-defg-hij"
+      },
+      {
+        "entryPointType": "phone",
+        "uri": "tel:+1-555-123-4567",
+        "pin": "123456789"
+      }
+    ],
+    "conferenceSolution": {
+      "name": "Google Meet",
+      "key": {"type": "hangoutsMeet"}
+    },
+    "conferenceId": "abc-defg-hij"
+  }
+}
+```
+
+**⚠️ Counterintuitive Aspects**:
+
+* **Creating Meet Link** requires special parameter:
+  ```python
+  service.events().insert(
+      calendarId='primary',
+      body=event_with_conferenceData_createRequest,
+      conferenceDataVersion=1  # REQUIRED!
+  )
+  ```
+* **`hangoutLink`** is read-only - can't set directly
+* **Two entry points**: Video URL + optional phone dial-in
+* **Removing link**: Set `conferenceData` to `null` (with `conferenceDataVersion=1`)
+
+---
+
+### 12. Recording/Transcription: Very Limited API
+
+**What User Sees (UI)**:
+```
+In Google Meet:
+  ⏺ Record meeting
+  📝 Turn on transcription
+  🤖 Take notes with Gemini
+
+In Calendar Event:
+  Video call options → Meeting records → Pre-configure
+```
+
+**What's in the Data (API)**:
+
+**Mostly NOT accessible!**
+
+| Feature | API Support |
+|---------|-------------|
+| Pre-configure auto-record | ⚠️ Admin-level only (2024+ feature) |
+| Per-event recording toggle | ❌ No direct field |
+| Start/stop recording | ❌ Requires meeting UI |
+| Access recordings | ⚠️ Via Drive API, not Calendar |
+| Access transcripts | ⚠️ Via Drive API, not Calendar |
+
+**⚠️ Counterintuitive Aspects**:
+
+* Calendar API cannot start/stop recordings
+* Recordings stored in Drive, not Calendar
+* No field in event response indicates recording status
+* Transcripts are separate Drive documents
+
+---
+
+### 13. Attachments: NOT Supported
+
+**What User Sees (UI)**:
+```
+In some calendar clients:
+  📎 Attach file → Select from Drive
+```
+
+**What's in the Data (API)**:
+
+**No native attachment support in Calendar API v3!**
+
+**Workarounds**:
+```json
+{
+  "description": "Attachments:\n📎 https://docs.google.com/document/d/abc123\n📎 https://drive.google.com/file/d/xyz789",
+
+  "extendedProperties": {
+    "shared": {
+      "attachment_url_1": "https://docs.google.com/document/d/abc123",
+      "attachment_url_2": "https://drive.google.com/file/d/xyz789"
+    }
+  }
+}
+```
+
+**⚠️ Counterintuitive Aspect**:
+
+Despite Google Calendar UI supporting Drive attachments, the REST API has no attachment field. Must use:
+- `description` with links
+- `extendedProperties` for structured data
+- Apps Script for true attachment support
+
+---
+
 ## Entity Relationship Diagram
 
 ```
@@ -457,11 +688,19 @@ Meeting: 2:00 PM - 3:00 PM
 | Recurring = one event | Each instance has DIFFERENT ID |
 | Calendar color is shared | Color is per-user (CalendarList) |
 | Sharing adds to their list | Must explicitly add via CalendarList |
+| guestsCanModify works | Only in UI; API guest edits are local only |
+| events.copy exists | NO! Must use get + insert manually |
+| Moving preserves ownership | NO! Organizer changes to dest owner |
+| Attachments via API | NOT SUPPORTED - use links workaround |
+| Recording via API | VERY LIMITED - admin presets only |
+| Meet link via URL | NO! Must use conferenceData + version=1 |
 
 ---
 
 ## See Also
 
+* `api-capabilities.md` - Feature matrix and detailed capability documentation
+* `visualizations.md` - Mermaid diagrams for visual understanding
 * `identifiers.md` - Detailed ID semantics
 * `timezones.md` - Timezone handling in depth
 * `gogcli-data-handling.md` - How gogcli handles these structures

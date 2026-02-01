@@ -1,0 +1,161 @@
+{
+  "_comment": "Event with Google Meet, attendees, and guest permissions",
+  "_source": "Synthetic example based on API documentation",
+  "_demonstrates": [
+    "conferenceData structure",
+    "Guest permission flags",
+    "Attendee response tracking"
+  ],
+
+  "kind": "calendar#event",
+  "id": "team_review_abc123",
+  "status": "confirmed",
+  "summary": "Quarterly Review",
+  "description": "Q4 performance review.\n\nAttachments (workaround - no native support):\n- Agenda: https://docs.google.com/document/d/abc123\n- Metrics: https://sheets.google.com/spreadsheets/d/xyz789",
+
+  "creator": {
+    "email": "alice@company.com",
+    "self": true
+  },
+  "organizer": {
+    "email": "alice@company.com",
+    "self": true
+  },
+
+  "start": {
+    "dateTime": "2025-01-30T14:00:00-08:00",
+    "timeZone": "America/Los_Angeles"
+  },
+  "end": {
+    "dateTime": "2025-01-30T15:00:00-08:00",
+    "timeZone": "America/Los_Angeles"
+  },
+
+  "guestsCanModify": true,
+  "guestsCanInviteOthers": true,
+  "guestsCanSeeOtherGuests": true,
+
+  "_guestsCanModify_gotcha": {
+    "_warning": "guestsCanModify behavior differs between UI and API!",
+    "via_calendar_ui": "Guest edits sync to organizer and all attendees",
+    "via_api": "Guest edits only affect their LOCAL COPY - organizer doesn't see changes!",
+    "recommendation": "For API-based modifications by guests, have organizer make changes"
+  },
+
+  "attendees": [
+    {
+      "email": "alice@company.com",
+      "organizer": true,
+      "self": true,
+      "responseStatus": "accepted"
+    },
+    {
+      "email": "bob@company.com",
+      "displayName": "Bob Smith",
+      "optional": false,
+      "responseStatus": "accepted",
+      "comment": "Will present metrics"
+    },
+    {
+      "email": "carol@company.com",
+      "displayName": "Carol Jones",
+      "optional": true,
+      "responseStatus": "tentative",
+      "additionalGuests": 1
+    },
+    {
+      "email": "meeting-room-a@resource.calendar.google.com",
+      "displayName": "Conference Room A",
+      "resource": true,
+      "responseStatus": "accepted"
+    }
+  ],
+
+  "hangoutLink": "https://meet.google.com/abc-defg-hij",
+
+  "conferenceData": {
+    "entryPoints": [
+      {
+        "entryPointType": "video",
+        "uri": "https://meet.google.com/abc-defg-hij",
+        "label": "meet.google.com/abc-defg-hij"
+      },
+      {
+        "entryPointType": "phone",
+        "uri": "tel:+1-555-123-4567",
+        "pin": "123456789",
+        "label": "+1 555-123-4567",
+        "regionCode": "US"
+      },
+      {
+        "entryPointType": "more",
+        "uri": "https://tel.meet/abc-defg-hij?pin=123456789"
+      }
+    ],
+    "conferenceSolution": {
+      "key": {
+        "type": "hangoutsMeet"
+      },
+      "name": "Google Meet",
+      "iconUri": "https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-512dp/logo_meet_2020q4_color_2x_web_512dp.png"
+    },
+    "conferenceId": "abc-defg-hij",
+    "signature": "AGirE/..."
+  },
+
+  "_conferenceData_notes": {
+    "creating_meet_link": {
+      "method": "Include conferenceData.createRequest in event body",
+      "required_parameter": "conferenceDataVersion=1 in API call",
+      "example_request": {
+        "conferenceData": {
+          "createRequest": {
+            "requestId": "unique-request-id-123",
+            "conferenceSolutionKey": {
+              "type": "hangoutsMeet"
+            }
+          }
+        }
+      }
+    },
+    "removing_meet_link": {
+      "method": "Set conferenceData to null",
+      "required_parameter": "conferenceDataVersion=1 in API call"
+    },
+    "hangoutLink_is_readonly": "Cannot set hangoutLink directly - use conferenceData.createRequest"
+  },
+
+  "extendedProperties": {
+    "shared": {
+      "attachment_1_name": "Meeting Agenda",
+      "attachment_1_url": "https://docs.google.com/document/d/abc123",
+      "attachment_1_mimeType": "application/vnd.google-apps.document",
+      "attachment_2_name": "Q4 Metrics",
+      "attachment_2_url": "https://sheets.google.com/spreadsheets/d/xyz789",
+      "attachment_2_mimeType": "application/vnd.google-apps.spreadsheet"
+    },
+    "private": {
+      "my_notes": "Remember to ask about budget"
+    }
+  },
+
+  "_extendedProperties_notes": {
+    "shared": "Visible to all attendees",
+    "private": "Visible only to the authenticated user",
+    "use_case": "Workaround for lack of native attachment support"
+  },
+
+  "reminders": {
+    "useDefault": false,
+    "overrides": [
+      {"method": "email", "minutes": 1440},
+      {"method": "popup", "minutes": 30}
+    ]
+  },
+
+  "iCalUID": "team_review_abc123@google.com",
+  "sequence": 0,
+  "created": "2025-01-28T10:00:00.000Z",
+  "updated": "2025-01-28T15:30:00.000Z",
+  "htmlLink": "https://www.google.com/calendar/event?eid=xxx"
+}
