@@ -126,7 +126,58 @@
     "user_label_ids": "User labels use 'Label_N' format where N is numeric",
     "nested_labels": "Nested labels use '/' in name but flat ID structure",
     "id_immutable": "Label IDs cannot change after creation",
-    "name_mutable": "Label names can be changed, ID stays same",
+    "name_mutable": "Label names can be changed via labels.patch, ID stays same",
     "max_labels": "Maximum 10,000 user labels per mailbox"
-  }
+  },
+
+  "_label_mutability": {
+    "_system_labels_on_messages": {
+      "can_apply_and_remove": [
+        "INBOX (remove = archive)",
+        "UNREAD (remove = mark read)",
+        "STARRED",
+        "IMPORTANT",
+        "SPAM",
+        "TRASH",
+        "CATEGORY_PERSONAL",
+        "CATEGORY_SOCIAL",
+        "CATEGORY_PROMOTIONS",
+        "CATEGORY_UPDATES",
+        "CATEGORY_FORUMS",
+        "SNOOZED (label only, no timing API)"
+      ],
+      "auto_managed_cannot_modify": [
+        "SENT (applied automatically on send)",
+        "DRAFT (applied automatically on draft create)"
+      ]
+    },
+    "_label_entity_operations": {
+      "system_labels": "Cannot create, rename, or delete",
+      "user_labels": "Full CRUD: create, read, update (rename/color), delete"
+    }
+  },
+
+  "_available_colors": {
+    "_note": "Gmail only accepts ~70 predefined colors. Arbitrary hex codes will be rejected.",
+    "_sample_palette": [
+      {"name": "Red", "backgroundColor": "#fb4c2f", "textColor": "#ffffff"},
+      {"name": "Dark Red", "backgroundColor": "#cc3a21", "textColor": "#ffffff"},
+      {"name": "Orange", "backgroundColor": "#ffad47", "textColor": "#ffffff"},
+      {"name": "Yellow", "backgroundColor": "#fad165", "textColor": "#000000"},
+      {"name": "Green", "backgroundColor": "#16a765", "textColor": "#ffffff"},
+      {"name": "Teal", "backgroundColor": "#2da2bb", "textColor": "#ffffff"},
+      {"name": "Blue", "backgroundColor": "#4a86e8", "textColor": "#ffffff"},
+      {"name": "Purple", "backgroundColor": "#a479e2", "textColor": "#ffffff"},
+      {"name": "Pink", "backgroundColor": "#f691b3", "textColor": "#000000"},
+      {"name": "Gray", "backgroundColor": "#999999", "textColor": "#ffffff"},
+      {"name": "Black", "backgroundColor": "#000000", "textColor": "#ffffff"},
+      {"name": "White", "backgroundColor": "#ffffff", "textColor": "#000000"}
+    ],
+    "_error_on_invalid": {
+      "code": 400,
+      "message": "Invalid label color"
+    }
+  },
+
+  "_see_also": "label-operations.json for CRUD operation examples"
 }

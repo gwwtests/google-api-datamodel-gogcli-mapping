@@ -401,6 +401,15 @@ def duplicate_event(service, source_calendar_id, event_id, dest_calendar_id):
 ## See Also
 
 * `ux-to-data-mapping.md` - UI to API mapping gotchas
+* `visualizations.md` - Mermaid diagrams
 * `identifiers.md` - Event ID and iCalUID semantics
 * `timezones.md` - Timezone handling
-* `../examples/` - Example API responses
+
+### Example Files
+
+* `examples/event-move-and-duplicate.json` - Move and copy operations
+* `examples/event-with-meet-and-permissions.json` - Conference data and guest permissions
+* `examples/same-meeting-different-calendars.json` - Event ID differences across calendars
+* `examples/event-recurring-parent-and-instance.json` - Recurring event structure
+* `examples/event-timed.json` - Timed event with attendees
+* `examples/event-allday.json` - All-day event date handling

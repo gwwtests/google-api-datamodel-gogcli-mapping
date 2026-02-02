@@ -1,0 +1,304 @@
+{
+  "_comment": "Gmail Label Operations Examples",
+  "_source": "Synthetic examples based on API documentation",
+  "_demonstrates": [
+    "Label CRUD operations",
+    "Archive/unarchive via INBOX label",
+    "Trash operations",
+    "System label limitations"
+  ],
+
+  "1_create_label": {
+    "_operation": "POST /users/me/labels",
+    "_description": "Create a new user label",
+
+    "request": {
+      "name": "Projects/Q4 2025",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "color": {
+        "backgroundColor": "#16a765",
+        "textColor": "#ffffff"
+      }
+    },
+
+    "response": {
+      "id": "Label_42",
+      "name": "Projects/Q4 2025",
+      "type": "user",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "color": {
+        "backgroundColor": "#16a765",
+        "textColor": "#ffffff"
+      },
+      "messagesTotal": 0,
+      "messagesUnread": 0,
+      "threadsTotal": 0,
+      "threadsUnread": 0
+    },
+
+    "_notes": {
+      "nested_labels": "Use '/' in name for nesting (e.g., 'Projects/Q4 2025')",
+      "id_format": "System assigns 'Label_N' format ID",
+      "color_restriction": "Must use predefined Gmail colors (~70 options)"
+    }
+  },
+
+  "2_rename_label": {
+    "_operation": "PATCH /users/me/labels/{id}",
+    "_description": "Rename an existing label (ID stays the same!)",
+
+    "request": {
+      "name": "Projects/Q4 2025 - COMPLETED"
+    },
+
+    "response": {
+      "id": "Label_42",
+      "name": "Projects/Q4 2025 - COMPLETED",
+      "type": "user",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "color": {
+        "backgroundColor": "#16a765",
+        "textColor": "#ffffff"
+      }
+    },
+
+    "_critical_note": "ID 'Label_42' remains UNCHANGED - only 'name' changes"
+  },
+
+  "3_change_label_color": {
+    "_operation": "PATCH /users/me/labels/{id}",
+    "_description": "Change label color",
+
+    "request": {
+      "color": {
+        "backgroundColor": "#fb4c2f",
+        "textColor": "#ffffff"
+      }
+    },
+
+    "_available_colors_sample": [
+      {"bg": "#000000", "text": "#ffffff"},
+      {"bg": "#fb4c2f", "text": "#ffffff"},
+      {"bg": "#ffad47", "text": "#ffffff"},
+      {"bg": "#fad165", "text": "#000000"},
+      {"bg": "#16a765", "text": "#ffffff"},
+      {"bg": "#4a86e8", "text": "#ffffff"},
+      {"bg": "#a479e2", "text": "#ffffff"},
+      {"bg": "#f691b3", "text": "#000000"}
+    ],
+
+    "_error_if_invalid_color": {
+      "error": {
+        "code": 400,
+        "message": "Invalid label color",
+        "status": "INVALID_ARGUMENT"
+      }
+    }
+  },
+
+  "4_archive_message": {
+    "_operation": "POST /users/me/messages/{id}/modify",
+    "_description": "Archive = Remove INBOX label",
+
+    "request": {
+      "removeLabelIds": ["INBOX"]
+    },
+
+    "before": {
+      "id": "msg_123",
+      "labelIds": ["INBOX", "IMPORTANT", "Label_42"]
+    },
+
+    "after": {
+      "id": "msg_123",
+      "labelIds": ["IMPORTANT", "Label_42"]
+    },
+
+    "_note": "Message still exists in 'All Mail', just not visible in Inbox"
+  },
+
+  "5_unarchive_message": {
+    "_operation": "POST /users/me/messages/{id}/modify",
+    "_description": "Unarchive = Add INBOX label back",
+
+    "request": {
+      "addLabelIds": ["INBOX"]
+    },
+
+    "before": {
+      "id": "msg_123",
+      "labelIds": ["IMPORTANT", "Label_42"]
+    },
+
+    "after": {
+      "id": "msg_123",
+      "labelIds": ["INBOX", "IMPORTANT", "Label_42"]
+    }
+  },
+
+  "6_trash_message": {
+    "_operation": "POST /users/me/messages/{id}/trash",
+    "_description": "Move to trash (dedicated endpoint)",
+
+    "before": {
+      "id": "msg_123",
+      "labelIds": ["INBOX", "STARRED", "Label_42"]
+    },
+
+    "after": {
+      "id": "msg_123",
+      "labelIds": ["TRASH"]
+    },
+
+    "_notes": {
+      "removes_other_labels": "Most labels are removed when trashing",
+      "auto_delete": "Messages in TRASH auto-delete after 30 days",
+      "alternative": "Can also use messages.modify with addLabelIds: ['TRASH']"
+    }
+  },
+
+  "7_untrash_message": {
+    "_operation": "POST /users/me/messages/{id}/untrash",
+    "_description": "Restore from trash",
+
+    "before": {
+      "id": "msg_123",
+      "labelIds": ["TRASH"]
+    },
+
+    "after": {
+      "id": "msg_123",
+      "labelIds": ["INBOX"]
+    },
+
+    "_note": "Previous labels are NOT restored - message returns to INBOX"
+  },
+
+  "8_permanent_delete": {
+    "_operation": "DELETE /users/me/messages/{id}",
+    "_description": "Permanently delete (bypasses trash)",
+    "_warning": "IRREVERSIBLE - message is gone forever",
+
+    "response": "204 No Content"
+  },
+
+  "9_mark_read_unread": {
+    "_operations": [
+      "POST /users/me/messages/{id}/modify"
+    ],
+
+    "mark_as_read": {
+      "request": {
+        "removeLabelIds": ["UNREAD"]
+      }
+    },
+
+    "mark_as_unread": {
+      "request": {
+        "addLabelIds": ["UNREAD"]
+      }
+    }
+  },
+
+  "10_star_unstar": {
+    "_operations": [
+      "POST /users/me/messages/{id}/modify"
+    ],
+
+    "add_star": {
+      "request": {
+        "addLabelIds": ["STARRED"]
+      }
+    },
+
+    "remove_star": {
+      "request": {
+        "removeLabelIds": ["STARRED"]
+      }
+    }
+  },
+
+  "11_move_to_category": {
+    "_operation": "POST /users/me/messages/{id}/modify",
+    "_description": "Move message to different category tab",
+
+    "request": {
+      "addLabelIds": ["CATEGORY_PROMOTIONS"],
+      "removeLabelIds": ["CATEGORY_PERSONAL"]
+    },
+
+    "_available_categories": [
+      "CATEGORY_PERSONAL",
+      "CATEGORY_SOCIAL",
+      "CATEGORY_PROMOTIONS",
+      "CATEGORY_UPDATES",
+      "CATEGORY_FORUMS"
+    ]
+  },
+
+  "12_system_label_errors": {
+    "_description": "These operations will FAIL",
+
+    "cannot_add_DRAFT": {
+      "request": {
+        "addLabelIds": ["DRAFT"]
+      },
+      "error": {
+        "code": 400,
+        "message": "Invalid label: DRAFT",
+        "status": "INVALID_ARGUMENT"
+      }
+    },
+
+    "cannot_remove_SENT": {
+      "request": {
+        "removeLabelIds": ["SENT"]
+      },
+      "error": {
+        "code": 400,
+        "message": "Invalid label: SENT",
+        "status": "INVALID_ARGUMENT"
+      }
+    },
+
+    "cannot_rename_system_label": {
+      "_operation": "PATCH /users/me/labels/INBOX",
+      "request": {
+        "name": "My Inbox"
+      },
+      "error": {
+        "code": 400,
+        "message": "System labels cannot be modified",
+        "status": "INVALID_ARGUMENT"
+      }
+    },
+
+    "cannot_delete_system_label": {
+      "_operation": "DELETE /users/me/labels/STARRED",
+      "error": {
+        "code": 400,
+        "message": "System labels cannot be deleted",
+        "status": "INVALID_ARGUMENT"
+      }
+    }
+  },
+
+  "13_delete_user_label": {
+    "_operation": "DELETE /users/me/labels/{id}",
+    "_description": "Delete a user-created label",
+
+    "_warning": "Label is immediately removed from all messages",
+
+    "response": "204 No Content"
+  },
+
+  "_summary": {
+    "mutable_labels": ["INBOX", "UNREAD", "STARRED", "IMPORTANT", "SPAM", "TRASH", "CATEGORY_*", "SNOOZED"],
+    "auto_managed_labels": ["SENT", "DRAFT"],
+    "user_label_operations": ["create", "read", "update", "delete"],
+    "system_label_operations": ["read", "apply to messages (most)", "remove from messages (most)"]
+  }
+}

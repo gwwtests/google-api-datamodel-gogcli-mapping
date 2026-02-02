@@ -360,6 +360,14 @@ After creating the draft correctly:
 ## See Also
 
 * `ux-to-data-mapping.md` - UI to API mapping gotchas
+* `visualizations.md` - Mermaid diagrams
 * `identifiers.md` - Message ID and thread ID semantics
 * `advanced-features.md` - Snooze, categories, send-as details
-* `../examples/` - Example API responses
+
+### Example Files
+
+* `examples/label-operations.json` - Label CRUD, archive, trash operations
+* `examples/labels-system-vs-user.json` - System vs user label comparison
+* `examples/draft-reply-to-thread.json` - Creating draft as thread reply
+* `examples/message-full.json` - Complete message structure
+* `examples/thread-with-messages.json` - Thread with multiple messages

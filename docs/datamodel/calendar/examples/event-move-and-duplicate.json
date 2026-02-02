@@ -1,0 +1,271 @@
+{
+  "_comment": "Calendar Event Move and Duplicate Operations",
+  "_source": "Synthetic examples based on API documentation",
+  "_demonstrates": [
+    "events.move operation",
+    "Manual event duplication (no native copy)",
+    "ID changes during operations",
+    "Organizer ownership changes"
+  ],
+
+  "1_move_event": {
+    "_operation": "POST /calendars/{calendarId}/events/{eventId}/move?destination={destinationCalendarId}",
+    "_description": "Move event from one calendar to another",
+
+    "request": {
+      "method": "POST",
+      "url": "/calendars/alice@company.com/events/team_meeting_123/move",
+      "params": {
+        "destination": "team-calendar@company.com",
+        "sendUpdates": "all"
+      }
+    },
+
+    "before_move": {
+      "id": "team_meeting_123",
+      "calendarId": "alice@company.com",
+      "summary": "Weekly Team Sync",
+      "organizer": {
+        "email": "alice@company.com",
+        "self": true
+      },
+      "attendees": [
+        {"email": "alice@company.com", "responseStatus": "accepted", "organizer": true},
+        {"email": "bob@company.com", "responseStatus": "accepted"}
+      ]
+    },
+
+    "after_move": {
+      "id": "team_meeting_123",
+      "calendarId": "team-calendar@company.com",
+      "summary": "Weekly Team Sync",
+      "organizer": {
+        "email": "team-calendar@company.com"
+      },
+      "attendees": [
+        {"email": "team-calendar@company.com", "responseStatus": "accepted", "organizer": true},
+        {"email": "alice@company.com", "responseStatus": "accepted"},
+        {"email": "bob@company.com", "responseStatus": "accepted"}
+      ],
+
+      "_changes": {
+        "organizer": "Changed from alice@company.com to team-calendar@company.com",
+        "alice_role": "Alice is now an attendee, not organizer",
+        "id": "May remain same or change (implementation dependent)",
+        "original_deleted": "Event removed from alice@company.com calendar"
+      }
+    },
+
+    "sendUpdates_options": {
+      "all": "Notify all attendees",
+      "externalOnly": "Notify only non-Google attendees",
+      "none": "No notifications"
+    },
+
+    "_cannot_move": [
+      "Birthday events (type: 'birthday')",
+      "Out of Office (type: 'outOfOffice')",
+      "Working Location (type: 'workingLocation')",
+      "Focus Time (type: 'focusTime')",
+      "Events from Google Tasks"
+    ]
+  },
+
+  "2_duplicate_event": {
+    "_description": "No events.copy endpoint - must use GET + INSERT manually",
+    "_workflow": "1. Get event → 2. Remove system fields → 3. Insert to destination",
+
+    "step_1_get_original": {
+      "_operation": "GET /calendars/{calendarId}/events/{eventId}",
+
+      "response": {
+        "kind": "calendar#event",
+        "etag": "\"3123456789000000\"",
+        "id": "project_review_456",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=xxx",
+        "created": "2025-01-15T10:00:00.000Z",
+        "updated": "2025-01-20T14:30:00.000Z",
+        "summary": "Project Review",
+        "creator": {
+          "email": "alice@company.com"
+        },
+        "organizer": {
+          "email": "alice@company.com"
+        },
+        "start": {
+          "dateTime": "2025-02-01T14:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2025-02-01T15:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "iCalUID": "project_review_456@google.com",
+        "sequence": 2,
+        "attendees": [
+          {"email": "alice@company.com", "responseStatus": "accepted"},
+          {"email": "bob@company.com", "responseStatus": "tentative"}
+        ],
+        "conferenceData": {
+          "conferenceId": "abc-defg-hij",
+          "entryPoints": [
+            {"entryPointType": "video", "uri": "https://meet.google.com/abc-defg-hij"}
+          ]
+        }
+      }
+    },
+
+    "step_2_remove_system_fields": {
+      "_must_remove": [
+        "id",
+        "etag",
+        "created",
+        "updated",
+        "htmlLink",
+        "iCalUID",
+        "creator",
+        "organizer",
+        "sequence"
+      ],
+
+      "_optionally_remove": [
+        "recurringEventId",
+        "originalStartTime"
+      ],
+
+      "cleaned_event": {
+        "kind": "calendar#event",
+        "status": "confirmed",
+        "summary": "Project Review",
+        "start": {
+          "dateTime": "2025-02-01T14:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2025-02-01T15:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "attendees": [
+          {"email": "alice@company.com", "responseStatus": "accepted"},
+          {"email": "bob@company.com", "responseStatus": "tentative"}
+        ],
+        "conferenceData": {
+          "conferenceId": "abc-defg-hij",
+          "entryPoints": [
+            {"entryPointType": "video", "uri": "https://meet.google.com/abc-defg-hij"}
+          ]
+        }
+      }
+    },
+
+    "step_3_insert_to_destination": {
+      "_operation": "POST /calendars/{destinationCalendarId}/events",
+      "_params": "conferenceDataVersion=1 (to preserve Meet link)",
+
+      "response": {
+        "kind": "calendar#event",
+        "etag": "\"3123456800000000\"",
+        "id": "new_event_789",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=yyy",
+        "created": "2025-02-01T12:00:00.000Z",
+        "updated": "2025-02-01T12:00:00.000Z",
+        "summary": "Project Review",
+        "creator": {
+          "email": "team-calendar@company.com"
+        },
+        "organizer": {
+          "email": "team-calendar@company.com"
+        },
+        "start": {
+          "dateTime": "2025-02-01T14:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2025-02-01T15:00:00-08:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "iCalUID": "new_event_789@google.com",
+        "sequence": 0
+      },
+
+      "_changes_from_original": {
+        "id": "new_event_789 (completely NEW)",
+        "iCalUID": "new_event_789@google.com (NEW - can't correlate with original)",
+        "creator": "team-calendar@company.com (destination calendar owner)",
+        "organizer": "team-calendar@company.com (destination calendar owner)",
+        "sequence": "0 (reset)",
+        "original_preserved": "YES - still exists on source calendar"
+      }
+    }
+  },
+
+  "3_comparison_table": {
+    "_move_vs_duplicate": {
+      "aspect": ["Original event", "New event ID", "iCalUID", "Organizer", "Attendee notification", "Correlation possible"],
+      "move": ["DELETED", "May stay same", "PRESERVED", "Changes to dest owner", "Optional (sendUpdates)", "YES via iCalUID"],
+      "duplicate": ["PRESERVED", "Always NEW", "NEW (different)", "Dest calendar owner", "NO", "NO (independent events)"]
+    }
+  },
+
+  "4_recurring_event_considerations": {
+    "_move_recurring": {
+      "behavior": "Moves entire series including all instances and exceptions",
+      "instances": "All instance IDs may change"
+    },
+
+    "_duplicate_recurring_instance": {
+      "_warning": "Duplicating a single instance creates standalone event",
+      "must_remove": ["recurringEventId", "originalStartTime"],
+      "result": "Independent non-recurring event"
+    },
+
+    "_duplicate_recurring_parent": {
+      "behavior": "Creates new recurring series",
+      "result": "Independent series with own instances"
+    }
+  },
+
+  "5_error_cases": {
+    "move_birthday_event": {
+      "error": {
+        "code": 400,
+        "message": "Cannot move birthday event",
+        "status": "INVALID_ARGUMENT"
+      }
+    },
+
+    "move_without_permission": {
+      "error": {
+        "code": 403,
+        "message": "The user does not have permission to move this event",
+        "status": "PERMISSION_DENIED"
+      }
+    },
+
+    "insert_with_system_fields": {
+      "_if_id_included": {
+        "error": {
+          "code": 409,
+          "message": "The requested identifier already exists",
+          "status": "ALREADY_EXISTS"
+        }
+      }
+    }
+  },
+
+  "_best_practices": {
+    "move": [
+      "Use for transferring ownership of events",
+      "Preserves iCalUID for correlation",
+      "Attendees can be notified"
+    ],
+    "duplicate": [
+      "Use when original must be preserved",
+      "Remember: creates independent copy",
+      "Include conferenceDataVersion=1 to preserve Meet link",
+      "Attendees on copy are NOT notified automatically"
+    ]
+  }
+}
