@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for read-only Chat commands via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to run gogcli Chat commands that only READ data",
+
+  "permissions": {
+    "allow": [
+      "Bash(gog chat spaces list *)",
+      "Bash(gog chat spaces find *)",
+      "Bash(gog chat messages list *)",
+      "Bash(gog chat threads list *)",
+      "Bash(gog chat --help *)",
+      "Bash(gog chat * --help)"
+    ]
+  }
+}

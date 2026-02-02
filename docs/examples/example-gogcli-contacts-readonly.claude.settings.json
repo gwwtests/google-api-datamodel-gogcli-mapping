@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for read-only Contacts commands via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to run gogcli Contacts commands that only READ data",
+
+  "permissions": {
+    "allow": [
+      "Bash(gog contacts search *)",
+      "Bash(gog contacts list *)",
+      "Bash(gog contacts get *)",
+      "Bash(gog contacts directory list *)",
+      "Bash(gog contacts directory search *)",
+      "Bash(gog contacts other list *)",
+      "Bash(gog contacts other search *)",
+      "Bash(gog contacts --help *)",
+      "Bash(gog contacts * --help)"
+    ]
+  }
+}

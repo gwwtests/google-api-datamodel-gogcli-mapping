@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for read-only Calendar commands via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to run gogcli Calendar commands that only READ data",
+
+  "permissions": {
+    "allow": [
+      "Bash(gog calendar calendars *)",
+      "Bash(gog calendar acl *)",
+      "Bash(gog calendar events *)",
+      "Bash(gog calendar event *)",
+      "Bash(gog calendar colors *)",
+      "Bash(gog calendar freebusy *)",
+      "Bash(gog calendar conflicts *)",
+      "Bash(gog calendar search *)",
+      "Bash(gog calendar time *)",
+      "Bash(gog calendar users *)",
+      "Bash(gog calendar team *)",
+      "Bash(gog calendar --help *)",
+      "Bash(gog calendar * --help)"
+    ]
+  }
+}

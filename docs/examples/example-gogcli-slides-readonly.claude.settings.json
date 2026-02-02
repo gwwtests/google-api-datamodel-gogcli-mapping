@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for read-only Slides commands via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to run gogcli Slides commands that only READ data",
+
+  "permissions": {
+    "allow": [
+      "Bash(gog slides info *)",
+      "Bash(gog slides export *)",
+      "Bash(gog slides --help *)",
+      "Bash(gog slides * --help)"
+    ]
+  }
+}

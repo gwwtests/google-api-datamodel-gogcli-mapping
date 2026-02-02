@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for read-only Gmail commands via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to run gogcli Gmail commands that only READ data",
+
+  "permissions": {
+    "allow": [
+      "Bash(gog gmail search *)",
+      "Bash(gog gmail messages search *)",
+      "Bash(gog gmail get *)",
+      "Bash(gog gmail thread get *)",
+      "Bash(gog gmail attachment *)",
+      "Bash(gog gmail history *)",
+      "Bash(gog gmail labels list *)",
+      "Bash(gog gmail labels get *)",
+      "Bash(gog gmail drafts list *)",
+      "Bash(gog gmail drafts get *)",
+      "Bash(gog gmail forwarding list *)",
+      "Bash(gog gmail forwarding get *)",
+      "Bash(gog gmail delegates list *)",
+      "Bash(gog gmail delegates get *)",
+      "Bash(gog gmail sendas list *)",
+      "Bash(gog gmail sendas get *)",
+      "Bash(gog gmail filters list *)",
+      "Bash(gog gmail filters get *)",
+      "Bash(gog gmail vacation get *)",
+      "Bash(gog gmail autoforward get *)",
+      "Bash(gog gmail watch status *)",
+      "Bash(gog gmail track opens *)",
+      "Bash(gog gmail track status *)",
+      "Bash(gog gmail url *)",
+      "Bash(gog gmail --help *)",
+      "Bash(gog gmail * --help)"
+    ]
+  }
+}
