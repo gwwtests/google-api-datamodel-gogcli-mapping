@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Claude Code settings for Gmail drafting workflow via gogcli",
+  "_documentation": "https://docs.anthropic.com/claude-code/settings",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_purpose": "Allows Claude to CREATE and UPDATE drafts, but CANNOT send emails. User reviews and sends manually via Gmail WebUI or mobile app.",
+
+  "_workflow": {
+    "description": "Safe drafting workflow for human-in-the-loop email review",
+    "steps": [
+      "1. Claude creates draft using 'gog gmail drafts create'",
+      "2. Claude can update draft using 'gog gmail drafts update'",
+      "3. User reviews draft in Gmail WebUI or Android/iOS app",
+      "4. User manually clicks Send when satisfied"
+    ],
+    "blocked_operations": [
+      "gog gmail send - direct email sending",
+      "gog gmail drafts send - sending drafts",
+      "gog gmail drafts delete - deleting drafts (optional safety)"
+    ]
+  },
+
+  "_api_verification": {
+    "drafts_create": {
+      "api_method": "Users.Drafts.Create",
+      "source": "gmail_drafts.go:140",
+      "sends_email": false,
+      "note": "Creates draft in Drafts folder, does NOT send"
+    },
+    "drafts_update": {
+      "api_method": "Users.Drafts.Update",
+      "source": "gmail_drafts.go:200",
+      "sends_email": false,
+      "note": "Updates existing draft, does NOT send"
+    },
+    "drafts_send": {
+      "api_method": "Users.Drafts.Send",
+      "source": "gmail_drafts.go:300",
+      "sends_email": true,
+      "note": "BLOCKED - this actually sends the email"
+    }
+  },
+
+  "permissions": {
+    "allow": [
+      "Bash(gog gmail drafts list *)",
+      "Bash(gog gmail drafts get *)",
+      "Bash(gog gmail drafts create *)",
+      "Bash(gog gmail drafts update *)",
+
+      "Bash(gog gmail search *)",
+      "Bash(gog gmail messages search *)",
+      "Bash(gog gmail get *)",
+      "Bash(gog gmail thread get *)",
+      "Bash(gog gmail labels list *)",
+      "Bash(gog gmail labels get *)",
+      "Bash(gog gmail url *)",
+
+      "Bash(gog gmail --help *)",
+      "Bash(gog gmail drafts --help *)"
+    ]
+  }
+}
