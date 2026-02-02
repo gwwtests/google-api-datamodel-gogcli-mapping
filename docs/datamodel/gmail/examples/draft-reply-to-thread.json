@@ -1,0 +1,181 @@
+{
+  "_comment": "Creating a draft that appears as a reply to an existing thread",
+  "_source": "Synthetic example based on API documentation and research",
+  "_demonstrates": [
+    "Draft creation as thread reply",
+    "Message-ID vs Gmail ID distinction",
+    "Required SMTP headers for threading"
+  ],
+
+  "step_1_get_original_message": {
+    "_comment": "First, get the original message to extract threading info",
+    "_request": "GET /users/me/messages/{messageId}?format=full",
+
+    "response": {
+      "id": "18d5abc123def456",
+      "threadId": "thread_project_update",
+      "labelIds": ["INBOX", "IMPORTANT"],
+      "snippet": "Let's discuss the Q4 roadmap...",
+      "payload": {
+        "headers": [
+          {
+            "name": "Message-ID",
+            "value": "<CABx-abc123@mail.gmail.com>"
+          },
+          {
+            "name": "From",
+            "value": "Alice Smith <alice@company.com>"
+          },
+          {
+            "name": "To",
+            "value": "bob@company.com"
+          },
+          {
+            "name": "Subject",
+            "value": "Q4 Roadmap Discussion"
+          },
+          {
+            "name": "Date",
+            "value": "Mon, 27 Jan 2025 10:00:00 -0800"
+          },
+          {
+            "name": "References",
+            "value": "<CABx-parent123@mail.gmail.com>"
+          }
+        ]
+      }
+    }
+  },
+
+  "step_2_extract_threading_info": {
+    "_comment": "Extract these values from the original message headers",
+
+    "extracted": {
+      "threadId": "thread_project_update",
+      "message_id_header": "<CABx-abc123@mail.gmail.com>",
+      "existing_references": "<CABx-parent123@mail.gmail.com>",
+      "reply_to_address": "alice@company.com",
+      "original_subject": "Q4 Roadmap Discussion"
+    },
+
+    "_critical_warning": {
+      "DO_NOT_USE": "18d5abc123def456 (Gmail internal ID)",
+      "USE_INSTEAD": "<CABx-abc123@mail.gmail.com> (Message-ID header value)"
+    }
+  },
+
+  "step_3_build_mime_message": {
+    "_comment": "Construct RFC 2822 compliant MIME message",
+
+    "mime_headers": {
+      "To": "alice@company.com",
+      "From": "bob@company.com",
+      "Subject": "Re: Q4 Roadmap Discussion",
+      "In-Reply-To": "<CABx-abc123@mail.gmail.com>",
+      "References": "<CABx-parent123@mail.gmail.com> <CABx-abc123@mail.gmail.com>",
+      "Content-Type": "text/plain; charset=utf-8",
+      "MIME-Version": "1.0"
+    },
+
+    "mime_body": "Hi Alice,\n\nThanks for starting this discussion. I have some thoughts on the Q4 priorities...\n\nBest,\nBob",
+
+    "_raw_mime_format": "To: alice@company.com\r\nFrom: bob@company.com\r\nSubject: Re: Q4 Roadmap Discussion\r\nIn-Reply-To: <CABx-abc123@mail.gmail.com>\r\nReferences: <CABx-parent123@mail.gmail.com> <CABx-abc123@mail.gmail.com>\r\nContent-Type: text/plain; charset=utf-8\r\nMIME-Version: 1.0\r\n\r\nHi Alice,\n\nThanks for starting this discussion..."
+  },
+
+  "step_4_encode_and_create_draft": {
+    "_comment": "Base64url encode the MIME message and create draft",
+
+    "_encoding_note": {
+      "standard_base64": "Uses + and / and = padding",
+      "base64url": "Uses - and _ and NO padding (required by Gmail API)"
+    },
+
+    "_request": "POST /users/me/drafts",
+    "request_body": {
+      "message": {
+        "raw": "VG86IGFsaWNlQGNvbXBhbnkuY29tDQpGcm9tOiBib2JAY29tcGFueS5jb20NClN1YmplY3Q6IFJlOiBRNCBSb2FkbWFwIERpc2N1c3Npb24NCkluLVJlcGx5LVRvOiA8Q0FCeC1hYmMxMjNAbWFpbC5nbWFpbC5jb20-DQpSZWZlcmVuY2VzOiA8Q0FCeC1wYXJlbnQxMjNAbWFpbC5nbWFpbC5jb20-IDxDQUJ4LWFiYzEyM0BtYWlsLmdtYWlsLmNvbT4NCkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD11dGYtOA0KTUlNRS1WZXJzaW9uOiAxLjANCg0KSGkgQWxpY2UsCgpUaGFua3MgZm9yIHN0YXJ0aW5nIHRoaXMgZGlzY3Vzc2lvbi4uLg",
+        "threadId": "thread_project_update"
+      }
+    },
+
+    "_threadId_critical": "This links the draft to the thread in YOUR mailbox. Without it, draft appears standalone."
+  },
+
+  "step_5_api_response": {
+    "_comment": "Response from drafts.create",
+
+    "response": {
+      "id": "r_draft_abc789",
+      "message": {
+        "id": "18d5xyz987654321",
+        "threadId": "thread_project_update",
+        "labelIds": ["DRAFT"]
+      }
+    },
+
+    "_note_dual_ids": {
+      "draft_id": "r_draft_abc789 (use for drafts.update, drafts.send, drafts.delete)",
+      "message_id": "18d5xyz987654321 (internal message, will CHANGE after send)"
+    }
+  },
+
+  "result_in_gmail_ui": {
+    "_comment": "What user sees in Gmail Web UI after draft creation",
+
+    "thread_view": {
+      "position": "Draft appears at bottom of thread",
+      "indicator": "Shows 'Draft' label/chip",
+      "editable": "Click to open compose window with draft content",
+      "recipients_visible": "alice@company.com pre-filled"
+    },
+
+    "drafts_folder": {
+      "visible": "Also appears in Drafts folder",
+      "shows_thread": "Shows as part of thread 'Re: Q4 Roadmap Discussion'"
+    }
+  },
+
+  "common_mistakes": [
+    {
+      "mistake": "Using Gmail message.id instead of Message-ID header",
+      "wrong": "In-Reply-To: 18d5abc123def456",
+      "correct": "In-Reply-To: <CABx-abc123@mail.gmail.com>",
+      "consequence": "Threading works for sender, breaks for recipients"
+    },
+    {
+      "mistake": "Missing angle brackets in Message-ID",
+      "wrong": "In-Reply-To: CABx-abc123@mail.gmail.com",
+      "correct": "In-Reply-To: <CABx-abc123@mail.gmail.com>",
+      "consequence": "RFC 5322 violation, Gmail may reject or ignore"
+    },
+    {
+      "mistake": "Using standard base64 encoding",
+      "wrong": "VG8gYWxpY2VAZW1haWwuY29t+/==",
+      "correct": "VG8gYWxpY2VAZW1haWwuY29t-_",
+      "consequence": "API returns 400 Bad Request"
+    },
+    {
+      "mistake": "Omitting threadId in draft request",
+      "consequence": "Draft not linked to thread in sender's view"
+    },
+    {
+      "mistake": "Omitting In-Reply-To/References headers",
+      "consequence": "Draft appears in thread for sender, but recipients see new thread"
+    },
+    {
+      "mistake": "Wrong Subject format",
+      "wrong": "Subject: Q4 Roadmap Discussion",
+      "correct": "Subject: Re: Q4 Roadmap Discussion",
+      "consequence": "May break threading in some clients"
+    }
+  ],
+
+  "_after_sending": {
+    "_comment": "What happens when user sends the draft from Gmail UI",
+
+    "draft_deleted": "Draft resource is deleted",
+    "new_message_created": "New message with DIFFERENT id is created",
+    "labels_change": "DRAFT removed, SENT added",
+    "threading_preserved": "Message stays in thread due to In-Reply-To/References headers"
+  }
+}

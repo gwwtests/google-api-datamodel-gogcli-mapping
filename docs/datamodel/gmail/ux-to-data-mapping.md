@@ -584,9 +584,170 @@ Subject: Re: Original Subject
 
 ---
 
+### 15. System Label Mechanics: The Real "Folder" System
+
+**What User Sees (UI)**:
+```
+┌─────────────────────────┐
+│ ✉ Inbox           (12)  │
+│ ★ Starred              │
+│ ⏰ Snoozed              │
+│ 📤 Sent                 │
+│ 📝 Drafts          (2)  │
+│ 🗑 Trash                │
+│ ⚠ Spam                 │
+└─────────────────────────┘
+```
+Looks like folders. But...
+
+**What's in the Data (API)**:
+
+These are ALL implemented as system labels:
+
+| UI "Folder" | System Label | Can Manually Apply? | Can Manually Remove? |
+|-------------|--------------|:-------------------:|:--------------------:|
+| Inbox | `INBOX` | ✅ | ✅ (= archive) |
+| Starred | `STARRED` | ✅ | ✅ |
+| Snoozed | `SNOOZED` | ✅ (label only) | ✅ |
+| Sent | `SENT` | ❌ Auto-managed | ❌ |
+| Drafts | `DRAFT` | ❌ Auto-managed | ❌ |
+| Trash | `TRASH` | ✅ | ✅ |
+| Spam | `SPAM` | ✅ | ✅ |
+
+**⚠️ Critical Discovery**: SENT and DRAFT labels are FULLY AUTO-MANAGED
+
+```python
+# THIS FAILS with "400 Invalid label"
+service.users().messages().modify(
+    userId='me',
+    id='msg_id',
+    body={'addLabelIds': ['DRAFT']}  # ERROR!
+)
+
+# THIS ALSO FAILS
+service.users().messages().modify(
+    userId='me',
+    id='msg_id',
+    body={'removeLabelIds': ['SENT']}  # ERROR!
+)
+```
+
+**Archive = Remove INBOX label**:
+```python
+# Archive message (remove from inbox, keep in All Mail)
+service.users().messages().modify(
+    userId='me',
+    id='msg_id',
+    body={'removeLabelIds': ['INBOX']}
+)
+
+# Unarchive (bring back to inbox)
+service.users().messages().modify(
+    userId='me',
+    id='msg_id',
+    body={'addLabelIds': ['INBOX']}
+)
+```
+
+---
+
+### 16. Creating a Draft Reply (Thread Continuation)
+
+**What User Wants**:
+"Create a draft that appears as a reply to an existing conversation, so I can review it in Gmail UI before sending"
+
+**What's Required**:
+
+1. **threadId** - Links draft to thread (for sender's view)
+2. **In-Reply-To header** - RFC Message-ID of message being replied to
+3. **References header** - Chain of Message-IDs in conversation
+4. **Subject with "Re:" prefix** - Maintains thread grouping
+
+```
+⚠️ CRITICAL DISTINCTION:
+
+Gmail API message.id:     "18d5abc123def456"
+  → Internal identifier, DO NOT use for threading
+
+RFC Message-ID header:    "<abc123@mail.gmail.com>"
+  → Found in payload.headers, USE THIS for In-Reply-To
+```
+
+**Correct Draft Reply Structure**:
+
+```
+MIME Headers:
+  To: recipient@example.com
+  Subject: Re: Original Subject
+  In-Reply-To: <original-message-id@mail.gmail.com>
+  References: <grandparent@mail.gmail.com> <parent@mail.gmail.com>
+
+API Request:
+  POST /users/me/drafts
+  {
+    "message": {
+      "raw": "<base64url-encoded-mime-message>",
+      "threadId": "thread_abc123"
+    }
+  }
+```
+
+**Result in Gmail Web UI**:
+- Draft appears at bottom of conversation thread
+- Shows "Draft" chip/label
+- Click to edit before sending
+- Recipients see it as proper thread continuation
+
+---
+
+### 17. Label Renaming: ID Stays, Name Changes
+
+**What User Sees (UI)**:
+```
+Settings → Labels → Edit "Work" → Rename to "Projects"
+```
+Label appears renamed everywhere.
+
+**What's in the Data (API)**:
+
+```json
+// BEFORE rename
+{
+  "id": "Label_123",      // ← This NEVER changes
+  "name": "Work",
+  "type": "user"
+}
+
+// AFTER rename via labels.patch
+{
+  "id": "Label_123",      // ← Same ID!
+  "name": "Projects",     // ← Only name changed
+  "type": "user"
+}
+```
+
+**Rename via API**:
+```python
+service.users().labels().patch(
+    userId='me',
+    id='Label_123',
+    body={'name': 'Projects'}
+).execute()
+```
+
+**⚠️ Implication for Data Storage**:
+- Store label by `id`, not `name`
+- Names can change, IDs are permanent
+- Messages keep `labelIds` array - these are IDs, not names
+
+---
+
 ## See Also
 
+* `api-capabilities.md` - Feature matrix and label management details
+* `visualizations.md` - Mermaid diagrams for visual understanding
 * `identifiers.md` - Detailed ID semantics
 * `gogcli-data-handling.md` - How gogcli handles these structures
 * `advanced-features.md` - Snooze, categories, send-as details
 * `../examples/` - Example API responses
+* `../examples/draft-reply-to-thread.json` - Draft threading example
