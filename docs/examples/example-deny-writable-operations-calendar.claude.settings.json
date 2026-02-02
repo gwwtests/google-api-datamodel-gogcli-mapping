@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Deny Calendar write operations",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+
+  "permissions": {
+    "deny": [
+      "Bash(gog calendar create *)",
+      "Bash(gog calendar update *)",
+      "Bash(gog calendar delete *)",
+      "Bash(gog calendar respond *)",
+      "Bash(gog calendar focus-time *)",
+      "Bash(gog calendar out-of-office *)",
+      "Bash(gog calendar working-location *)",
+      "Bash(gog calendar propose-time *)"
+    ]
+  }
+}

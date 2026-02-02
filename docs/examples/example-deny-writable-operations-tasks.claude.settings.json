@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Deny Tasks write operations",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+
+  "permissions": {
+    "deny": [
+      "Bash(gog tasks lists create *)",
+      "Bash(gog tasks add *)",
+      "Bash(gog tasks update *)",
+      "Bash(gog tasks done *)",
+      "Bash(gog tasks undo *)",
+      "Bash(gog tasks delete *)",
+      "Bash(gog tasks clear *)"
+    ]
+  }
+}

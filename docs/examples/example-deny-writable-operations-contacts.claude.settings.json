@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Deny Contacts write operations",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+
+  "permissions": {
+    "deny": [
+      "Bash(gog contacts create *)",
+      "Bash(gog contacts update *)",
+      "Bash(gog contacts delete *)",
+      "Bash(gog contacts other delete *)"
+    ]
+  }
+}

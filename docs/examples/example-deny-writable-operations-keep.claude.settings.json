@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "_comment": "Deny Keep write operations (Keep has no write commands in gogcli)",
+  "_generated": "2026-02-02",
+  "_source": "gogcli-commands-classification.yaml",
+  "_note": "Keep API in gogcli is read-only. No write operations to deny.",
+
+  "permissions": {
+    "deny": []
+  }
+}
