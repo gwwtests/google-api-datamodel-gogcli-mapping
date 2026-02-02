@@ -1,0 +1,887 @@
+# gogcli Command Classification: Read-Only vs Write Operations
+# Generated: 2026-02-02
+# Purpose: Machine-readable classification for Claude Code permission configuration
+
+metadata:
+  repository: https://github.com/steipete/gogcli
+  commit_hash: 99d957581f61532de08f3847e79f639edad3c68b
+  commit_date: "2026-01-22T04:04:14Z"
+  analysis_date: "2026-02-02"
+  source_directory: internal/cmd/
+  classification_criteria:
+    read_only: "Only fetches/displays data via GET-equivalent API calls"
+    write: "Creates, modifies, or deletes data via POST/PUT/PATCH/DELETE API calls"
+
+services:
+  gmail:
+    source_files:
+      - gmail.go
+      - gmail_*.go
+
+    read_only:
+      - command: "gog gmail search"
+        api_method: "Users.Threads.List"
+        source: "gmail.go:84"
+        evidence: "svc.Users.Threads.List(\"me\").Q(query)"
+
+      - command: "gog gmail messages search"
+        api_method: "Users.Messages.List"
+        source: "gmail_messages.go:46"
+        evidence: "svc.Users.Messages.List(\"me\").Q(query)"
+
+      - command: "gog gmail get"
+        api_method: "Users.Messages.Get"
+        source: "gmail_get.go:52"
+        evidence: "svc.Users.Messages.Get(\"me\", messageID).Format(format)"
+
+      - command: "gog gmail thread get"
+        api_method: "Users.Threads.Get"
+        source: "gmail_thread.go:78"
+        evidence: "svc.Users.Threads.Get(\"me\", threadID).Format(\"full\")"
+
+      - command: "gog gmail attachment"
+        api_method: "Users.Messages.Attachments.Get"
+        source: "gmail_attachment.go:61"
+        evidence: "downloadAttachmentToPath() calls Attachments.Get"
+
+      - command: "gog gmail history"
+        api_method: "Users.History.List"
+        source: "gmail_history.go:37"
+        evidence: "svc.Users.History.List(\"me\").StartHistoryId()"
+
+      - command: "gog gmail labels list"
+        api_method: "Users.Labels.List"
+        source: "gmail_labels.go:128"
+        evidence: "svc.Users.Labels.List(\"me\")"
+
+      - command: "gog gmail labels get"
+        api_method: "Users.Labels.Get"
+        source: "gmail_labels.go:50"
+        evidence: "svc.Users.Labels.Get(\"me\", id)"
+
+      - command: "gog gmail drafts list"
+        api_method: "Users.Drafts.List"
+        source: "gmail_drafts.go:43"
+        evidence: "svc.Users.Drafts.List(\"me\").MaxResults()"
+
+      - command: "gog gmail drafts get"
+        api_method: "Users.Drafts.Get"
+        source: "gmail_drafts.go:115"
+        evidence: "Retrieves draft details"
+
+      - command: "gog gmail forwarding list"
+        api_method: "Users.Settings.ForwardingAddresses.List"
+        source: "gmail_forwarding.go:37"
+        evidence: "svc.Users.Settings.ForwardingAddresses.List(\"me\")"
+
+      - command: "gog gmail forwarding get"
+        api_method: "Users.Settings.ForwardingAddresses.Get"
+        source: "gmail_forwarding.go:82"
+        evidence: "svc.Users.Settings.ForwardingAddresses.Get(\"me\", email)"
+
+      - command: "gog gmail delegates list"
+        api_method: "Users.Settings.Delegates.List"
+        source: "gmail_delegates.go:37"
+        evidence: "svc.Users.Settings.Delegates.List(\"me\")"
+
+      - command: "gog gmail delegates get"
+        api_method: "Users.Settings.Delegates.Get"
+        source: "gmail_delegates.go:82"
+        evidence: "svc.Users.Settings.Delegates.Get(\"me\", email)"
+
+      - command: "gog gmail sendas list"
+        api_method: "Users.Settings.SendAs.List"
+        source: "gmail_sendas.go:43"
+        evidence: "svc.Users.Settings.SendAs.List(\"me\")"
+
+      - command: "gog gmail sendas get"
+        api_method: "Users.Settings.SendAs.Get"
+        source: "gmail_sendas.go:99"
+        evidence: "svc.Users.Settings.SendAs.Get(\"me\", email)"
+
+      - command: "gog gmail filters list"
+        api_method: "Users.Settings.Filters.List"
+        source: "gmail_filters.go:38"
+        evidence: "svc.Users.Settings.Filters.List(\"me\")"
+
+      - command: "gog gmail filters get"
+        api_method: "Users.Settings.Filters.Get"
+        source: "gmail_filters.go:97"
+        evidence: "svc.Users.Settings.Filters.Get(\"me\", filterId)"
+
+      - command: "gog gmail vacation get"
+        api_method: "Users.Settings.GetVacation"
+        source: "gmail_vacation.go:35"
+        evidence: "svc.Users.Settings.GetVacation(\"me\")"
+
+      - command: "gog gmail autoforward get"
+        api_method: "Users.Settings.GetAutoForwarding"
+        source: "gmail_autoforward.go:34"
+        evidence: "svc.Users.Settings.GetAutoForwarding(\"me\")"
+
+      - command: "gog gmail watch status"
+        api_method: "Local state file read"
+        source: "gmail_watch_cmds.go:100"
+        evidence: "Reads stored watch configuration from local file"
+
+      - command: "gog gmail track opens"
+        api_method: "HTTP GET (custom tracking service)"
+        source: "gmail_track_opens.go:47-54"
+        evidence: "http.MethodGet to external tracking service"
+
+      - command: "gog gmail track status"
+        api_method: "Local config file read"
+        source: "gmail_track_status.go:20-22"
+        evidence: "Reads tracking configuration from local file"
+
+      - command: "gog gmail url"
+        api_method: "No API call"
+        source: "gmail.go"
+        evidence: "Generates Gmail web URLs from thread IDs"
+
+    write:
+      - command: "gog gmail send"
+        api_method: "Users.Messages.Send"
+        source: "gmail_send.go:101"
+        evidence: "svc.Users.Messages.Send()"
+        destructive: false
+
+      - command: "gog gmail thread modify"
+        api_method: "Users.Threads.Modify"
+        source: "gmail_thread.go:150"
+        evidence: "Modifies labels on all messages in thread"
+        destructive: false
+
+      - command: "gog gmail batch modify"
+        api_method: "Users.Messages.BatchModify"
+        source: "gmail_batch.go:85"
+        evidence: "svc.Users.Messages.BatchModify()"
+        destructive: false
+
+      - command: "gog gmail batch delete"
+        api_method: "Users.Messages.BatchDelete"
+        source: "gmail_batch.go:35"
+        evidence: "svc.Users.Messages.BatchDelete()"
+        destructive: true
+
+      - command: "gog gmail labels create"
+        api_method: "Users.Labels.Create"
+        source: "gmail_labels.go:94"
+        evidence: "svc.Users.Labels.Create()"
+        destructive: false
+
+      - command: "gog gmail drafts create"
+        api_method: "Users.Drafts.Create"
+        source: "gmail_drafts.go:140"
+        evidence: "Creates new draft messages"
+        destructive: false
+
+      - command: "gog gmail drafts update"
+        api_method: "Users.Drafts.Update"
+        source: "gmail_drafts.go:200"
+        evidence: "Updates existing draft"
+        destructive: false
+
+      - command: "gog gmail drafts delete"
+        api_method: "Users.Drafts.Delete"
+        source: "gmail_drafts.go:270"
+        evidence: "Permanently deletes draft"
+        destructive: true
+
+      - command: "gog gmail drafts send"
+        api_method: "Users.Drafts.Send"
+        source: "gmail_drafts.go:300"
+        evidence: "Sends draft message"
+        destructive: false
+
+      - command: "gog gmail filters create"
+        api_method: "Users.Settings.Filters.Create"
+        source: "gmail_filters.go:110"
+        evidence: "Creates new email filter"
+        destructive: false
+
+      - command: "gog gmail filters delete"
+        api_method: "Users.Settings.Filters.Delete"
+        source: "gmail_filters.go:160"
+        evidence: "Deletes filter rule"
+        destructive: true
+
+      - command: "gog gmail forwarding create"
+        api_method: "Users.Settings.ForwardingAddresses.Create"
+        source: "gmail_forwarding.go:100"
+        evidence: "Creates forwarding address"
+        destructive: false
+
+      - command: "gog gmail forwarding delete"
+        api_method: "Users.Settings.ForwardingAddresses.Delete"
+        source: "gmail_forwarding.go:140"
+        evidence: "Deletes forwarding address"
+        destructive: true
+
+      - command: "gog gmail delegates add"
+        api_method: "Users.Settings.Delegates.Create"
+        source: "gmail_delegates.go:100"
+        evidence: "Adds delegate account"
+        destructive: false
+
+      - command: "gog gmail delegates remove"
+        api_method: "Users.Settings.Delegates.Delete"
+        source: "gmail_delegates.go:160"
+        evidence: "Removes delegate account"
+        destructive: true
+
+      - command: "gog gmail sendas create"
+        api_method: "Users.Settings.SendAs.Create"
+        source: "gmail_sendas.go:130"
+        evidence: "Creates send-as alias"
+        destructive: false
+
+      - command: "gog gmail sendas verify"
+        api_method: "Users.Settings.SendAs.Verify"
+        source: "gmail_sendas.go:180"
+        evidence: "Resends verification email"
+        destructive: false
+
+      - command: "gog gmail sendas delete"
+        api_method: "Users.Settings.SendAs.Delete"
+        source: "gmail_sendas.go:220"
+        evidence: "Deletes send-as alias"
+        destructive: true
+
+      - command: "gog gmail sendas update"
+        api_method: "Users.Settings.SendAs.Update"
+        source: "gmail_sendas.go:260"
+        evidence: "Updates send-as settings"
+        destructive: false
+
+      - command: "gog gmail vacation update"
+        api_method: "Users.Settings.UpdateVacation"
+        source: "gmail_vacation.go:130"
+        evidence: "Modifies vacation responder"
+        destructive: false
+
+      - command: "gog gmail autoforward update"
+        api_method: "Users.Settings.UpdateAutoForwarding"
+        source: "gmail_autoforward.go:110"
+        evidence: "Modifies auto-forwarding"
+        destructive: false
+
+      - command: "gog gmail watch start"
+        api_method: "Users.Watch"
+        source: "gmail_watch_cmds.go:45-96"
+        evidence: "Enables Gmail Pub/Sub watch"
+        destructive: false
+
+      - command: "gog gmail watch renew"
+        api_method: "Users.Watch"
+        source: "gmail_watch_cmds.go:150"
+        evidence: "Renews watch subscription"
+        destructive: false
+
+      - command: "gog gmail watch stop"
+        api_method: "Users.Stop"
+        source: "gmail_watch_cmds.go:200"
+        evidence: "Stops Gmail watch"
+        destructive: false
+
+      - command: "gog gmail track setup"
+        api_method: "Cloudflare Worker deployment"
+        source: "gmail_track_setup.go:29"
+        evidence: "Deploys Cloudflare Worker"
+        destructive: false
+
+  calendar:
+    source_files:
+      - calendar.go
+      - calendar_*.go
+
+    read_only:
+      - command: "gog calendar calendars"
+        api_method: "CalendarList.List"
+        source: "calendar.go:52"
+        evidence: "svc.CalendarList.List().MaxResults(c.Max)"
+
+      - command: "gog calendar acl"
+        api_method: "Acl.List"
+        source: "calendar.go:99"
+        evidence: "svc.Acl.List(calendarID)"
+
+      - command: "gog calendar events"
+        api_method: "Events.List"
+        source: "calendar_list.go:19"
+        evidence: "svc.Events.List(calendarID).TimeMin(from).TimeMax(to)"
+
+      - command: "gog calendar event"
+        api_method: "Events.Get"
+        source: "calendar.go:215"
+        evidence: "svc.Events.Get(calendarID, eventID)"
+
+      - command: "gog calendar colors"
+        api_method: "Colors.Get"
+        source: "calendar_colors.go:29"
+        evidence: "svc.Colors.Get()"
+
+      - command: "gog calendar freebusy"
+        api_method: "Freebusy.Query"
+        source: "calendar_freebusy.go:50"
+        evidence: "svc.Freebusy.Query(req)"
+
+      - command: "gog calendar conflicts"
+        api_method: "Freebusy.Query"
+        source: "calendar_conflicts.go:71"
+        evidence: "svc.Freebusy.Query()"
+
+      - command: "gog calendar search"
+        api_method: "Events.List"
+        source: "calendar_search.go:47"
+        evidence: "svc.Events.List(c.CalendarID).Q(query)"
+
+      - command: "gog calendar time"
+        api_method: "CalendarList.Get"
+        source: "calendar_time.go:43"
+        evidence: "Retrieves timezone information"
+
+      - command: "gog calendar users"
+        api_method: "People.ListDirectoryPeople"
+        source: "calendar_users.go:40"
+        evidence: "svc.People.ListDirectoryPeople()"
+
+      - command: "gog calendar team"
+        api_method: "Freebusy.Query, Events.List"
+        source: "calendar_team.go:94"
+        evidence: "svc.Freebusy.Query()"
+
+    write:
+      - command: "gog calendar create"
+        api_method: "Events.Insert"
+        source: "calendar_edit.go:146"
+        evidence: "svc.Events.Insert(calendarID, event)"
+        destructive: false
+
+      - command: "gog calendar update"
+        api_method: "Events.Patch"
+        source: "calendar_edit.go:417"
+        evidence: "svc.Events.Patch(calendarID, targetEventID, patch)"
+        destructive: false
+
+      - command: "gog calendar delete"
+        api_method: "Events.Delete"
+        source: "calendar_edit.go:879"
+        evidence: "svc.Events.Delete(calendarID, targetEventID)"
+        destructive: true
+
+      - command: "gog calendar respond"
+        api_method: "Events.Patch"
+        source: "calendar_respond.go:87"
+        evidence: "svc.Events.Patch(calendarID, eventID, event)"
+        destructive: false
+
+      - command: "gog calendar focus-time"
+        api_method: "Events.Insert"
+        source: "calendar_focus_time.go:62"
+        evidence: "svc.Events.Insert(c.CalendarID, event)"
+        destructive: false
+
+      - command: "gog calendar out-of-office"
+        api_method: "Events.Insert"
+        source: "calendar_ooo.go:53"
+        evidence: "svc.Events.Insert(c.CalendarID, event)"
+        destructive: false
+
+      - command: "gog calendar working-location"
+        api_method: "Events.Insert"
+        source: "calendar_working_location.go:54"
+        evidence: "svc.Events.Insert(c.CalendarID, event)"
+        destructive: false
+
+      - command: "gog calendar propose-time"
+        api_method: "Events.Patch"
+        source: "calendar_propose_time.go:100"
+        evidence: "svc.Events.Patch() when --decline or --comment used"
+        destructive: false
+        note: "Read-only unless --decline or --comment flags provided"
+
+  drive:
+    source_files:
+      - drive.go
+      - drive_*.go
+
+    read_only:
+      - command: "gog drive ls"
+        api_method: "Files.List"
+        source: "drive.go:90-99"
+        evidence: "svc.Files.List().Q(q)"
+
+      - command: "gog drive search"
+        api_method: "Files.List"
+        source: "drive.go:156-165"
+        evidence: "svc.Files.List().Q(buildDriveSearchQuery())"
+
+      - command: "gog drive get"
+        api_method: "Files.Get"
+        source: "drive.go:220-224"
+        evidence: "svc.Files.Get(fileID)"
+
+      - command: "gog drive download"
+        api_method: "Files.Get, Files.Export"
+        source: "drive.go:272-276"
+        evidence: "svc.Files.Get() for metadata, Export() for content"
+
+      - command: "gog drive permissions"
+        api_method: "Permissions.List"
+        source: "drive.go:714-725"
+        evidence: "svc.Permissions.List(fileID)"
+
+      - command: "gog drive url"
+        api_method: "Files.Get"
+        source: "drive.go:1056"
+        evidence: "svc.Files.Get(fileID).Fields(\"webViewLink\")"
+
+      - command: "gog drive comments list"
+        api_method: "Comments.List"
+        source: "drive_comments.go:50-63"
+        evidence: "svc.Comments.List(fileID)"
+
+      - command: "gog drive comments get"
+        api_method: "Comments.Get"
+        source: "drive_comments.go:152-155"
+        evidence: "svc.Comments.Get(fileID, commentID)"
+
+      - command: "gog drive drives"
+        api_method: "Drives.List"
+        source: "drive_drives.go:32-42"
+        evidence: "svc.Drives.List()"
+
+    write:
+      - command: "gog drive upload"
+        api_method: "Files.Create"
+        source: "drive.go:363-368"
+        evidence: "svc.Files.Create(meta).Media(f)"
+        destructive: false
+
+      - command: "gog drive mkdir"
+        api_method: "Files.Create"
+        source: "drive.go:415-419"
+        evidence: "svc.Files.Create(f) with folder MIME type"
+        destructive: false
+
+      - command: "gog drive copy"
+        api_method: "Files.Copy"
+        source: "drive_copy.go:72-76"
+        evidence: "svc.Files.Copy(id, req)"
+        destructive: false
+
+      - command: "gog drive delete"
+        aliases: ["rm", "del"]
+        api_method: "Files.Delete"
+        source: "drive.go:460"
+        evidence: "svc.Files.Delete(fileID)"
+        destructive: true
+
+      - command: "gog drive move"
+        api_method: "Files.Update"
+        source: "drive.go:508-516"
+        evidence: "svc.Files.Update(fileID).AddParents().RemoveParents()"
+        destructive: false
+
+      - command: "gog drive rename"
+        api_method: "Files.Update"
+        source: "drive.go:555-559"
+        evidence: "svc.Files.Update(fileID, &drive.File{Name: newName})"
+        destructive: false
+
+      - command: "gog drive share"
+        api_method: "Permissions.Create"
+        source: "drive.go:617-622"
+        evidence: "svc.Permissions.Create(fileID, perm)"
+        destructive: false
+
+      - command: "gog drive unshare"
+        api_method: "Permissions.Delete"
+        source: "drive.go:674"
+        evidence: "svc.Permissions.Delete(fileID, permissionID)"
+        destructive: true
+
+      - command: "gog drive comments create"
+        api_method: "Comments.Create"
+        source: "drive_comments.go:218-221"
+        evidence: "svc.Comments.Create(fileID, comment)"
+        destructive: false
+
+      - command: "gog drive comments update"
+        api_method: "Comments.Update"
+        source: "drive_comments.go:270-273"
+        evidence: "svc.Comments.Update(fileID, commentID, comment)"
+        destructive: false
+
+      - command: "gog drive comments delete"
+        api_method: "Comments.Delete"
+        source: "drive_comments.go:317"
+        evidence: "svc.Comments.Delete(fileID, commentID)"
+        destructive: true
+
+      - command: "gog drive comments reply"
+        api_method: "Replies.Create"
+        source: "drive_comments.go:369-372"
+        evidence: "svc.Replies.Create(fileID, commentID, reply)"
+        destructive: false
+
+  tasks:
+    source_files:
+      - tasks.go
+      - tasks_*.go
+
+    read_only:
+      - command: "gog tasks lists list"
+        api_method: "Tasklists.List"
+        source: "tasks_lists.go:37-38"
+        evidence: "svc.Tasklists.List().MaxResults(c.Max)"
+
+      - command: "gog tasks list"
+        api_method: "Tasks.List"
+        source: "tasks_items.go:53-76"
+        evidence: "svc.Tasks.List(tasklistID)"
+
+      - command: "gog tasks get"
+        api_method: "Tasks.Get"
+        source: "tasks_items.go:132"
+        evidence: "svc.Tasks.Get(tasklistID, taskID)"
+
+    write:
+      - command: "gog tasks lists create"
+        api_method: "Tasklists.Insert"
+        source: "tasks_lists.go:85"
+        evidence: "svc.Tasklists.Insert(&tasks.TaskList{Title: title})"
+        destructive: false
+
+      - command: "gog tasks add"
+        api_method: "Tasks.Insert"
+        source: "tasks_items.go:202"
+        evidence: "svc.Tasks.Insert(tasklistID, task)"
+        destructive: false
+
+      - command: "gog tasks update"
+        api_method: "Tasks.Patch"
+        source: "tasks_items.go:406"
+        evidence: "svc.Tasks.Patch(tasklistID, taskID, patch)"
+        destructive: false
+
+      - command: "gog tasks done"
+        api_method: "Tasks.Patch"
+        source: "tasks_items.go:453"
+        evidence: "svc.Tasks.Patch(...Status: completed)"
+        destructive: false
+
+      - command: "gog tasks undo"
+        api_method: "Tasks.Patch"
+        source: "tasks_items.go:490"
+        evidence: "svc.Tasks.Patch(...Status: needsAction)"
+        destructive: false
+
+      - command: "gog tasks delete"
+        api_method: "Tasks.Delete"
+        source: "tasks_items.go:531"
+        evidence: "svc.Tasks.Delete(tasklistID, taskID)"
+        destructive: true
+
+      - command: "gog tasks clear"
+        api_method: "Tasks.Clear"
+        source: "tasks_items.go:569"
+        evidence: "svc.Tasks.Clear(tasklistID)"
+        destructive: true
+
+  contacts:
+    source_files:
+      - contacts.go
+      - contacts_*.go
+
+    read_only:
+      - command: "gog contacts search"
+        api_method: "People.SearchContacts"
+        source: "contacts.go:44"
+        evidence: "svc.People.SearchContacts().Query(query)"
+
+      - command: "gog contacts list"
+        api_method: "People.Connections.List"
+        source: "contacts_crud.go:38"
+        evidence: "svc.People.Connections.List(peopleMeResource)"
+
+      - command: "gog contacts get"
+        api_method: "People.Get"
+        source: "contacts_crud.go:116"
+        evidence: "svc.People.Get(identifier)"
+
+      - command: "gog contacts directory list"
+        api_method: "People.ListDirectoryPeople"
+        source: "contacts_directory.go:46"
+        evidence: "svc.People.ListDirectoryPeople()"
+
+      - command: "gog contacts directory search"
+        api_method: "People.SearchDirectoryPeople"
+        source: "contacts_directory.go:123"
+        evidence: "svc.People.SearchDirectoryPeople().Query(query)"
+
+      - command: "gog contacts other list"
+        api_method: "OtherContacts.List"
+        source: "contacts_directory.go:202"
+        evidence: "svc.OtherContacts.List()"
+
+      - command: "gog contacts other search"
+        api_method: "OtherContacts.Search"
+        source: "contacts_directory.go:276"
+        evidence: "svc.OtherContacts.Search().Query(query)"
+
+    write:
+      - command: "gog contacts create"
+        api_method: "People.CreateContact"
+        source: "contacts_crud.go:203"
+        evidence: "svc.People.CreateContact(p)"
+        destructive: false
+
+      - command: "gog contacts update"
+        api_method: "People.UpdateContact"
+        source: "contacts_crud.go:283"
+        evidence: "svc.People.UpdateContact(resourceName, existing)"
+        destructive: false
+
+      - command: "gog contacts delete"
+        api_method: "People.DeleteContact"
+        source: "contacts_crud.go:319"
+        evidence: "svc.People.DeleteContact(resourceName)"
+        destructive: true
+
+      - command: "gog contacts other delete"
+        api_method: "OtherContacts.CopyOtherContactToMyContactsGroup + People.DeleteContact"
+        source: "contacts_directory.go:360"
+        evidence: "Copy then delete"
+        destructive: true
+
+  chat:
+    source_files:
+      - chat.go
+      - chat_*.go
+
+    read_only:
+      - command: "gog chat spaces list"
+        api_method: "Spaces.List"
+        source: "chat_spaces.go:41"
+        evidence: "svc.Spaces.List()"
+
+      - command: "gog chat spaces find"
+        api_method: "Spaces.List"
+        source: "chat_spaces.go:126"
+        evidence: "Iterates through spaces to find by displayName"
+
+      - command: "gog chat messages list"
+        api_method: "Spaces.Messages.List"
+        source: "chat_messages.go:69"
+        evidence: "svc.Spaces.Messages.List(space)"
+
+      - command: "gog chat threads list"
+        api_method: "Spaces.Messages.List"
+        source: "chat_threads.go:44"
+        evidence: "svc.Spaces.Messages.List(space)"
+
+    write:
+      - command: "gog chat spaces create"
+        api_method: "Spaces.Setup"
+        source: "chat_spaces.go:240"
+        evidence: "svc.Spaces.Setup(req)"
+        destructive: false
+
+      - command: "gog chat messages send"
+        api_method: "Spaces.Messages.Create"
+        source: "chat_messages.go:175"
+        evidence: "svc.Spaces.Messages.Create(space, message)"
+        destructive: false
+
+      - command: "gog chat dm send"
+        api_method: "Spaces.Setup + Spaces.Messages.Create"
+        source: "chat_dm.go:145"
+        evidence: "Creates DM space then sends message"
+        destructive: false
+
+      - command: "gog chat dm space"
+        api_method: "Spaces.Setup"
+        source: "chat_dm.go:145"
+        evidence: "svc.Spaces.Setup() for DM"
+        destructive: false
+
+  keep:
+    source_files:
+      - keep.go
+
+    read_only:
+      - command: "gog keep list"
+        api_method: "Notes.List"
+        source: "keep.go:45"
+        evidence: "svc.Notes.List()"
+
+      - command: "gog keep search"
+        api_method: "Notes.List"
+        source: "keep.go:128"
+        evidence: "Client-side filtering of Notes.List()"
+
+      - command: "gog keep get"
+        api_method: "Notes.Get"
+        source: "keep.go:190"
+        evidence: "svc.Notes.Get(name)"
+
+      - command: "gog keep attachment"
+        api_method: "Media.Download"
+        source: "keep.go:237"
+        evidence: "svc.Media.Download(name)"
+
+    write: []
+
+  sheets:
+    source_files:
+      - sheets.go
+      - sheets_*.go
+
+    read_only:
+      - command: "gog sheets get"
+        api_method: "Spreadsheets.Values.Get"
+        source: "sheets.go:96"
+        evidence: "svc.Spreadsheets.Values.Get(spreadsheetID, rangeSpec)"
+
+      - command: "gog sheets metadata"
+        api_method: "Spreadsheets.Get"
+        source: "sheets.go:380"
+        evidence: "svc.Spreadsheets.Get(spreadsheetID)"
+
+      - command: "gog sheets export"
+        api_method: "Files.Get (via Drive)"
+        source: "export_via_drive.go:45"
+        evidence: "Downloads file without modification"
+
+    write:
+      - command: "gog sheets update"
+        api_method: "Spreadsheets.Values.Update"
+        source: "sheets.go:190"
+        evidence: "svc.Spreadsheets.Values.Update(spreadsheetID, rangeSpec, vr)"
+        destructive: false
+
+      - command: "gog sheets append"
+        api_method: "Spreadsheets.Values.Append"
+        source: "sheets.go:281"
+        evidence: "svc.Spreadsheets.Values.Append(spreadsheetID, rangeSpec, vr)"
+        destructive: false
+
+      - command: "gog sheets clear"
+        api_method: "Spreadsheets.Values.Clear"
+        source: "sheets.go:344"
+        evidence: "svc.Spreadsheets.Values.Clear(spreadsheetID, rangeSpec)"
+        destructive: true
+
+      - command: "gog sheets create"
+        api_method: "Spreadsheets.Create"
+        source: "sheets.go:458"
+        evidence: "svc.Spreadsheets.Create(spreadsheet)"
+        destructive: false
+
+      - command: "gog sheets copy"
+        api_method: "Files.Copy (via Drive)"
+        source: "drive_copy.go:72"
+        evidence: "svc.Files.Copy(id, req)"
+        destructive: false
+
+  docs:
+    source_files:
+      - docs.go
+
+    read_only:
+      - command: "gog docs info"
+        api_method: "Documents.Get"
+        source: "docs.go:68"
+        evidence: "svc.Documents.Get(id).Fields(\"documentId,title,revisionId\")"
+
+      - command: "gog docs cat"
+        api_method: "Documents.Get"
+        source: "docs.go:201"
+        evidence: "svc.Documents.Get(id)"
+
+      - command: "gog docs export"
+        api_method: "Files.Get (via Drive)"
+        source: "export_via_drive.go:45"
+        evidence: "Downloads file without modification"
+
+    write:
+      - command: "gog docs create"
+        api_method: "Files.Create (via Drive)"
+        source: "docs.go:141"
+        evidence: "svc.Files.Create(f)"
+        destructive: false
+
+      - command: "gog docs copy"
+        api_method: "Files.Copy (via Drive)"
+        source: "drive_copy.go:72"
+        evidence: "svc.Files.Copy(id, req)"
+        destructive: false
+
+  slides:
+    source_files:
+      - slides.go
+
+    read_only:
+      - command: "gog slides info"
+        api_method: "Files.Get (via Drive)"
+        source: "info_via_drive.go:43"
+        evidence: "svc.Files.Get(id)"
+
+      - command: "gog slides export"
+        api_method: "Files.Get (via Drive)"
+        source: "export_via_drive.go:45"
+        evidence: "Downloads file without modification"
+
+    write:
+      - command: "gog slides create"
+        api_method: "Files.Create (via Drive)"
+        source: "slides.go:80"
+        evidence: "svc.Files.Create(f)"
+        destructive: false
+
+      - command: "gog slides copy"
+        api_method: "Files.Copy (via Drive)"
+        source: "drive_copy.go:72"
+        evidence: "svc.Files.Copy(id, req)"
+        destructive: false
+
+# Summary statistics
+summary:
+  total_commands: 127
+  read_only_commands: 64
+  write_commands: 63
+  destructive_write_commands: 17
+
+  by_service:
+    gmail:
+      read_only: 24
+      write: 25
+    calendar:
+      read_only: 11
+      write: 8
+    drive:
+      read_only: 9
+      write: 12
+    tasks:
+      read_only: 3
+      write: 7
+    contacts:
+      read_only: 7
+      write: 4
+    chat:
+      read_only: 4
+      write: 4
+    keep:
+      read_only: 4
+      write: 0
+    sheets:
+      read_only: 3
+      write: 5
+    docs:
+      read_only: 3
+      write: 2
+    slides:
+      read_only: 2
+      write: 2
