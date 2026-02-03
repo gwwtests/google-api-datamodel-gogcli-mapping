@@ -11,6 +11,7 @@ Services are prioritized by common usage and complexity:
   - [ ] Messages data model
   - [ ] Threads data model (messages vs threads relationship)
   - [ ] Labels (system vs user labels)
+  - [x] Filters (import/export format, API vs WebUI)
   - [ ] Identifiers (message ID, thread ID uniqueness)
   - [ ] Multi-account considerations
   - [ ] History and sync
@@ -93,6 +94,14 @@ To be documented across all services:
 - [ ] **Timestamps**: RFC3339 patterns, timezone handling
 - [ ] **Error Responses**: Common error codes and handling
 - [ ] **Multi-Account**: Patterns for combining data safely
+
+## gogcli Feature Proposals
+
+Feature requests for [gogcli](https://github.com/steipete/gogcli) identified during research:
+
+| Proposal | Status | File |
+|----------|--------|------|
+| Gmail filter export in WebUI-compatible XML | Pending issue creation | `research/gogcli-issues/gmail-filters-export-xml-proposal.md` |
 
 ## Adding New Services
 
