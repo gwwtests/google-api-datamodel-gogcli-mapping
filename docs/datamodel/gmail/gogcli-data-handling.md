@@ -112,6 +112,48 @@ Label.Type == "user"    // Custom labels
 3. Accept names OR IDs in commands (case-insensitive)
 4. Resolve names to IDs for API calls
 
+### Label Modification Commands
+
+**Important**: Labels exist on **messages**, not threads. See `ux-to-data-mapping.md` section 19.
+
+| Command | Target | API Method | Effect |
+|---------|--------|------------|--------|
+| `gog gmail labels modify <threadId>` | Thread | `threads.modify` | Labels ALL messages in thread |
+| `gog gmail batch modify <msgIds...>` | Messages | `messages.batchModify` | Labels specific messages only |
+
+**Thread-level labeling** (`gmail_labels.go`):
+```bash
+# Add/remove labels on ALL messages in a thread
+gog gmail labels modify <threadId> --add Work,Important --remove Personal
+
+# This calls threads.modify which affects all existing messages
+# New messages added to thread later do NOT inherit these labels
+```
+
+**Message-level labeling** (`gmail_batch.go`):
+```bash
+# Get message IDs from a thread
+gog gmail thread get <threadId> --json | jq '.messages[].id'
+
+# Add/remove labels on specific messages only
+gog gmail batch modify msg1 msg2 msg3 --add Urgent --remove UNREAD
+```
+
+**Common labeling patterns**:
+```bash
+# Archive a thread (remove from Inbox)
+gog gmail labels modify <threadId> --remove INBOX
+
+# Mark thread as important
+gog gmail labels modify <threadId> --add IMPORTANT
+
+# Star specific messages (not whole thread)
+gog gmail batch modify <msgId> --add STARRED
+
+# Mark as read
+gog gmail labels modify <threadId> --remove UNREAD
+```
+
 ## Multi-Account Handling
 
 ### Account Selection Priority
@@ -186,11 +228,13 @@ Format("full")
 |------|---------|
 | `gmail.go` | Search threads, top-level commands |
 | `gmail_messages.go` | Message search/fetch |
-| `gmail_labels.go` | Label operations |
+| `gmail_labels.go` | Label operations (thread-level) |
 | `gmail_labels_utils.go` | Label ID resolution |
+| `gmail_batch.go` | Batch operations (message-level delete/modify) |
 | `gmail_thread.go` | Thread operations, body decoding |
 | `gmail_get.go` | Single message retrieval |
 | `gmail_attachments.go` | Attachment handling |
+| `gmail_filters.go` | Filter create with actions (archive, star, trash, etc.) |
 | `account.go` | Account selection logic |
 | `gmail_date.go` | Date parsing/formatting |
 
