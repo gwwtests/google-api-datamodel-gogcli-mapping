@@ -6,7 +6,25 @@ This directory contains pre-configured permission settings for [Claude Code](htt
 
 ## Quick Start
 
-Copy the desired settings to your Claude Code configuration:
+### Recommended: Use the Default All-Tiers Settings
+
+The **`default-all-tiers.claude.settings.json`** file is the recommended starting point. It includes all gogcli operations properly classified into three tiers:
+
+* **allow** - Read-only operations (auto-approved)
+* **ask** - Non-destructive modifications (prompted each time)
+* **deny** - Dangerous operations (blocked)
+
+```bash
+# Copy as your project settings (recommended)
+cp default-all-tiers.claude.settings.json .claude/settings.json
+
+# Or as global settings
+cp default-all-tiers.claude.settings.json ~/.claude/settings.json
+```
+
+### Alternative: Per-Service or Per-Tier Files
+
+For more granular control, use individual files:
 
 ```bash
 # Project-wide (shared with team)
@@ -27,6 +45,7 @@ cp allow-readonly-gmail.claude.settings.json ~/.claude/settings.json
 
 | Prefix | Tier | Permission | Description |
 |--------|------|------------|-------------|
+| `default-all-tiers` | ALL | all three | **Recommended** - Complete settings with allow/ask/deny |
 | `allow-readonly-` | ✅ SAFE | `allow` | Read-only operations, auto-approved |
 | `ask-modify-` | ❓ GRAY | `ask` | Non-destructive modifications, prompted each time |
 | `deny-dangerous-` | ❌ DANGEROUS | `deny` | External impact or irreversible, blocked |
@@ -154,6 +173,43 @@ Claude Code evaluates permissions in this order: **deny → allow → ask**
 
 ## Usage Examples
 
+### Complete All-Tiers Configuration (Recommended)
+
+Use `default-all-tiers.claude.settings.json` for balanced security:
+
+* ✅ Read-only operations auto-approved
+* ❓ Modifications require confirmation each time
+* ❌ Dangerous operations blocked entirely
+
+```bash
+cp default-all-tiers.claude.settings.json .claude/settings.json
+```
+
+This file structure (allow → ask → deny order):
+
+```json
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(gog gmail search *)",
+      "Bash(gog gmail get *)",
+      ...
+    ],
+    "ask": [
+      "Bash(gog gmail drafts create *)",
+      "Bash(gog drive upload *)",
+      ...
+    ],
+    "deny": [
+      "Bash(gog gmail send *)",
+      "Bash(gog drive delete *)",
+      ...
+    ]
+  }
+}
+```
+
 ### Read-Only Access (Safest)
 
 ```json
@@ -226,6 +282,7 @@ jq -s '.[0].permissions.allow = ([.[].permissions.allow] | add | unique | sort) 
 
 | Category | Files | Purpose |
 |----------|-------|---------|
+| **default-all-tiers** | 1 | **Recommended** - Complete settings with all tiers combined |
 | allow-readonly-* | 11 | Pure read-only operations |
 | ask-modify-* | 10 | Non-destructive modifications |
 | deny-dangerous-* | 11 | Block irreversible/external operations |
