@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "ask": [
+      "Bash(gog drive upload *)",
+      "Bash(gog drive mkdir *)",
+      "Bash(gog drive copy *)",
+      "Bash(gog drive move *)",
+      "Bash(gog drive rename *)",
+      "Bash(gog drive comments create *)",
+      "Bash(gog drive comments update *)",
+      "Bash(gog drive comments reply *)"
+    ]
+  }
+}

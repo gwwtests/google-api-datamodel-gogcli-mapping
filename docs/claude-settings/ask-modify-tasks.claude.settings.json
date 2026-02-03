@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "ask": [
+      "Bash(gog tasks lists create *)",
+      "Bash(gog tasks add *)",
+      "Bash(gog tasks update *)",
+      "Bash(gog tasks done *)",
+      "Bash(gog tasks undo *)"
+    ]
+  }
+}
