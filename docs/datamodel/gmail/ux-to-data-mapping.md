@@ -372,7 +372,61 @@ User sees "tabs" that look like separate inboxes.
 
 ---
 
-### 11. Snooze: The Missing API Feature
+### 11. Multiple Stars: API Only Sees Binary State
+
+**What User Sees (UI)**:
+```
+Settings → Stars → Choose from 12 different star icons:
+
+Color stars:    ★ ★ ★ ★ ★ ★
+                yellow orange red purple blue green
+
+Symbol stars:   ❗ » ❕ ✓ ℹ ❓
+                red   orange yellow green blue purple
+                bang  guillemet bang check info question
+```
+
+User can cycle through enabled stars by clicking repeatedly.
+
+**What's in the Data (API)**:
+```json
+{
+  "id": "msg_starred_123",
+  "labelIds": [
+    "INBOX",
+    "STARRED"    // ← Binary! No star type information
+  ]
+}
+```
+
+**⚠️ Critical API Limitation**:
+- Gmail UI supports **12 different star types**
+- API only exposes single `STARRED` label (on/off)
+- **Star type is NOT accessible via API**
+- Stored internally but not exposed
+
+**Gmail Search vs API**:
+```
+Gmail UI search:
+  has:yellow-star    ← Works in Gmail search bar
+  has:red-star
+  has:green-check
+  has:blue-info
+
+API search (q parameter):
+  is:starred         ← Only binary check available
+  has:yellow-star    ← Does NOT work via API!
+```
+
+**Reference**: [Gmail Help - Stars and icons](https://support.google.com/mail/answer/5904?hl=en)
+
+**Workaround**:
+- Use custom user labels instead: "Priority-Red", "Review-Green", etc.
+- These ARE accessible via API unlike star types
+
+---
+
+### 12. Snooze: The Missing API Feature
 
 **What User Sees (UI)**:
 ```
@@ -410,7 +464,7 @@ User sees "tabs" that look like separate inboxes.
 
 ---
 
-### 12. Send As: Multiple Sender Addresses
+### 13. Send As: Multiple Sender Addresses
 
 **What User Sees (UI)**:
 ```
@@ -451,7 +505,7 @@ From: [dropdown menu]
 
 ---
 
-### 13. Draft Lifecycle: ID Transformation
+### 14. Draft Lifecycle: ID Transformation
 
 **What User Expects**:
 "Draft ID stays the same when I send it"
@@ -479,7 +533,7 @@ AFTER drafts.send():
 
 ---
 
-### 14. Threading Requires SMTP Headers for Recipients
+### 15. Threading Requires SMTP Headers for Recipients
 
 **What Developer Expects**:
 "Setting `threadId` in API will thread the email for everyone"
@@ -578,13 +632,14 @@ Subject: Re: Original Subject
 
 | Feature | API Status | Workaround |
 |---------|------------|------------|
+| Multi-Star Types | Binary STARRED only, no star type | Use custom labels instead |
 | Snooze | SNOOZED label only, no timing | External scheduler + custom labels |
 | Scheduled Send | No support | External scheduler + drafts.send |
 | Confidential Mode | No support | None (use CSE for encryption) |
 
 ---
 
-### 15. System Label Mechanics: The Real "Folder" System
+### 16. System Label Mechanics: The Real "Folder" System
 
 **What User Sees (UI)**:
 ```
@@ -651,7 +706,7 @@ service.users().messages().modify(
 
 ---
 
-### 16. Creating a Draft Reply (Thread Continuation)
+### 17. Creating a Draft Reply (Thread Continuation)
 
 **What User Wants**:
 "Create a draft that appears as a reply to an existing conversation, so I can review it in Gmail UI before sending"
@@ -700,7 +755,7 @@ API Request:
 
 ---
 
-### 17. Label Renaming: ID Stays, Name Changes
+### 18. Label Renaming: ID Stays, Name Changes
 
 **What User Sees (UI)**:
 ```
@@ -739,6 +794,62 @@ service.users().labels().patch(
 - Store label by `id`, not `name`
 - Names can change, IDs are permanent
 - Messages keep `labelIds` array - these are IDs, not names
+
+---
+
+### 19. Labels Exist on Messages, Not Threads (Critical!)
+
+**What User Might Assume**:
+"I label a thread, and all messages in it share that label"
+
+**What's Actually True**:
+```
+Labels are stored on individual MESSAGES.
+Thread labels = UNION of all message labels.
+```
+
+**Example - Thread with 3 messages**:
+```json
+{
+  "threadId": "thread_abc",
+  "messages": [
+    { "id": "msg_A", "labelIds": ["INBOX", "foo"] },
+    { "id": "msg_B", "labelIds": ["INBOX", "bar"] },
+    { "id": "msg_C", "labelIds": ["INBOX", "zoo"] }
+  ]
+}
+```
+Gmail UI shows thread with labels: `INBOX`, `foo`, `bar`, `zoo` (union)
+
+**Thread Modify Behavior**:
+When you call `threads.modify`:
+- Label is added/removed from **ALL existing messages** in thread
+- New messages added later do **NOT inherit** the label
+
+**API Methods Comparison**:
+
+| API Method | Target | Effect |
+|------------|--------|--------|
+| `threads.modify` | All messages in thread | Applies to ALL existing messages |
+| `messages.modify` | Single message | Applies to ONE message only |
+| `messages.batchModify` | Multiple messages | Applies to specified messages |
+
+**gogcli Commands**:
+```bash
+# Thread-level: label ALL messages in thread
+gog gmail labels modify <threadId> --add Work --remove Personal
+
+# Message-level: label SPECIFIC messages
+gog gmail batch modify <msgId1> <msgId2> --add Urgent
+
+# Get message IDs from a thread first
+gog gmail thread get <threadId> --json | jq '.messages[].id'
+```
+
+**⚠️ Practical Implications**:
+- Labeling a thread then adding a reply → reply has NO labels from thread
+- Must re-label thread to include new messages
+- For per-message control, use `batch modify` with message IDs
 
 ---
 
