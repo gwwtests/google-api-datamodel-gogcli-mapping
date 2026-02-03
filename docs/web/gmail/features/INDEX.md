@@ -1,6 +1,6 @@
 # Gmail API Advanced Features - Archived Research
 
-**Last Updated**: 2026-01-30
+**Last Updated**: 2026-02-03
 
 This directory contains archived research on Gmail API features that are either not fully documented or have limited/no API support.
 
@@ -41,6 +41,12 @@ This directory contains archived research on Gmail API features that are either 
 * `draft-resource.*` - Draft resource structure and limitations
 
 **Status**: No API support. Feature request blocked.
+
+### 6. Star Types (Multiple Stars)
+
+* `star-types.*` - Gmail star types and icons (12 types available in UI)
+
+**Status**: API exposes only binary `STARRED` label. Star type (color/symbol) is NOT accessible via API. Search operators like `has:red-star` work in Gmail UI but NOT via API `q` parameter.
 
 ## File Naming Convention
 
