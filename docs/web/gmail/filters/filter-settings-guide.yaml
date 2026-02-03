@@ -1,0 +1,22 @@
+source_url: "https://developers.google.com/workspace/gmail/api/guides/filter_settings"
+download_timestamp: "2026-02-03T00:00:00Z"
+document_title: "Gmail API - Managing Filters Guide"
+covered_api_calls:
+  - "users.settings.filters.create"
+  - "users.settings.filters.list"
+  - "users.settings.filters.get"
+  - "users.settings.filters.delete"
+key_concepts:
+  - "filter criteria"
+  - "filter actions"
+  - "label management via filters"
+  - "message forwarding"
+  - "Gmail search syntax"
+  - "automatic email organization"
+related_docs:
+  - "filters-api-reference.md"
+  - "../labels/labels-overview.md"
+notes: |
+  Core guide for programmatic filter management. Covers creation with criteria
+  and actions. Important: Multiple criteria require ALL conditions to match.
+  Filters work on individual messages, not entire threads.

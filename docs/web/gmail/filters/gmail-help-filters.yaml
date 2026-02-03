@@ -1,0 +1,28 @@
+source_url: "https://support.google.com/mail/answer/6579"
+download_timestamp: "2026-02-03T11:07:56Z"
+document_title: "Gmail Help - Create Rules to Filter Your Emails"
+archival_status: "partial"
+archival_notes: |
+  Could not fetch complete content via automated tools due to dynamic page loading.
+  Document created based on known Gmail UI filter functionality.
+covered_ui_features:
+  - "filter creation UI"
+  - "filter import from XML"
+  - "filter export to XML"
+  - "filter criteria options"
+  - "filter action options"
+key_concepts:
+  - "XML-based import/export"
+  - "UI filter management"
+  - "filter backup and migration"
+  - "1000 filter limit"
+  - "email address verification for forwarding"
+related_docs:
+  - "filters-xml-export-format.md"
+  - "filter-xml-format-specification.md"
+  - "filter-settings-guide.md"
+  - "filters-api-vs-xml.md"
+notes: |
+  This is the end-user documentation for Gmail's web UI filter management.
+  Distinct from API documentation - uses XML format instead of JSON.
+  Import/export feature is web UI only, not available via API directly.
