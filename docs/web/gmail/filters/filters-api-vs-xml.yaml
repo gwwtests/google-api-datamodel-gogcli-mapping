@@ -1,0 +1,32 @@
+source_urls:
+  - "https://developers.google.com/gmail/api/reference/rest/v1/users.settings.filters"
+  - "https://developers.google.com/workspace/gmail/api/guides/filter_settings"
+  - "https://developers.google.com/workspace/gmail/api/guides/migrate-from-email-settings"
+download_timestamp: "2026-02-03T00:00:00Z"
+document_title: "Gmail Filter Format Comparison: API JSON vs WebUI XML"
+key_concepts:
+  - "format incompatibility"
+  - "label IDs vs names"
+  - "action flags vs label manipulation"
+  - "query vs hasTheWord"
+  - "bidirectional conversion"
+  - "alias expansion differences"
+  - "thread-wide search differences"
+related_docs:
+  - "filters-api-reference.md"
+  - "filters-xml-export-format.md"
+  - "../labels/labels-reference.md"
+notes: |
+  CRITICAL: The two formats are NOT directly compatible.
+
+  Key conversion challenges:
+  1. Label resolution: Must use users.labels.list to map IDs ↔ names
+  2. Action semantics: shouldArchive (XML) vs removeLabelIds:["INBOX"] (JSON)
+  3. Query field names: hasTheWord (XML) vs query (JSON)
+  4. OR syntax: Single XML property vs multiple API filters
+
+  Behavioral differences:
+  - WebUI performs alias expansion, API does not
+  - WebUI searches thread-wide, API searches messages only
+
+  For gogcli: Recommend API JSON as primary format with optional XML export.

@@ -70,6 +70,16 @@ Tracking questions that need official documentation to answer.
 | GM-HI-002 | How long are history records kept? | 🟢 COMPLETED | At least 1 week, often longer. Can be less in rare cases. 404 on expired = need full sync - `docs/web/gmail/sync/sync-guide.md` |
 | GM-HI-003 | Can historyId go backwards? | 🟢 COMPLETED | No, described as "monotonically increasing" - `docs/web/gmail/history/history-reference.md` |
 
+### Filters
+
+| ID | Question | Status | Source |
+|----|----------|--------|--------|
+| GM-FI-001 | What does users.settings.filters.list return? | 🟢 COMPLETED | JSON array of Filter resources with id, criteria, action - `docs/web/gmail/filters/filters-api-reference.md` |
+| GM-FI-002 | What format is filter data in API? | 🟢 COMPLETED | JSON with criteria object (matching conditions) and action object (operations) - `docs/web/gmail/filters/filters-api-reference.md` |
+| GM-FI-003 | Is API format same as WebUI export? | 🟢 COMPLETED | No, API uses JSON, WebUI uses Atom XML. Not directly compatible - `docs/web/gmail/filters/filters-api-vs-xml.md` |
+| GM-FI-004 | Can API filter data be converted to WebUI format? | 🟢 COMPLETED | Yes, but requires label ID→name resolution and action semantic mapping - `docs/web/gmail/filters/filters-api-vs-xml.md` |
+| GM-FI-005 | What are key differences between formats? | 🟢 COMPLETED | Label IDs vs names, action flags vs label manipulation, query vs hasTheWord - `docs/web/gmail/filters/filters-api-vs-xml.md` |
+
 ---
 
 ## Summary Statistics
@@ -78,12 +88,15 @@ Tracking questions that need official documentation to answer.
 
 | Status | Count |
 |--------|-------|
-| 🟢 COMPLETED | 12 |
+| 🟢 COMPLETED | 17 |
 | ⚠️ PARTIAL | 4 |
 | 🔵 NEEDS_TESTING | 9 |
 | 🔴 PENDING | 0 |
 
-**Key Finding**: Official Google documentation does NOT specify identifier uniqueness scope (global vs per-user). This is critical for multi-account applications and requires empirical testing.
+**Key Findings**:
+
+* Official Google documentation does NOT specify identifier uniqueness scope (global vs per-user). This is critical for multi-account applications and requires empirical testing.
+* Filter formats (API JSON vs WebUI XML) are NOT directly compatible - conversion requires label resolution and semantic mapping.
 
 ---
 

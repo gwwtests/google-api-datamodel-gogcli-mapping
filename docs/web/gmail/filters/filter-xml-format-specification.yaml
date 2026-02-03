@@ -1,0 +1,120 @@
+source_url: "https://support.google.com/mail/answer/6579"
+download_timestamp: "2026-02-03T00:00:00Z"
+document_title: "Gmail Filter Export/Import XML Format Specification"
+research_date: "2026-02-03"
+
+covered_api_calls:
+  - "users.settings.filters.create"
+  - "users.settings.filters.list"
+  - "users.settings.filters.get"
+  - "users.settings.filters.delete"
+
+covered_ui_features:
+  - "Gmail Settings - Filters and Blocked Addresses"
+  - "Filter export (XML download)"
+  - "Filter import (XML upload)"
+
+key_concepts:
+  - "XML filter format specification"
+  - "Atom feed namespace"
+  - "Google Apps namespace (apps:property)"
+  - "Filter criteria properties"
+  - "Filter action properties"
+  - "Smart labels and categories"
+  - "Label name vs label ID mapping"
+  - "Filter ID uniqueness (account-local)"
+  - "Gmail search operator syntax"
+  - "mailFilters.xml structure"
+
+xml_namespaces:
+  atom: "http://www.w3.org/2005/Atom"
+  apps: "http://schemas.google.com/apps/2006"
+
+filter_criteria_properties:
+  - "from"
+  - "to"
+  - "subject"
+  - "hasTheWord"
+  - "doesNotHaveTheWord"
+  - "hasAttachment"
+  - "excludeChats"
+  - "size"
+  - "sizeOperator"
+  - "sizeUnit"
+
+filter_action_properties:
+  - "label"
+  - "shouldArchive"
+  - "shouldMarkAsRead"
+  - "shouldStar"
+  - "shouldTrash"
+  - "forwardTo"
+  - "shouldNeverSpam"
+  - "shouldAlwaysMarkAsImportant"
+  - "shouldNeverMarkAsImportant"
+  - "smartLabelToApply"
+
+smart_label_values:
+  personal: "^smartlabel_personal"
+  social: "^smartlabel_social"
+  promotions: "^smartlabel_promo"
+  notifications: "^smartlabel_notification"
+  forums: "^smartlabel_group"
+  newsletter: "^smartlabel_newsletter"
+
+related_docs:
+  - "../api/filter-api-reference.md"
+  - "../search/search-operators.md"
+  - "../labels/system-labels.md"
+
+primary_sources:
+  - url: "https://developers.google.com/workspace/gmail/api/guides/filter_settings"
+    title: "Gmail API - Managing Filters"
+    type: "official"
+  - url: "https://support.google.com/mail/answer/6579"
+    title: "Gmail Help - Create Rules to Filter Emails"
+    type: "official"
+  - url: "https://support.google.com/mail/answer/7190"
+    title: "Gmail Search Operators"
+    type: "official"
+
+community_sources:
+  - url: "https://github.com/rcmdnk/gmail_filter_manager"
+    title: "gmail_filter_manager - XML/YAML converter"
+    language: "Python"
+  - url: "https://github.com/clouserw/gmailfilters/blob/master/mailFilters.xml"
+    title: "Real-world filter XML example"
+  - url: "https://github.com/dimagi/gmail-filters/blob/master/gmailfilterxml/tests/many-filters.xml"
+    title: "Comprehensive test cases (50+ filters)"
+  - url: "https://github.com/larsks/gmail-tools/blob/master/smartlabels.xml"
+    title: "Smart label examples"
+  - url: "https://makezine.com/article/technology/edit-gmail-filters-with-xml/"
+    title: "Edit Gmail Filters with XML - Make Magazine"
+  - url: "https://www.draconianoverlord.com/2017/02/04/gmail-filter-tips.html/"
+    title: "Gmail Filter Tips - Draconian Overlord"
+
+notes: |
+  CRITICAL: No official XML schema specification exists from Google.
+  This documentation is reverse-engineered from Gmail's export functionality
+  and validated through community tools and empirical testing.
+
+  Filter IDs are unique within account but NOT globally unique.
+  XML format uses label names, API uses label IDs.
+  Import assigns new IDs, exported IDs are not preserved.
+  Maximum 1,000 filters per account.
+
+  XML format only accessible via Web UI, not through Gmail API.
+
+limitations:
+  - "No official XSD schema"
+  - "No API support for XML import/export"
+  - "Filter IDs not preserved on import"
+  - "Label names must be converted to IDs for API usage"
+  - "No retroactive application to existing emails"
+  - "1,000 filter limit per account"
+
+security_considerations:
+  - "forwardTo requires email verification"
+  - "Filters can auto-delete emails (shouldTrash)"
+  - "Never import filters from untrusted sources"
+  - "Treat filter exports as confidential data"

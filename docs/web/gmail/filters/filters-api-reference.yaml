@@ -1,0 +1,24 @@
+source_url: "https://developers.google.com/gmail/api/reference/rest/v1/users.settings.filters"
+download_timestamp: "2026-02-03T00:00:00Z"
+document_title: "Gmail API - users.settings.filters"
+covered_api_calls:
+  - "users.settings.filters.list"
+  - "users.settings.filters.get"
+  - "users.settings.filters.create"
+  - "users.settings.filters.delete"
+key_concepts:
+  - "filter criteria"
+  - "filter actions"
+  - "query syntax"
+  - "label IDs"
+  - "AND logic for multiple criteria"
+  - "maximum 1000 filters"
+related_docs:
+  - "../labels/labels-reference.md"
+  - "filters-xml-export-format.md"
+  - "filters-api-vs-xml.md"
+notes: |
+  Critical: Filters apply to individual messages, not entire threads.
+  All criteria are ANDed together - message must satisfy ALL conditions.
+  Maximum 1,000 filters per account.
+  Query field supports full Gmail search syntax.

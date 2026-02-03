@@ -1,0 +1,23 @@
+source_urls:
+  - "https://www.draconianoverlord.com/2017/02/04/gmail-filter-tips.html"
+  - "https://github.com/dimagi/gmail-filters/blob/master/gmailfilterxml/tests/many-filters.xml"
+  - "https://github.com/clouserw/gmailfilters/blob/master/mailFilters.xml"
+  - "https://gmail.googleblog.com/2009/03/new-in-labs-filter-importexport.html"
+download_timestamp: "2026-02-03T00:00:00Z"
+document_title: "Gmail Filter XML Export Format"
+key_concepts:
+  - "Atom feed format"
+  - "apps:property elements"
+  - "hasTheWord query syntax"
+  - "label names in XML"
+  - "shouldArchive action"
+  - "XML manual editing"
+related_docs:
+  - "filters-api-reference.md"
+  - "filters-api-vs-xml.md"
+notes: |
+  XML format uses Atom feed structure with Google Apps namespace.
+  Properties use label NAMES not IDs (unlike API JSON).
+  Actions use boolean flags (shouldArchive, shouldMarkAsRead).
+  hasTheWord supports full Gmail search syntax including OR, -, and label: operators.
+  Format enables manual editing and version control of filters.
