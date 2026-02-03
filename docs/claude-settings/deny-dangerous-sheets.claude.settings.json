@@ -1,16 +1,8 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
-  "_comment": "Deny Sheets write operations",
-  "_generated": "2026-02-02",
-  "_source": "gogcli-commands-classification.yaml",
-
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "deny": [
-      "Bash(gog sheets update *)",
-      "Bash(gog sheets append *)",
-      "Bash(gog sheets clear *)",
-      "Bash(gog sheets create *)",
-      "Bash(gog sheets copy *)"
+      "Bash(gog sheets clear *)"
     ]
   }
 }

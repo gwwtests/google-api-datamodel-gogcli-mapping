@@ -1,25 +1,13 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
-  "_comment": "Deny Drive write operations",
-  "_generated": "2026-02-02",
-  "_source": "gogcli-commands-classification.yaml",
-
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "deny": [
-      "Bash(gog drive upload *)",
-      "Bash(gog drive mkdir *)",
-      "Bash(gog drive copy *)",
       "Bash(gog drive delete *)",
       "Bash(gog drive rm *)",
       "Bash(gog drive del *)",
-      "Bash(gog drive move *)",
-      "Bash(gog drive rename *)",
       "Bash(gog drive share *)",
       "Bash(gog drive unshare *)",
-      "Bash(gog drive comments create *)",
-      "Bash(gog drive comments update *)",
-      "Bash(gog drive comments delete *)",
-      "Bash(gog drive comments reply *)"
+      "Bash(gog drive comments delete *)"
     ]
   }
 }

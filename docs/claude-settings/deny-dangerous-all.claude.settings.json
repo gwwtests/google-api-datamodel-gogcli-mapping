@@ -1,89 +1,32 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
-  "_comment": "Deny ALL gogcli write operations across all services",
-  "_generated": "2026-02-02",
-  "_source": "gogcli-commands-classification.yaml",
-  "_note": "Combined deny rules for gmail, calendar, drive, tasks, contacts, chat, sheets, docs, slides. Gmail drafts create/update allowed for human-in-the-loop workflow.",
-
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "deny": [
       "Bash(gog gmail send *)",
-      "Bash(gog gmail thread modify *)",
-      "Bash(gog gmail batch modify *)",
-      "Bash(gog gmail batch delete *)",
-      "Bash(gog gmail labels create *)",
-      "Bash(gog gmail drafts delete *)",
       "Bash(gog gmail drafts send *)",
-      "Bash(gog gmail filters create *)",
+      "Bash(gog gmail drafts delete *)",
+      "Bash(gog gmail batch delete *)",
       "Bash(gog gmail filters delete *)",
-      "Bash(gog gmail forwarding create *)",
       "Bash(gog gmail forwarding delete *)",
-      "Bash(gog gmail delegates add *)",
       "Bash(gog gmail delegates remove *)",
-      "Bash(gog gmail sendas create *)",
-      "Bash(gog gmail sendas verify *)",
       "Bash(gog gmail sendas delete *)",
-      "Bash(gog gmail sendas update *)",
-      "Bash(gog gmail vacation update *)",
-      "Bash(gog gmail autoforward update *)",
-      "Bash(gog gmail watch start *)",
-      "Bash(gog gmail watch renew *)",
-      "Bash(gog gmail watch stop *)",
-      "Bash(gog gmail track setup *)",
 
-      "Bash(gog calendar create *)",
-      "Bash(gog calendar update *)",
       "Bash(gog calendar delete *)",
-      "Bash(gog calendar respond *)",
-      "Bash(gog calendar focus-time *)",
-      "Bash(gog calendar out-of-office *)",
-      "Bash(gog calendar working-location *)",
-      "Bash(gog calendar propose-time *)",
 
-      "Bash(gog drive upload *)",
-      "Bash(gog drive mkdir *)",
-      "Bash(gog drive copy *)",
       "Bash(gog drive delete *)",
       "Bash(gog drive rm *)",
       "Bash(gog drive del *)",
-      "Bash(gog drive move *)",
-      "Bash(gog drive rename *)",
       "Bash(gog drive share *)",
       "Bash(gog drive unshare *)",
-      "Bash(gog drive comments create *)",
-      "Bash(gog drive comments update *)",
       "Bash(gog drive comments delete *)",
-      "Bash(gog drive comments reply *)",
 
-      "Bash(gog tasks lists create *)",
-      "Bash(gog tasks add *)",
-      "Bash(gog tasks update *)",
-      "Bash(gog tasks done *)",
-      "Bash(gog tasks undo *)",
       "Bash(gog tasks delete *)",
       "Bash(gog tasks clear *)",
 
-      "Bash(gog contacts create *)",
-      "Bash(gog contacts update *)",
       "Bash(gog contacts delete *)",
       "Bash(gog contacts other delete *)",
 
-      "Bash(gog chat spaces create *)",
-      "Bash(gog chat messages send *)",
-      "Bash(gog chat dm send *)",
-      "Bash(gog chat dm space *)",
-
-      "Bash(gog sheets update *)",
-      "Bash(gog sheets append *)",
-      "Bash(gog sheets clear *)",
-      "Bash(gog sheets create *)",
-      "Bash(gog sheets copy *)",
-
-      "Bash(gog docs create *)",
-      "Bash(gog docs copy *)",
-
-      "Bash(gog slides create *)",
-      "Bash(gog slides copy *)"
+      "Bash(gog sheets clear *)"
     ]
   }
 }
