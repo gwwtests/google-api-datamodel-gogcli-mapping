@@ -1,6 +1,7 @@
 # Feature Proposal: Gmail Filter Export in WebUI-Compatible XML Format
 
 **Target Repository:** https://github.com/steipete/gogcli
+**GitHub Issue:** https://github.com/steipete/gogcli/issues/174 ✅
 **Related Documentation:** `docs/web/gmail/filters/`
 
 ## Summary

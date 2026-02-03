@@ -99,9 +99,9 @@ To be documented across all services:
 
 Feature requests for [gogcli](https://github.com/steipete/gogcli) identified during research:
 
-| Proposal | Status | File |
+| Proposal | Status | Link |
 |----------|--------|------|
-| Gmail filter export in WebUI-compatible XML | Pending issue creation | `research/gogcli-issues/gmail-filters-export-xml-proposal.md` |
+| Gmail filter export in WebUI-compatible XML | [Issue #174](https://github.com/steipete/gogcli/issues/174) | `research/gogcli-issues/gmail-filters-export-xml-proposal.md` |
 
 ## Adding New Services
 
