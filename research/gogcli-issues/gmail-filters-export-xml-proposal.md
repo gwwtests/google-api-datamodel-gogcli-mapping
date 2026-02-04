@@ -295,6 +295,32 @@ git add filters-*.xml && git commit -m "Filter backup"
 - [ ] Documentation added to README
 - [ ] Tests cover edge cases (empty filters, complex criteria)
 
+## Alternative Workflow (gmailctl)
+
+For users who need XML export today, [gmailctl](https://github.com/mbrt/gmailctl) provides this capability via a two-step workflow:
+
+```bash
+# Step 1: Download filters from Gmail API to Jsonnet config
+gmailctl download > my-filters.jsonnet
+
+# Step 2: Export Jsonnet config to WebUI-compatible XML
+gmailctl export -f my-filters.jsonnet > mailFilters.xml
+```
+
+This produces valid Gmail WebUI-importable XML.
+
+**Why gogcli feature still valuable:**
+
+- Single-command workflow (`gog gmail filters export > filters.xml`)
+- No intermediate format/tool required
+- Consistent with gogcli's direct API access philosophy
+- Users already using gogcli don't need a second tool
+
+**Related issues:**
+
+- [mbrt/gmailctl#323](https://github.com/mbrt/gmailctl/issues/323) - Requests the **reverse direction** (XML → Jsonnet import)
+- These are complementary features enabling full XML round-trip
+
 ## Priority
 
 **Medium-High** - Enables powerful team collaboration and account management workflows that are currently only possible via WebUI manual export.
@@ -302,4 +328,5 @@ git add filters-*.xml && git commit -m "Filter backup"
 ---
 
 *Research conducted: 2026-02-03*
+*Last updated: 2026-02-04 (added gmailctl alternative workflow)*
 *Documentation archived in: gogcli-api-datamodel repository*
