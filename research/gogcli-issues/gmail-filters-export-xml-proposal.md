@@ -3,6 +3,24 @@
 **Target Repository:** https://github.com/steipete/gogcli
 **GitHub Issue:** https://github.com/steipete/gogcli/issues/174 ✅
 **Related Documentation:** `docs/web/gmail/filters/`
+**Last Updated:** 2026-02-03 (verified with real sources)
+
+## Verified Sources
+
+### Real Gmail Filter XML Exports (Primary Evidence)
+
+| Source | Date | Filters | URL |
+|--------|------|---------|-----|
+| clouserw/gmailfilters | 2009-12-09 | 7 | https://github.com/clouserw/gmailfilters/blob/master/mailFilters.xml |
+| dimagi/gmail-filters | 2014-09-19 | 64 | https://github.com/dimagi/gmail-filters/blob/master/gmailfilterxml/tests/many-filters.xml |
+| dims (K8s maintainer) | 2022-06-25 | 17 | https://gist.github.com/dims/c3f45c3158e883600f988d7a767fe16b |
+
+### Working Implementation Reference
+
+**gmailctl** (Go) - https://github.com/mbrt/gmailctl
+- Command: `gmailctl export` converts Jsonnet config → Gmail XML
+- XML export code: `internal/engine/export/xml/marshal.go`
+- Property constants: `internal/engine/export/xml/consts.go`
 
 ## Summary
 
@@ -57,34 +75,51 @@ gog gmail filters list --format=webui > mailFilters.xml
 
 ## Technical Implementation
 
-### XML Format Specification
+### XML Format Specification (Verified from Real Exports)
 
-Gmail uses Atom Syndication Format (RFC 4287) with Google Apps namespace:
+Gmail uses Atom Syndication Format (RFC 4287) with Google Apps namespace.
+
+**Real example from clouserw/gmailfilters (2009):**
 
 ```xml
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns='http://www.w3.org/2005/Atom'
-      xmlns:apps='http://schemas.google.com/apps/2006'>
-  <title>Mail Filters</title>
-  <author>
-    <name>User Name</name>
-    <email>user@gmail.com</email>
-  </author>
-  <updated>2026-02-03T12:00:00Z</updated>
-
-  <entry>
-    <category term='filter'/>
-    <title>Mail Filter</title>
-    <id>tag:mail.google.com,2008:filter:1234567890</id>
-    <updated>2026-02-03T12:00:00Z</updated>
-    <content/>
-    <apps:property name='from' value='notifications@github.com'/>
-    <apps:property name='hasTheWord' value='&quot;was assigned to you&quot;'/>
-    <apps:property name='label' value='GitHub/Assigned'/>
-    <apps:property name='shouldArchive' value='true'/>
-    <apps:property name='shouldMarkAsRead' value='true'/>
-  </entry>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:apps='http://schemas.google.com/apps/2006'>
+    <title>Mail Filters</title>
+    <id>tag:mail.google.com,2008:filters:1206327421108,1228202452022</id>
+    <updated>2009-12-09T20:44:01Z</updated>
+    <author>
+        <name>Wil Clouser</name>
+        <email>clouserw@gmail.com</email>
+    </author>
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <id>tag:mail.google.com,2008:filter:1206327421108</id>
+        <updated>2009-12-09T20:44:01Z</updated>
+        <content></content>
+        <apps:property name='from' value='bugzilla-daemon@mozilla.org'/>
+        <apps:property name='to' value='clouserw@gmail.com'/>
+        <apps:property name='hasTheWord' value='blocker'/>
+        <apps:property name='label' value='blocker'/>
+    </entry>
 </feed>
+```
+
+**Real example from dims' Kubernetes filters (2022) showing size properties:**
+
+```xml
+<entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:1463531420708</id>
+    <updated>2022-06-25T21:39:52Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value='list:"kubernetes-dev@googlegroups.com"'/>
+    <apps:property name='label' value='kubernetes'/>
+    <apps:property name='shouldArchive' value='true'/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+</entry>
 ```
 
 ### API to XML Field Mapping
@@ -233,11 +268,13 @@ git add filters-*.xml && git commit -m "Filter backup"
 - [Atom Syndication Format (RFC 4287)](https://www.ietf.org/rfc/rfc4287.txt)
 - [Google Apps XML namespace](http://schemas.google.com/apps/2006)
 
-### Related Tools
+### Related Tools (Verified)
 
-- [gmailctl](https://github.com/mbrt/gmailctl) - Jsonnet-based filter management with XML export
+- [gmailctl](https://github.com/mbrt/gmailctl) - **Has working XML export**: `gmailctl export` command
+  - Source: [`internal/engine/export/xml/marshal.go`](https://github.com/mbrt/gmailctl/blob/main/internal/engine/export/xml/marshal.go)
+  - Uses Jsonnet config as input, outputs Gmail-compatible XML
 - [gmail-yaml-filters](https://github.com/mesozoic/gmail-yaml-filters) - YAML → API sync
-- [Gefilte Fish](https://github.com/nedbat/gefilte) - Python DSL for filter generation
+- [dimagi/gmail-filters](https://github.com/dimagi/gmail-filters) - Python XML library with test examples
 
 ### Local Documentation
 
