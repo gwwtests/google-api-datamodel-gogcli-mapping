@@ -1,0 +1,918 @@
+# Google Docs Feature Comparison: UI vs API vs gogcli
+# Research Date: 2026-02-05
+# Purpose: Machine-readable mapping for generating comparison tables
+
+metadata:
+  service: Google Docs
+  api_version: v1
+  gogcli_version: latest
+  research_date: "2026-02-05"
+  notes: |
+    - gogcli uses Drive API for most operations (create, copy, export)
+    - gogcli only uses Docs API v1 Documents.Get() for metadata and text extraction
+    - Docs API has only 3 methods: get, create, batchUpdate (with 37+ request types)
+    - Comments are via Drive API, not Docs API
+
+# Legend for coverage field:
+# - full: Complete support
+# - partial: Some functionality available
+# - read_only: Can read but not write
+# - none: Not available
+# - ui_only: Only in web UI
+
+feature_categories:
+
+  # ============================================================================
+  # EDITING MODES
+  # ============================================================================
+  editing_modes:
+    display_name: "Editing Modes"
+    features:
+      - id: editing_mode
+        name: "Editing Mode (direct edit)"
+        ui: full
+        api: full
+        api_method: "documents.batchUpdate"
+        gogcli: none
+        gogcli_command: null
+        notes: "gogcli is read-focused; no batchUpdate support"
+
+      - id: suggesting_mode
+        name: "Suggesting Mode (track changes)"
+        ui: full
+        api: partial
+        api_method: "documents.get with SuggestionsViewMode"
+        gogcli: none
+        gogcli_command: null
+        notes: "API: Can read suggestions (SUGGESTIONS_INLINE mode), cannot accept/reject"
+
+      - id: viewing_mode
+        name: "Viewing Mode (read-only)"
+        ui: full
+        api: full
+        api_method: "documents.get"
+        gogcli: full
+        gogcli_command: "gog docs cat, gog docs info"
+        notes: "gogcli supports read-only document access"
+
+  # ============================================================================
+  # COMMENTS AND COLLABORATION
+  # ============================================================================
+  comments_collaboration:
+    display_name: "Comments & Collaboration"
+    features:
+      - id: add_comments
+        name: "Add Comments"
+        ui: full
+        api: full
+        api_method: "Drive API: comments.create"
+        gogcli: none
+        gogcli_command: null
+        notes: "Comments are via Drive API, not Docs API"
+
+      - id: reply_threads
+        name: "Reply Threads"
+        ui: full
+        api: full
+        api_method: "Drive API: replies.create"
+        gogcli: none
+        gogcli_command: null
+        notes: "Comments are via Drive API"
+
+      - id: resolve_comments
+        name: "Resolve Comments"
+        ui: full
+        api: full
+        api_method: "Drive API: comments.update (resolved=true)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: at_mentions_comments
+        name: "@Mentions in Comments"
+        ui: full
+        api: full
+        api_method: "Drive API: comments.create"
+        gogcli: none
+        gogcli_command: null
+        notes: "Triggers email notifications"
+
+      - id: accept_reject_suggestions
+        name: "Accept/Reject Suggestions"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "UI-ONLY: API can read suggestions but cannot accept/reject programmatically"
+
+  # ============================================================================
+  # CONTENT INSERTION
+  # ============================================================================
+  content_insertion:
+    display_name: "Content Insertion"
+    features:
+      - id: insert_tables
+        name: "Insert Tables"
+        ui: full
+        api: full
+        api_method: "InsertTableRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "API supports table creation, modification, merging cells"
+
+      - id: modify_tables
+        name: "Modify Tables (add/delete rows/columns)"
+        ui: full
+        api: full
+        api_method: "InsertTableRowRequest, DeleteTableRowRequest, etc."
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: merge_table_cells
+        name: "Merge Table Cells"
+        ui: full
+        api: full
+        api_method: "MergeTableCellsRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: table_styling
+        name: "Table Styling (borders, colors)"
+        ui: full
+        api: full
+        api_method: "UpdateTableCellStyleRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: insert_inline_images
+        name: "Insert Inline Images"
+        ui: full
+        api: full
+        api_method: "InsertInlineImageRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Requires publicly accessible URL or base64 data URI"
+
+      - id: insert_positioned_images
+        name: "Insert Positioned/Anchored Images"
+        ui: full
+        api: full
+        api_method: "CreatePositionedObjectRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: image_properties
+        name: "Modify Image Properties (crop, size)"
+        ui: full
+        api: full
+        api_method: "UpdateImagePropertiesRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: insert_drawings
+        name: "Insert/Create Drawings"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "UI-ONLY: API can read embedded drawings, cannot create or edit"
+
+      - id: read_drawings
+        name: "Read Embedded Drawings"
+        ui: full
+        api: read_only
+        api_method: "documents.get (EmbeddedDrawingProperties)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: embed_sheets_charts
+        name: "Embed Charts from Sheets"
+        ui: full
+        api: full
+        api_method: "SheetsChartReference"
+        gogcli: none
+        gogcli_command: null
+        notes: "Create chart in Sheets first, reference by ID"
+
+      - id: insert_hyperlinks
+        name: "Insert Hyperlinks"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (TextStyle.link.url)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: internal_bookmarks
+        name: "Internal Bookmarks"
+        ui: full
+        api: full
+        api_method: "BookmarkLink with bookmarkId"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: heading_links
+        name: "Links to Headings"
+        ui: full
+        api: full
+        api_method: "HeadingLink with headingId"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: insert_toc
+        name: "Insert Table of Contents"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "UI-ONLY: No InsertTableOfContentsRequest exists; can only read existing TOC"
+
+      - id: read_toc
+        name: "Read Table of Contents"
+        ui: full
+        api: read_only
+        api_method: "documents.get (tableOfContents)"
+        gogcli: partial
+        gogcli_command: "gog docs cat"
+        notes: "gogcli extracts TOC as plain text"
+
+      - id: insert_headers
+        name: "Insert Headers"
+        ui: full
+        api: full
+        api_method: "CreateHeaderRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Supports DEFAULT, FIRST_PAGE, EVEN_PAGE types"
+
+      - id: insert_footers
+        name: "Insert Footers"
+        ui: full
+        api: full
+        api_method: "CreateFooterRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Supports DEFAULT, FIRST_PAGE, EVEN_PAGE types"
+
+      - id: insert_page_numbers
+        name: "Insert Page Numbers"
+        ui: full
+        api: full
+        api_method: "AutoText (type: PAGE_NUMBER)"
+        gogcli: none
+        gogcli_command: null
+        notes: "Via AutoText element in header/footer"
+
+      - id: insert_page_count
+        name: "Insert Page Count"
+        ui: full
+        api: full
+        api_method: "AutoText (type: PAGE_COUNT)"
+        gogcli: none
+        gogcli_command: null
+        notes: "Via AutoText element in header/footer"
+
+      - id: insert_footnotes
+        name: "Insert Footnotes"
+        ui: full
+        api: full
+        api_method: "CreateFootnoteRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Creates reference and footnote content"
+
+      - id: insert_equations
+        name: "Insert Equations"
+        ui: full
+        api: full
+        api_method: "Equation element"
+        gogcli: none
+        gogcli_command: null
+        notes: "LaTeX-style equations"
+
+      - id: insert_horizontal_rules
+        name: "Insert Horizontal Lines"
+        ui: full
+        api: full
+        api_method: "HorizontalRule element"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: insert_page_breaks
+        name: "Insert Page Breaks"
+        ui: full
+        api: full
+        api_method: "InsertPageBreakRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: insert_section_breaks
+        name: "Insert Section Breaks"
+        ui: full
+        api: full
+        api_method: "InsertSectionBreakRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Types: CONTINUOUS, NEXT_PAGE"
+
+  # ============================================================================
+  # TEXT FORMATTING
+  # ============================================================================
+  text_formatting:
+    display_name: "Text Formatting"
+    features:
+      - id: font_family
+        name: "Font Family"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (weightedFontFamily)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: font_size
+        name: "Font Size"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (fontSize)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: bold
+        name: "Bold"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (bold)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: italic
+        name: "Italic"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (italic)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: underline
+        name: "Underline"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (underline)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: strikethrough
+        name: "Strikethrough"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (strikethrough)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: small_caps
+        name: "Small Caps"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (smallCaps)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: text_color
+        name: "Text Color"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (foregroundColor)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: highlight_color
+        name: "Highlight/Background Color"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (backgroundColor)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: superscript
+        name: "Superscript"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (baselineOffset: SUPERSCRIPT)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: subscript
+        name: "Subscript"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (baselineOffset: SUBSCRIPT)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # PARAGRAPH FORMATTING
+  # ============================================================================
+  paragraph_formatting:
+    display_name: "Paragraph Formatting"
+    features:
+      - id: text_alignment
+        name: "Text Alignment (left/center/right/justify)"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (alignment)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: indentation
+        name: "Indentation (first-line, hanging)"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (indentStart/End/FirstLine)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: paragraph_spacing
+        name: "Paragraph Spacing (before/after)"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (spaceAbove/spaceBelow)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: line_spacing
+        name: "Line Spacing"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (lineSpacing)"
+        gogcli: none
+        gogcli_command: null
+        notes: "Percentage: 100=single, 200=double"
+
+      - id: text_direction
+        name: "Text Direction (LTR/RTL)"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (direction)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # HEADINGS AND STYLES
+  # ============================================================================
+  headings_styles:
+    display_name: "Headings & Styles"
+    features:
+      - id: apply_heading_styles
+        name: "Apply Heading Styles (H1-H6)"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (namedStyleType: HEADING_1...6)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: title_style
+        name: "Apply Title/Subtitle Style"
+        ui: full
+        api: full
+        api_method: "UpdateParagraphStyleRequest (namedStyleType: TITLE/SUBTITLE)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: modify_default_styles
+        name: "Modify Default Style Definitions"
+        ui: full
+        api: full
+        api_method: "documents.namedStyles"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # LISTS
+  # ============================================================================
+  lists:
+    display_name: "Lists"
+    features:
+      - id: bulleted_lists
+        name: "Bulleted Lists"
+        ui: full
+        api: full
+        api_method: "CreateParagraphBulletsRequest (BULLET_* presets)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: numbered_lists
+        name: "Numbered Lists"
+        ui: full
+        api: full
+        api_method: "CreateParagraphBulletsRequest (NUMBERED_* presets)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: checkbox_lists_create
+        name: "Create Checkbox Lists"
+        ui: full
+        api: full
+        api_method: "CreateParagraphBulletsRequest (BULLET_CHECKBOX)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: checkbox_state_read
+        name: "Read Checkbox State (checked/unchecked)"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "UI-ONLY: API can create checkboxes but CANNOT detect checked/unchecked state"
+
+      - id: nested_lists
+        name: "Nested Lists (up to 9 levels)"
+        ui: full
+        api: full
+        api_method: "Paragraph.bullet.nestingLevel"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: remove_bullets
+        name: "Remove List Formatting"
+        ui: full
+        api: full
+        api_method: "DeleteParagraphBulletsRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # COLUMNS
+  # ============================================================================
+  columns:
+    display_name: "Columns"
+    features:
+      - id: multi_column_layout
+        name: "Multi-Column Layout"
+        ui: full
+        api: full
+        api_method: "SectionStyle.columnProperties"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: column_breaks
+        name: "Column Breaks"
+        ui: full
+        api: full
+        api_method: "ColumnBreak element"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: column_separators
+        name: "Column Separators"
+        ui: full
+        api: full
+        api_method: "SectionStyle.columnSeparatorStyle"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # PAGE SETUP
+  # ============================================================================
+  page_setup:
+    display_name: "Page Setup"
+    features:
+      - id: page_size
+        name: "Page Size (Letter, A4, custom)"
+        ui: full
+        api: full
+        api_method: "UpdateDocumentStyleRequest (pageSize)"
+        gogcli: none
+        gogcli_command: null
+        notes: "Width/height in PT, IN, or MM"
+
+      - id: page_margins
+        name: "Page Margins"
+        ui: full
+        api: full
+        api_method: "UpdateDocumentStyleRequest (marginTop/Bottom/Left/Right)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: page_orientation
+        name: "Page Orientation (portrait/landscape)"
+        ui: full
+        api: full
+        api_method: "UpdateDocumentStyleRequest (flipPageOrientation)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: page_color
+        name: "Page Background Color"
+        ui: full
+        api: full
+        api_method: "UpdateDocumentStyleRequest (background.color)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # SPECIAL FIELDS
+  # ============================================================================
+  special_fields:
+    display_name: "Special Fields & Variables"
+    features:
+      - id: autotext_page_number
+        name: "AutoText: Page Number"
+        ui: full
+        api: full
+        api_method: "AutoText (type: PAGE_NUMBER)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: autotext_page_count
+        name: "AutoText: Page Count"
+        ui: full
+        api: full
+        api_method: "AutoText (type: PAGE_COUNT)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: autotext_date
+        name: "AutoText: Date"
+        ui: full
+        api: partial
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "API support unclear - needs verification"
+
+      - id: smart_chip_date
+        name: "Smart Chip: Date"
+        ui: full
+        api: partial
+        api_method: "RichLink (limited)"
+        gogcli: none
+        gogcli_command: null
+        notes: "Read support; write support limited"
+
+      - id: smart_chip_person
+        name: "Smart Chip: Person @mention"
+        ui: full
+        api: partial
+        api_method: "Person element"
+        gogcli: none
+        gogcli_command: null
+        notes: "Read support (personProperties); write limited"
+
+      - id: smart_chip_file
+        name: "Smart Chip: File Link"
+        ui: full
+        api: partial
+        api_method: "RichLink element"
+        gogcli: none
+        gogcli_command: null
+        notes: "Read support; write support limited"
+
+      - id: smart_chip_calendar
+        name: "Smart Chip: Calendar Event"
+        ui: full
+        api: partial
+        api_method: "RichLink element"
+        gogcli: none
+        gogcli_command: null
+        notes: "Read support; write support limited"
+
+  # ============================================================================
+  # DOCUMENT MODES
+  # ============================================================================
+  document_modes:
+    display_name: "Document Modes"
+    features:
+      - id: pages_mode
+        name: "Pages Format (paginated)"
+        ui: full
+        api: full
+        api_method: "DocumentStyle.documentMode: PAGES"
+        gogcli: none
+        gogcli_command: null
+        notes: "Default mode with headers/footers/page numbers"
+
+      - id: pageless_mode
+        name: "Pageless Format (continuous)"
+        ui: full
+        api: full
+        api_method: "DocumentStyle.documentMode: PAGELESS"
+        gogcli: none
+        gogcli_command: null
+        notes: "No headers/footers/page numbers in this mode"
+
+  # ============================================================================
+  # MULTI-TAB DOCUMENTS
+  # ============================================================================
+  multi_tab:
+    display_name: "Multi-Tab Documents"
+    features:
+      - id: document_tabs
+        name: "Multiple Tabs per Document"
+        ui: full
+        api: full
+        api_method: "Document.tabs array"
+        gogcli: none
+        gogcli_command: null
+        notes: "Each tab has independent content"
+
+      - id: tab_hierarchy
+        name: "Tab Hierarchy (child tabs)"
+        ui: full
+        api: full
+        api_method: "Tab.childTabs"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # VERSION HISTORY
+  # ============================================================================
+  version_history:
+    display_name: "Version History"
+    features:
+      - id: view_revisions
+        name: "View Revisions"
+        ui: full
+        api: full
+        api_method: "Drive API: revisions.list"
+        gogcli: none
+        gogcli_command: null
+        notes: "Via Drive API, not Docs API"
+
+      - id: restore_revision
+        name: "Restore Previous Version"
+        ui: full
+        api: full
+        api_method: "Drive API: revisions.get + files.update"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: named_versions
+        name: "Named Versions (labels)"
+        ui: full
+        api: partial
+        api_method: "Drive API: revisions"
+        gogcli: none
+        gogcli_command: null
+        notes: "Version names may not be clearly exposed in API"
+
+      - id: pin_revisions
+        name: "Pin Revisions (keep forever)"
+        ui: full
+        api: full
+        api_method: "Drive API: revisions.update (keepForever: true)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # DOCUMENT OPERATIONS (GOGCLI FOCUS)
+  # ============================================================================
+  document_operations:
+    display_name: "Document Operations"
+    features:
+      - id: export_pdf
+        name: "Export to PDF"
+        ui: full
+        api: full
+        api_method: "Drive API: files.export (application/pdf)"
+        gogcli: full
+        gogcli_command: "gog docs export [--format pdf]"
+        notes: "Default format"
+
+      - id: export_docx
+        name: "Export to DOCX"
+        ui: full
+        api: full
+        api_method: "Drive API: files.export"
+        gogcli: full
+        gogcli_command: "gog docs export --format docx"
+        notes: null
+
+      - id: export_txt
+        name: "Export to Plain Text"
+        ui: full
+        api: full
+        api_method: "Drive API: files.export (text/plain)"
+        gogcli: full
+        gogcli_command: "gog docs export --format txt"
+        notes: null
+
+      - id: read_plain_text
+        name: "Read Document as Plain Text"
+        ui: full
+        api: full
+        api_method: "documents.get + extract text"
+        gogcli: full
+        gogcli_command: "gog docs cat"
+        notes: "Extracts text from paragraphs, tables, TOC; ignores formatting"
+
+      - id: get_metadata
+        name: "Get Document Metadata"
+        ui: full
+        api: full
+        api_method: "documents.get (fields: documentId,title,revisionId)"
+        gogcli: full
+        gogcli_command: "gog docs info"
+        notes: "Returns ID, title, revision, web link"
+
+      - id: create_document
+        name: "Create New Document"
+        ui: full
+        api: full
+        api_method: "Drive API: files.create (application/vnd.google-apps.document)"
+        gogcli: full
+        gogcli_command: "gog docs create --name 'Title'"
+        notes: "Creates empty document via Drive API"
+
+      - id: copy_document
+        name: "Copy Document"
+        ui: full
+        api: full
+        api_method: "Drive API: files.copy"
+        gogcli: full
+        gogcli_command: "gog docs copy --docid ID --title 'New Title'"
+        notes: null
+
+      - id: delete_document
+        name: "Delete Document"
+        ui: full
+        api: full
+        api_method: "Drive API: files.delete"
+        gogcli: none
+        gogcli_command: null
+        notes: "Use gog drive rm instead"
+
+      - id: modify_content
+        name: "Modify Document Content"
+        ui: full
+        api: full
+        api_method: "documents.batchUpdate"
+        gogcli: none
+        gogcli_command: null
+        notes: "gogcli has no write/edit support for document content"
+
+# Summary statistics
+summary:
+  total_features: 92
+  gogcli_support:
+    full: 7
+    partial: 1
+    none: 84
+  api_support:
+    full: 73
+    partial: 11
+    read_only: 3
+    none: 5
+  ui_only_features:
+    - "Accept/Reject Suggestions"
+    - "Insert/Create Drawings"
+    - "Insert Table of Contents"
+    - "Read Checkbox State"
+    - "Named Version Names (partial)"
