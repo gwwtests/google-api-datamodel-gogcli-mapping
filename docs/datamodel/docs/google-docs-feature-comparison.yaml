@@ -898,21 +898,151 @@ feature_categories:
         gogcli_command: null
         notes: "gogcli has no write/edit support for document content"
 
+  # ============================================================================
+  # ANCHORS, BOOKMARKS & NAMED RANGES
+  # ============================================================================
+  anchors_bookmarks:
+    display_name: "Anchors, Bookmarks & Named Ranges"
+    features:
+      - id: bookmarks
+        name: "Bookmarks (invisible anchors)"
+        ui: full
+        api: full
+        api_method: "Link.bookmarkId"
+        gogcli: none
+        gogcli_command: null
+        notes: "External URL: #bookmark=id.{bookmarkId}"
+
+      - id: named_ranges
+        name: "Named Ranges (programmatic labels)"
+        ui: partial
+        api: full
+        api_method: "CreateNamedRangeRequest, DeleteNamedRangeRequest"
+        gogcli: none
+        gogcli_command: null
+        notes: "Ideal for template placeholders, automation workflows"
+
+      - id: heading_links
+        name: "Heading Links (auto-generated)"
+        ui: full
+        api: full
+        api_method: "Link.headingId"
+        gogcli: none
+        gogcli_command: null
+        notes: "External URL: #heading=h.{headingId}"
+
+      - id: link_to_bookmark
+        name: "Create Link to Bookmark"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (link.bookmarkId)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+      - id: link_to_heading
+        name: "Create Link to Heading"
+        ui: full
+        api: full
+        api_method: "UpdateTextStyleRequest (link.headingId)"
+        gogcli: none
+        gogcli_command: null
+        notes: null
+
+  # ============================================================================
+  # CHANGE DETECTION & NOTIFICATIONS
+  # ============================================================================
+  change_detection:
+    display_name: "Change Detection & Notifications"
+    features:
+      - id: read_full_content
+        name: "Read Full Document Content"
+        ui: full
+        api: full
+        api_method: "documents.get"
+        gogcli: full
+        gogcli_command: "gog docs cat"
+        notes: "Returns complete structure with character-level indexes"
+
+      - id: read_with_indexes
+        name: "Read with UTF-16 Character Indexes"
+        ui: full
+        api: full
+        api_method: "documents.get (startIndex, endIndex)"
+        gogcli: none
+        gogcli_command: null
+        notes: "CRITICAL: emoji=2 indexes, newline=1 index"
+
+      - id: webhooks_file_level
+        name: "Webhooks (file-level notifications)"
+        ui: none
+        api: partial
+        api_method: "Drive API: files.watch"
+        gogcli: none
+        gogcli_command: null
+        notes: "Requires HTTPS, domain verification; expires ~1 week"
+
+      - id: webhook_content_diffs
+        name: "Webhook Content Diffs"
+        ui: none
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "NOT AVAILABLE: Notifications only say 'changed', must fetch & diff yourself"
+
+      - id: revision_json_structure
+        name: "Get JSON Structure for Old Revisions"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "NOT AVAILABLE: Can only export old revisions to PDF/DOCX, not JSON"
+
+      - id: per_character_attribution
+        name: "Per-Character Change Attribution"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "NOT AVAILABLE: Only per-revision (lastModifyingUser)"
+
+      - id: compute_diffs
+        name: "Compute Document Diffs"
+        ui: full
+        api: none
+        api_method: null
+        gogcli: none
+        gogcli_command: null
+        notes: "NOT AVAILABLE: Must implement yourself by comparing documents.get responses"
+
 # Summary statistics
 summary:
-  total_features: 92
+  total_features: 104
   gogcli_support:
-    full: 7
+    full: 8
     partial: 1
-    none: 84
+    none: 95
   api_support:
-    full: 73
-    partial: 11
+    full: 78
+    partial: 12
     read_only: 3
-    none: 5
+    none: 11
   ui_only_features:
     - "Accept/Reject Suggestions"
     - "Insert/Create Drawings"
     - "Insert Table of Contents"
     - "Read Checkbox State"
     - "Named Version Names (partial)"
+  api_limitations:
+    - "Cannot create suggestions (only read)"
+    - "Cannot accept/reject suggestions"
+    - "Cannot insert Table of Contents"
+    - "Cannot create/edit drawings"
+    - "Cannot read checkbox state"
+    - "Cannot get JSON structure for old revisions"
+    - "Cannot get per-character attribution"
+    - "Cannot get diff notifications (must compute yourself)"
+    - "Webhooks are file-level only, no content diffs"

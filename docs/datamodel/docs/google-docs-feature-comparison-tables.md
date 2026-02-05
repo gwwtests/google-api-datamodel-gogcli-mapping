@@ -18,13 +18,13 @@
 
 | Metric | Count |
 |--------|-------|
-| **Total Features** | 92 |
-| **gogcli: Full Support** | 7 |
+| **Total Features** | 104 |
+| **gogcli: Full Support** | 8 |
 | **gogcli: Partial Support** | 1 |
-| **gogcli: No Support** | 84 |
-| **API: Full Support** | 73 |
-| **API: Partial/Read-Only** | 14 |
-| **UI-Only Features** | 5 |
+| **gogcli: No Support** | 95 |
+| **API: Full Support** | 78 |
+| **API: Partial/Read-Only** | 15 |
+| **API Limitations (None)** | 11 |
 
 ### UI-Only Features (No API Support)
 
@@ -33,6 +33,14 @@
 * Insert Table of Contents
 * Read Checkbox State (checked/unchecked)
 * Named Version Names (limited visibility)
+
+### API Limitations (Cannot Do)
+
+* Cannot create suggestions (only read)
+* Cannot get JSON structure for old revisions
+* Cannot get per-character attribution
+* Cannot get diff notifications (must compute yourself)
+* Webhooks are file-level only, no content diffs
 
 ---
 
@@ -246,6 +254,44 @@
 | Restore Previous Version | ✅ | ✅ | ❌ | Via Drive API |
 | Named Versions (labels) | ✅ | ⚠️ | ❌ | Names may not be exposed |
 | Pin Revisions | ✅ | ✅ | ❌ | `keepForever: true` |
+
+---
+
+## 15. Anchors, Bookmarks & Named Ranges
+
+| Feature | UI | API | gogcli | Notes |
+|---------|:--:|:---:|:------:|-------|
+| Bookmarks (invisible anchors) | ✅ | ✅ | ❌ | URL: `#bookmark=id.{bookmarkId}` |
+| Named Ranges (programmatic) | ⚠️ | ✅ | ❌ | For templates, automation |
+| Heading Links (auto-generated) | ✅ | ✅ | ❌ | URL: `#heading=h.{headingId}` |
+| Create Link to Bookmark | ✅ | ✅ | ❌ | `UpdateTextStyleRequest` |
+| Create Link to Heading | ✅ | ✅ | ❌ | `UpdateTextStyleRequest` |
+
+**Use Cases:**
+
+* **Bookmarks:** Stable jump points, external URLs to specific location
+* **Named Ranges:** Template placeholders, programmatic content tracking
+* **Heading Links:** Auto-maintained TOC navigation
+
+---
+
+## 16. Change Detection & Notifications
+
+| Feature | UI | API | gogcli | Notes |
+|---------|:--:|:---:|:------:|-------|
+| Read Full Document Content | ✅ | ✅ | ✅ | `documents.get` returns complete structure |
+| Read with Character Indexes | ✅ | ✅ | ❌ | UTF-16 indexes (emoji=2, newline=1) |
+| Webhooks (file-level) | — | ⚠️ | ❌ | Drive API `files.watch`; HTTPS required |
+| Webhook Content Diffs | — | ❌ | ❌ | **NOT AVAILABLE** |
+| JSON for Old Revisions | ✅ | ❌ | ❌ | **NOT AVAILABLE** - only export to PDF/DOCX |
+| Per-Character Attribution | ✅ | ❌ | ❌ | **NOT AVAILABLE** - only per-revision |
+| Compute Diffs | ✅ | ❌ | ❌ | **NOT AVAILABLE** - must implement yourself |
+
+**Key Limitations:**
+
+* Webhooks only say "file changed" - you must fetch full document and diff yourself
+* Cannot get JSON structure for old revisions (only export formats)
+* Cannot see which user wrote which specific text (only who saved each revision)
 
 ---
 
