@@ -93,7 +93,8 @@ Gmail research is ~95% complete. Calendar API core research is ~100% complete. N
 * `docs/datamodel/docs/google-docs-feature-comparison.yaml` - Machine-readable feature mapping
 * `docs/datamodel/docs/google-docs-feature-comparison-tables.md` - Generated comparison tables
 * `docs/datamodel/docs/google-docs-anchors-bookmarks.md` - Bookmarks, named ranges, heading links (with code examples)
-* `docs/datamodel/docs/google-docs-supplementary-notes.md` - Additional notes for verification (webhooks, comment anchors)
+* `docs/datamodel/docs/google-docs-reading-history-changes.md` - Reading content, revisions, change detection, webhooks
+* `docs/datamodel/docs/google-docs-supplementary-notes.md` - Additional notes for verification
 
 ### Next Steps
 
