@@ -1,6 +1,6 @@
 # Google Docs Documentation Index
 
-**Total Documentation:** 3,385 lines across 6 files
+**Total Documentation:** ~3,600 lines across 7 files
 **Research Date:** 2026-02-05
 
 ---
@@ -10,7 +10,7 @@
 | File | Lines | Purpose |
 |------|------:|---------|
 | `google-docs-ui-features-comprehensive.md` | 1,280 | Complete UI feature research (17 sections) |
-| `google-docs-feature-comparison.yaml` | 918 | Machine-readable feature mapping (92 features) |
+| `google-docs-feature-comparison.yaml` | 1,018 | Machine-readable feature mapping (104 features) |
 | `google-docs-anchors-bookmarks.md` | 410 | Bookmarks, named ranges, heading links |
 | `google-docs-reading-history-changes.md` | 357 | Reading content, revisions, webhooks, diffs |
 | `google-docs-feature-comparison-tables.md` | 304 | Generated markdown comparison tables |
