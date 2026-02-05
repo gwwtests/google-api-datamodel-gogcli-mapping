@@ -1,10 +1,33 @@
 # Current Work
 
-**Last Updated**: 2026-01-29
+**Last Updated**: 2026-02-05
 
-## Current Focus: Calendar API Data Model
+## Current Focus: Google Docs API Data Model
 
-Gmail research is ~95% complete. Calendar API core research now ~85% complete.
+Gmail research is ~95% complete. Calendar API core research is ~100% complete. Now researching Google Docs.
+
+### Google Docs Status
+
+```
+[■■■■■■■■■■] 100% - Google Docs API Research (Documentation Phase)
+```
+
+**Completed**:
+
+- [x] Research Google Docs UI/UX features (editing modes, comments, formatting, page setup)
+- [x] Archive Google Docs API documentation
+- [x] Analyze gogcli Docs commands
+- [x] Create feature comparison YAML (UI vs API vs gogcli)
+- [x] Generate comparison tables from YAML
+
+**Key Research Findings**:
+
+- **UI-Only Features**: Accept/reject suggestions, insert TOC, create drawings, read checkbox state
+- **gogcli Architecture**: Uses Drive API for create/copy/export; Docs API only for `Documents.Get()`
+- **gogcli Commands**: 5 commands (export, info, create, copy, cat) - read-focused, no editing
+- **API Capabilities**: 3 methods (get, create, batchUpdate) with 37+ request types
+- **UTF-16 Indexing**: Critical for all operations (emoji = 2 indexes)
+- **Comments via Drive API**: Not via Docs API
 
 ### Gmail Status
 
@@ -64,13 +87,21 @@ Gmail research is ~95% complete. Calendar API core research now ~85% complete.
 * CalendarList = user-specific properties (color, reminders)
 * Same calendar appears differently in each user's CalendarList
 
+### Key Google Docs Files
+
+* `docs/datamodel/docs/google-docs-ui-features-comprehensive.md` - Complete UI research (17 sections)
+* `docs/datamodel/docs/google-docs-feature-comparison.yaml` - Machine-readable feature mapping
+* `docs/datamodel/docs/google-docs-feature-comparison-tables.md` - Generated comparison tables
+
 ### Next Steps
 
 1. [x] Archive Calendar API documentation
 2. [x] Document Calendar data model (identifiers, timezones)
 3. [x] Analyze gogcli Calendar commands
-4. [ ] Optional: Archive ACL and Settings API references
-5. [ ] Start next service (Drive, Tasks, or Contacts per FUTURE_WORK.md)
+4. [x] Research Google Docs UI/UX and API
+5. [x] Create Google Docs feature comparison (YAML + tables)
+6. [ ] Optional: Archive ACL and Settings API references
+7. [ ] Start next service (Drive, Tasks, or Contacts per FUTURE_WORK.md)
 
 ### Research Tracking
 
@@ -78,6 +109,7 @@ See: `research/RESEARCH_REQUESTS.md`
 
 **Gmail**: 12 completed, 4 partial, 9 need testing
 **Calendar**: 19 completed, 1 partial, 0 need testing
+**Google Docs**: 92 features mapped (7 gogcli full, 73 API full, 5 UI-only)
 
 ### Key Gmail Files
 
@@ -101,4 +133,5 @@ See: `research/RESEARCH_REQUESTS.md`
 1. Read this file (CURRENT_WORK.md)
 2. For Gmail: Read `docs/gmail-data-model-findings.md` and `docs/web/gmail/INDEX.md`
 3. For Calendar: Read `docs/web/calendar/INDEX.md` and `docs/datamodel/calendar/identifiers.md`
-4. Check `research/RESEARCH_REQUESTS.md` for open questions
+4. For Google Docs: Read `docs/datamodel/docs/google-docs-feature-comparison-tables.md`
+5. Check `research/RESEARCH_REQUESTS.md` for open questions
