@@ -1,6 +1,6 @@
 # Google Docs Documentation Index
 
-**Total Documentation:** ~3,600 lines across 7 files
+**Total Documentation:** ~3,900 lines across 8 files
 **Research Date:** 2026-02-05
 
 ---
@@ -14,6 +14,7 @@
 | `google-docs-anchors-bookmarks.md` | 410 | Bookmarks, named ranges, heading links |
 | `google-docs-reading-history-changes.md` | 357 | Reading content, revisions, webhooks, diffs |
 | `google-docs-feature-comparison-tables.md` | 304 | Generated markdown comparison tables |
+| `google-docs-gogcli-gap-analysis.md` | 273 | (UI+API) vs gogcli - what's missing |
 | `google-docs-supplementary-notes.md` | 116 | Additional notes for verification |
 
 ---
