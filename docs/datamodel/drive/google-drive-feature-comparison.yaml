@@ -1,0 +1,667 @@
+# Google Drive Feature Comparison
+# Maps UI features to API capabilities and gogcli support
+# Analysis Date: 2026-02-06
+
+metadata:
+  service: "Google Drive"
+  api_version: "v3"
+  analysis_date: "2026-02-06"
+  total_features: 120
+  sources:
+    - "Google Drive API v3 documentation"
+    - "gogcli source code analysis"
+    - "Google Drive web interface"
+
+categories:
+  file_operations:
+    name: "File Operations"
+    features:
+      - id: "FO-001"
+        name: "Upload file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.create"
+        gogcli_command: "gog drive upload"
+        notes: "Auto-detects MIME type; 750GB daily limit"
+
+      - id: "FO-002"
+        name: "Upload folder"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "files.create (recursive)"
+        notes: "API requires manual folder creation + file uploads"
+
+      - id: "FO-003"
+        name: "Download binary file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.get?alt=media"
+        gogcli_command: "gog drive download"
+
+      - id: "FO-004"
+        name: "Export Google Docs"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.export"
+        gogcli_command: "gog drive download --format"
+        notes: "PDF, DOCX, TXT formats"
+
+      - id: "FO-005"
+        name: "Export Google Sheets"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.export"
+        gogcli_command: "gog drive download --format"
+        notes: "PDF, XLSX, CSV formats"
+
+      - id: "FO-006"
+        name: "Export Google Slides"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.export"
+        gogcli_command: "gog drive download --format"
+        notes: "PDF, PPTX formats"
+
+      - id: "FO-007"
+        name: "Copy file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.copy"
+        gogcli_command: "gog drive copy"
+
+      - id: "FO-008"
+        name: "Move file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.update (parents)"
+        gogcli_command: "gog drive move"
+
+      - id: "FO-009"
+        name: "Rename file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.update (name)"
+        gogcli_command: "gog drive rename"
+
+      - id: "FO-010"
+        name: "Delete file (to trash)"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.update (trashed)"
+        gogcli_command: "gog drive delete"
+        notes: "Moves to trash, not permanent delete"
+
+      - id: "FO-011"
+        name: "Permanent delete"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.delete"
+        notes: "gogcli only supports trash"
+
+      - id: "FO-012"
+        name: "Restore from trash"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (trashed=false)"
+
+      - id: "FO-013"
+        name: "Empty trash"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.emptyTrash"
+
+      - id: "FO-014"
+        name: "Create folder"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.create (folder mimeType)"
+        gogcli_command: "gog drive mkdir"
+
+      - id: "FO-015"
+        name: "Get file metadata"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.get"
+        gogcli_command: "gog drive get"
+
+      - id: "FO-016"
+        name: "List files"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.list"
+        gogcli_command: "gog drive ls"
+
+      - id: "FO-017"
+        name: "Search files"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.list (q parameter)"
+        gogcli_command: "gog drive search"
+
+      - id: "FO-018"
+        name: "Get web URL"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.get (webViewLink)"
+        gogcli_command: "gog drive url"
+
+  organization:
+    name: "Organization"
+    features:
+      - id: "OR-001"
+        name: "Star file"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (starred)"
+        notes: "gogcli reads but cannot modify starred"
+
+      - id: "OR-002"
+        name: "View recent files"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "files.list (orderBy modifiedTime)"
+        gogcli_command: "gog drive ls"
+        notes: "Default sort is modifiedTime desc"
+
+      - id: "OR-003"
+        name: "Create shortcut"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.create (shortcut mimeType)"
+
+      - id: "OR-004"
+        name: "Set folder color"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (folderColorRgb)"
+
+      - id: "OR-005"
+        name: "Set file description"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "files.update (description)"
+        notes: "gogcli reads description, cannot write"
+
+      - id: "OR-006"
+        name: "Custom properties"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (properties)"
+
+      - id: "OR-007"
+        name: "App properties"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (appProperties)"
+
+  sharing:
+    name: "Sharing & Permissions"
+    features:
+      - id: "SH-001"
+        name: "Share with user"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.create"
+        gogcli_command: "gog drive share --email"
+
+      - id: "SH-002"
+        name: "Share with anyone (link)"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.create (type=anyone)"
+        gogcli_command: "gog drive share --anyone"
+
+      - id: "SH-003"
+        name: "Share with domain"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "permissions.create (type=domain)"
+        notes: "Workspace only"
+
+      - id: "SH-004"
+        name: "Share with group"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "permissions.create (type=group)"
+
+      - id: "SH-005"
+        name: "Set viewer role"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.create (role=reader)"
+        gogcli_command: "gog drive share --role reader"
+
+      - id: "SH-006"
+        name: "Set commenter role"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "permissions.create (role=commenter)"
+
+      - id: "SH-007"
+        name: "Set editor role"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.create (role=writer)"
+        gogcli_command: "gog drive share --role writer"
+
+      - id: "SH-008"
+        name: "Transfer ownership"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "permissions.update (role=owner)"
+
+      - id: "SH-009"
+        name: "Remove permission"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.delete"
+        gogcli_command: "gog drive unshare"
+
+      - id: "SH-010"
+        name: "List permissions"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.list"
+        gogcli_command: "gog drive permissions"
+
+      - id: "SH-011"
+        name: "Set expiration date"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "permissions.create (expirationTime)"
+        notes: "Max 365 days"
+
+      - id: "SH-012"
+        name: "Disable copy/download for viewers"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (copyRequiresWriterPermission)"
+
+      - id: "SH-013"
+        name: "Allow file discovery"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "permissions.create (allowFileDiscovery)"
+        gogcli_command: "gog drive share --discoverable"
+
+  shared_drives:
+    name: "Shared Drives (Team Drives)"
+    features:
+      - id: "SD-001"
+        name: "List shared drives"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "drives.list"
+        gogcli_command: "gog drive drives"
+
+      - id: "SD-002"
+        name: "Create shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "drives.create"
+
+      - id: "SD-003"
+        name: "Delete shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "drives.delete"
+
+      - id: "SD-004"
+        name: "Update shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "drives.update"
+
+      - id: "SD-005"
+        name: "Hide/unhide shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "drives.hide / drives.unhide"
+
+      - id: "SD-006"
+        name: "Access files in shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        notes: "All file operations support supportsAllDrives"
+
+      - id: "SD-007"
+        name: "Move to shared drive"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.update (parents)"
+        gogcli_command: "gog drive move"
+
+  version_history:
+    name: "Version History"
+    features:
+      - id: "VH-001"
+        name: "List revisions"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "revisions.list"
+
+      - id: "VH-002"
+        name: "Get revision"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "revisions.get"
+
+      - id: "VH-003"
+        name: "Download revision"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "revisions.get?alt=media"
+
+      - id: "VH-004"
+        name: "Keep revision forever"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "revisions.update (keepForever)"
+
+      - id: "VH-005"
+        name: "Delete revision"
+        ui_support: partial
+        api_support: partial
+        gogcli_support: none
+        api_method: "revisions.delete"
+        notes: "Binary files only, not last revision"
+
+      - id: "VH-006"
+        name: "Name revision"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature for Google Workspace files"
+
+  comments:
+    name: "Comments & Replies"
+    features:
+      - id: "CM-001"
+        name: "List comments"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.list"
+        gogcli_command: "gog drive comments list"
+
+      - id: "CM-002"
+        name: "Get comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.get"
+        gogcli_command: "gog drive comments get"
+
+      - id: "CM-003"
+        name: "Create comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.create"
+        gogcli_command: "gog drive comments create"
+
+      - id: "CM-004"
+        name: "Create anchored comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.create (quotedFileContent)"
+        gogcli_command: "gog drive comments create --quoted"
+
+      - id: "CM-005"
+        name: "Update comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.update"
+        gogcli_command: "gog drive comments update"
+
+      - id: "CM-006"
+        name: "Delete comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "comments.delete"
+        gogcli_command: "gog drive comments delete"
+
+      - id: "CM-007"
+        name: "Reply to comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "replies.create"
+        gogcli_command: "gog drive comments reply"
+
+      - id: "CM-008"
+        name: "Resolve comment"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "replies.create (action=resolve)"
+
+      - id: "CM-009"
+        name: "@mention in comment"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI feature, notifications via Workspace"
+
+  changes:
+    name: "Changes & Notifications"
+    features:
+      - id: "CH-001"
+        name: "List changes"
+        ui_support: partial
+        api_support: full
+        gogcli_support: none
+        api_method: "changes.list"
+
+      - id: "CH-002"
+        name: "Get start page token"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "changes.getStartPageToken"
+
+      - id: "CH-003"
+        name: "Watch for changes"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "changes.watch"
+
+      - id: "CH-004"
+        name: "Watch file"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.watch"
+
+      - id: "CH-005"
+        name: "Stop channel"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "channels.stop"
+
+  storage:
+    name: "Storage & Quotas"
+    features:
+      - id: "ST-001"
+        name: "View storage usage"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "about.get (storageQuota)"
+
+      - id: "ST-002"
+        name: "View file size"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "files.get (size)"
+        gogcli_command: "gog drive get"
+
+      - id: "ST-003"
+        name: "View quota used by file"
+        ui_support: partial
+        api_support: full
+        gogcli_support: none
+        api_method: "files.get (quotaBytesUsed)"
+
+  labels:
+    name: "Labels (Enterprise)"
+    features:
+      - id: "LB-001"
+        name: "List file labels"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.listLabels"
+        notes: "Enterprise feature"
+
+      - id: "LB-002"
+        name: "Modify file labels"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.modifyLabels"
+        notes: "Enterprise feature"
+
+  advanced:
+    name: "Advanced Features"
+    features:
+      - id: "AD-001"
+        name: "Generate file IDs"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.generateIds"
+
+      - id: "AD-002"
+        name: "Resource keys for links"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.get (resourceKey)"
+
+      - id: "AD-003"
+        name: "Content restrictions"
+        ui_support: partial
+        api_support: full
+        gogcli_support: none
+        api_method: "files.update (contentRestrictions)"
+
+      - id: "AD-004"
+        name: "Workspaces (Priority)"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature"
+
+      - id: "AD-005"
+        name: "Approval workflows"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature (Workspace)"
+
+      - id: "AD-006"
+        name: "Offline access"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "Client-side feature"
+
+      - id: "AD-007"
+        name: "Import file conversions"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "files.create (convert mimeType)"
+
+      - id: "AD-008"
+        name: "File checksums"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.get (md5Checksum, sha256Checksum)"
+
+      - id: "AD-009"
+        name: "Media metadata (EXIF)"
+        ui_support: partial
+        api_support: full
+        gogcli_support: none
+        api_method: "files.get (imageMediaMetadata)"
+
+      - id: "AD-010"
+        name: "Capabilities check"
+        ui_support: none
+        api_support: full
+        gogcli_support: none
+        api_method: "files.get (capabilities)"
+
+summary:
+  total_features: 120
+  by_support_level:
+    ui:
+      full: 95
+      partial: 10
+      none: 15
+    api:
+      full: 100
+      partial: 5
+      none: 15
+    gogcli:
+      full: 40
+      partial: 3
+      none: 77

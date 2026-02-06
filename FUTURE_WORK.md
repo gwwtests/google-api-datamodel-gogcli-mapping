@@ -34,12 +34,14 @@ Services are prioritized by common usage and complexity:
 
 ### Phase 3: Files and Documents
 
-- [ ] **Drive API** ← NEXT
-  - [ ] Files and folders
-  - [ ] Shared drives (Team Drives)
-  - [ ] Permissions model
-  - [ ] File IDs and uniqueness
-  - [ ] Export formats
+- [x] **Drive API** (100% - comprehensive feature mapping)
+  - [x] Files and folders - 120 features mapped in YAML
+  - [x] Shared drives (Team Drives) - supportsAllDrives documented
+  - [x] Permissions model - 4 types, 6 roles documented
+  - [x] File IDs and uniqueness - globally unique (no composite key needed)
+  - [x] Export formats - MIME type mapping complete
+  - [x] Comments via Drive API - 6 comment commands in gogcli
+  - [x] UI vs API vs gogcli comparison
 
 - [x] **Docs API** (100% - comprehensive feature mapping)
   - [x] Document structure - 104 features mapped in YAML
@@ -55,8 +57,11 @@ Services are prioritized by common usage and complexity:
   - [x] Data validation - API full, gogcli copy-only
   - [x] UI vs API vs gogcli comparison
 
-- [ ] **Slides API**
+- [ ] **Slides API** ← NEXT
+  - [ ] Presentation structure
+  - [ ] Slides, shapes, text
   - [ ] Export via Drive
+  - [ ] UI vs API vs gogcli comparison
 
 ### Phase 4: Contacts and People
 
@@ -93,12 +98,12 @@ Services are prioritized by common usage and complexity:
 
 To be documented across all services:
 
-- [~] **Identifier Patterns**: Documented for Gmail, Calendar - use composite keys
+- [~] **Identifier Patterns**: Documented for Gmail, Calendar, Drive - composite keys vs global IDs
 - [ ] **Pagination**: How each API paginates
-- [~] **Rate Limits**: Gmail quotas documented in docs/web/gmail/semantics/
-- [~] **Timestamps**: Gmail (epoch ms), Calendar (RFC3339) documented
+- [~] **Rate Limits**: Gmail, Drive quotas documented
+- [~] **Timestamps**: Gmail (epoch ms), Calendar/Drive (RFC3339) documented
 - [ ] **Error Responses**: Common error codes and handling
-- [~] **Multi-Account**: Composite key pattern documented for Gmail/Calendar
+- [~] **Multi-Account**: Composite key pattern documented for Gmail/Calendar; Drive IDs globally unique
 
 ## gogcli Feature Proposals
 
