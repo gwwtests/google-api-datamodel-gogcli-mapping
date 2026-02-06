@@ -2,9 +2,44 @@
 
 **Last Updated**: 2026-02-06
 
-## Current Focus: Google Docs API Data Model
+## Current Focus: Google Sheets API Data Model
 
-Gmail research is ~95% complete. Calendar API core research is ~100% complete. Now researching Google Docs.
+Gmail research is ~95% complete. Calendar API core research is ~100% complete. Google Docs complete. Now researching Google Sheets.
+
+### Google Sheets Status
+
+```
+[■■■■■■■■■■] 100% - Google Sheets API Research (Documentation Phase)
+```
+
+**Completed**:
+
+- [x] Research Google Sheets UI/UX features (cells, formulas, notes, comments, validation, formatting)
+- [x] Research Sheets API v4 capabilities (69 batchUpdate request types)
+- [x] Analyze gogcli Sheets commands (8 commands)
+- [x] Create feature comparison YAML (156 features, 12 categories)
+- [x] Generate comparison tables from YAML
+
+**Key Research Findings**:
+
+- **Notes vs Comments**: Notes (yellow corner) in CellData.note; Comments via Drive API
+- **GOOGLEFINANCE**: Current prices readable via API; historical returns #N/A (since 2016)
+- **gogcli Capabilities**: 8 commands for data CRUD, formatting, lifecycle; no charts/pivots/filters
+- **Data Validation**: API full support; gogcli can only copy existing rules
+- **Conditional Formatting**: API cannot apply underline, alignment, borders (returns 400)
+- **Apps Script/Macros**: Separate Apps Script API required; Sheets API cannot execute
+
+### Key Google Sheets Files
+
+* `docs/datamodel/sheets/INDEX.md` - Documentation index
+* `docs/datamodel/sheets/google-sheets-ui-features-comprehensive.md` - Complete UI research (10 sections)
+* `docs/datamodel/sheets/google-sheets-feature-comparison.yaml` - Machine-readable feature mapping (156 features)
+* `docs/datamodel/sheets/google-sheets-feature-comparison-tables.md` - Generated comparison tables (12 categories)
+* `docs/datamodel/sheets/google-sheets-gogcli-data-handling.md` - How gogcli handles Sheets
+
+---
+
+## Previous Work: Google Docs API Data Model
 
 ### Google Docs Status
 
@@ -115,6 +150,7 @@ See: `research/RESEARCH_REQUESTS.md`
 **Gmail**: 17 completed, 4 partial, 9 need testing
 **Calendar**: 20 completed, 0 partial, 0 need testing
 **Google Docs**: 92 features mapped (7 gogcli full, 73 API full, 5 UI-only)
+**Google Sheets**: 156 features mapped (32 gogcli full, 98 API full, 18 API none)
 
 ### Key Gmail Files
 
@@ -139,4 +175,5 @@ See: `research/RESEARCH_REQUESTS.md`
 2. For Gmail: Read `docs/gmail-data-model-findings.md` and `docs/web/gmail/INDEX.md`
 3. For Calendar: Read `docs/web/calendar/INDEX.md` and `docs/datamodel/calendar/identifiers.md`
 4. For Google Docs: Read `docs/datamodel/docs/google-docs-feature-comparison-tables.md`
-5. Check `research/RESEARCH_REQUESTS.md` for open questions
+5. For Google Sheets: Read `docs/datamodel/sheets/google-sheets-feature-comparison-tables.md`
+6. Check `research/RESEARCH_REQUESTS.md` for open questions

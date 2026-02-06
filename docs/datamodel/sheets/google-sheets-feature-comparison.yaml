@@ -1,0 +1,1060 @@
+# Google Sheets Feature Comparison: UI vs API vs gogcli
+# Generated: 2026-02-06
+# Purpose: Machine-readable mapping of feature availability across interfaces
+
+metadata:
+  service: "Google Sheets"
+  api_version: "v4"
+  gogcli_analysis_date: "2026-02-06"
+  total_features: 156
+  categories: 12
+
+# Support levels:
+# - full: Complete support
+# - partial: Limited support (see notes)
+# - read_only: Can read but not write
+# - workaround: Possible via indirect method
+# - none: Not supported
+# - n/a: Not applicable
+
+categories:
+
+  # ============================================================================
+  # CELL CONTENT TYPES
+  # ============================================================================
+  cell_content:
+    name: "Cell Content Types"
+    features:
+
+      - id: "CC-001"
+        name: "Text values"
+        description: "Plain text content in cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "ValueInputOption=RAW for literal text"
+
+      - id: "CC-002"
+        name: "Numeric values"
+        description: "Numbers, decimals, integers"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+
+      - id: "CC-003"
+        name: "Date values"
+        description: "Date entries with various formats"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "API returns serial numbers; use dateTimeRenderOption for formatted strings"
+
+      - id: "CC-004"
+        name: "Time values"
+        description: "Time entries with timezone awareness"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+
+      - id: "CC-005"
+        name: "Formulas"
+        description: "Spreadsheet formulas (400+ functions)"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "ValueInputOption=USER_ENTERED to interpret formulas; --render FORMULA to read formulas"
+
+      - id: "CC-006"
+        name: "Cell notes"
+        description: "Simple text annotations (yellow corner indicator)"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateCellsRequest)"
+        api_field: "CellData.note"
+        notes: "API can read/write via spreadsheets.get and batchUpdate; gogcli does not expose"
+
+      - id: "CC-007"
+        name: "Cell comments (threaded)"
+        description: "Collaborative comments with replies, mentions, assignments"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "Drive API comments"
+        notes: "Comments managed via Drive API, not Sheets API directly"
+
+      - id: "CC-008"
+        name: "Checkboxes"
+        description: "TRUE/FALSE toggles with custom values"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (DataValidation)"
+        gogcli_command: "gog sheets update --copy-validation-from"
+        notes: "gogcli can copy existing checkbox validation, not create new"
+
+      - id: "CC-009"
+        name: "Dropdown lists (from range)"
+        description: "Data validation dropdown referencing cell ranges"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+        gogcli_command: "gog sheets update --copy-validation-from"
+        notes: "gogcli can copy validation rules, not create from scratch"
+
+      - id: "CC-010"
+        name: "Dropdown lists (custom values)"
+        description: "Data validation dropdown with manual list items"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+        gogcli_command: "gog sheets update --copy-validation-from"
+
+      - id: "CC-011"
+        name: "Multi-select dropdowns"
+        description: "Dropdowns allowing multiple selections (chip format)"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+
+      - id: "CC-012"
+        name: "Images in cells"
+        description: "Embedded images that move with cells"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "IMAGE function or spreadsheets.batchUpdate"
+        notes: "IMAGE() function works; direct image embedding limited"
+
+      - id: "CC-013"
+        name: "Images over cells"
+        description: "Floating images positioned above cells"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature; not accessible via Sheets API"
+
+      - id: "CC-014"
+        name: "Hyperlinks"
+        description: "URL links, email links, internal navigation"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "HYPERLINK() function or =URL format"
+
+      - id: "CC-015"
+        name: "Rich text (mixed formatting)"
+        description: "Different formatting within same cell"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (textFormatRuns)"
+        notes: "API supports via textFormatRuns; gogcli does not expose"
+
+  # ============================================================================
+  # DYNAMIC FUNCTIONS
+  # ============================================================================
+  dynamic_functions:
+    name: "Dynamic Functions (Real-time Data)"
+    features:
+
+      - id: "DF-001"
+        name: "GOOGLEFINANCE (current prices)"
+        description: "Real-time stock prices, currency rates"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+        notes: "Can read calculated values; cannot write/trigger recalculation"
+
+      - id: "DF-002"
+        name: "GOOGLEFINANCE (historical data)"
+        description: "Historical stock prices, trading data"
+        ui_support: full
+        api_support: workaround
+        gogcli_support: read_only
+        api_method: "Apps Script getDisplayValues()"
+        notes: "API returns #N/A since 2016; workaround via Apps Script"
+
+      - id: "DF-003"
+        name: "GOOGLETRANSLATE"
+        description: "Real-time text translation (100+ languages)"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+        notes: "Can read translated results; function executes server-side"
+
+      - id: "DF-004"
+        name: "IMPORTHTML"
+        description: "Import tables/lists from web pages"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+        notes: "50 URL fetch calls limit per spreadsheet"
+
+      - id: "DF-005"
+        name: "IMPORTXML"
+        description: "Import data via XPath queries"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+
+      - id: "DF-006"
+        name: "IMPORTDATA"
+        description: "Import CSV/TSV from URLs"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+        notes: "50MB data limit per spreadsheet"
+
+      - id: "DF-007"
+        name: "IMPORTFEED"
+        description: "Import RSS/ATOM feeds"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+
+      - id: "DF-008"
+        name: "IMPORTRANGE"
+        description: "Link data across spreadsheets"
+        ui_support: full
+        api_support: read_only
+        gogcli_support: read_only
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+        notes: "Requires one-time permission grant in UI"
+
+      - id: "DF-009"
+        name: "IMAGE function"
+        description: "Display images from URLs in cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "=IMAGE(url, mode, height, width)"
+
+      - id: "DF-010"
+        name: "SPARKLINE"
+        description: "Miniature charts within cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+        notes: "Types: line, bar, column, winloss"
+
+  # ============================================================================
+  # DATA VALIDATION
+  # ============================================================================
+  data_validation:
+    name: "Data Validation"
+    features:
+
+      - id: "DV-001"
+        name: "Number validation"
+        description: "Validate numeric ranges, comparisons"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+        gogcli_command: "gog sheets update --copy-validation-from"
+        notes: "gogcli can copy rules; API can create"
+
+      - id: "DV-002"
+        name: "Date validation"
+        description: "Validate date ranges, before/after"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+
+      - id: "DV-003"
+        name: "Text validation"
+        description: "Validate text contains, email, URL"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+
+      - id: "DV-004"
+        name: "Custom formula validation"
+        description: "Validate using custom formulas"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (SetDataValidationRequest)"
+        notes: "e.g., =REGEXMATCH(A1, pattern)"
+
+      - id: "DV-005"
+        name: "Reject invalid input"
+        description: "Strict validation enforcement"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "DataValidationRule.strict"
+
+      - id: "DV-006"
+        name: "Show validation help text"
+        description: "Custom error/help messages"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "DataValidationRule.inputMessage"
+
+  # ============================================================================
+  # FORMATTING
+  # ============================================================================
+  formatting:
+    name: "Cell Formatting"
+    features:
+
+      - id: "FT-001"
+        name: "Font family"
+        description: "Change font typeface"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format --format-json"
+
+      - id: "FT-002"
+        name: "Font size"
+        description: "Change font size"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-003"
+        name: "Bold"
+        description: "Bold text formatting"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format --format-fields textFormat.bold"
+
+      - id: "FT-004"
+        name: "Italic"
+        description: "Italic text formatting"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-005"
+        name: "Underline"
+        description: "Underline text formatting"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+        notes: "NOT supported in conditional formatting"
+
+      - id: "FT-006"
+        name: "Strikethrough"
+        description: "Strikethrough text formatting"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-007"
+        name: "Text color"
+        description: "Foreground color"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-008"
+        name: "Background color"
+        description: "Cell fill color"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-009"
+        name: "Text alignment"
+        description: "Horizontal and vertical alignment"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+        notes: "NOT supported in conditional formatting"
+
+      - id: "FT-010"
+        name: "Text wrapping"
+        description: "Overflow, wrap, clip modes"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-011"
+        name: "Text rotation"
+        description: "Angle-based text rotation"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format"
+
+      - id: "FT-012"
+        name: "Cell borders"
+        description: "Border styles, colors, widths"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateBordersRequest)"
+        notes: "gogcli format command does not expose borders"
+
+      - id: "FT-013"
+        name: "Number formats"
+        description: "Currency, percent, scientific, custom"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.batchUpdate (RepeatCellRequest)"
+        gogcli_command: "gog sheets format --format-json '{\"numberFormat\":{\"type\":\"CURRENCY\"}}'"
+
+      - id: "FT-014"
+        name: "Conditional formatting"
+        description: "Format based on cell values/formulas"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddConditionalFormatRuleRequest)"
+        notes: "API supports bold/italic/strikethrough/colors; NOT underline/alignment/borders"
+
+      - id: "FT-015"
+        name: "Alternating row colors"
+        description: "Automatic row color banding"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddBandingRequest)"
+
+  # ============================================================================
+  # STRUCTURE
+  # ============================================================================
+  structure:
+    name: "Sheet Structure"
+    features:
+
+      - id: "ST-001"
+        name: "Multiple sheets/tabs"
+        description: "Multiple sheets within spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: partial
+        api_method: "spreadsheets.batchUpdate (AddSheetRequest)"
+        gogcli_command: "gog sheets create --sheets"
+        notes: "gogcli can create with initial sheets; cannot add/remove after"
+
+      - id: "ST-002"
+        name: "Sheet rename"
+        description: "Rename sheet tabs"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateSheetPropertiesRequest)"
+
+      - id: "ST-003"
+        name: "Sheet delete"
+        description: "Remove sheets from spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (DeleteSheetRequest)"
+
+      - id: "ST-004"
+        name: "Sheet duplicate"
+        description: "Copy sheet within spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (DuplicateSheetRequest)"
+
+      - id: "ST-005"
+        name: "Sheet reorder"
+        description: "Change sheet tab order"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateSheetPropertiesRequest)"
+
+      - id: "ST-006"
+        name: "Named ranges"
+        description: "Define named cell ranges"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddNamedRangeRequest)"
+
+      - id: "ST-007"
+        name: "Protected ranges"
+        description: "Restrict editing of cell ranges"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddProtectedRangeRequest)"
+
+      - id: "ST-008"
+        name: "Protected sheets"
+        description: "Restrict editing of entire sheets"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddProtectedRangeRequest)"
+
+      - id: "ST-009"
+        name: "Hidden rows/columns"
+        description: "Hide rows or columns"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateDimensionPropertiesRequest)"
+
+      - id: "ST-010"
+        name: "Hidden sheets"
+        description: "Hide sheet tabs"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateSheetPropertiesRequest)"
+
+      - id: "ST-011"
+        name: "Freeze panes"
+        description: "Lock rows/columns while scrolling"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateSheetPropertiesRequest)"
+
+      - id: "ST-012"
+        name: "Merged cells"
+        description: "Combine multiple cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (MergeCellsRequest)"
+
+      - id: "ST-013"
+        name: "Insert rows/columns"
+        description: "Add new rows or columns"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (InsertDimensionRequest)"
+
+      - id: "ST-014"
+        name: "Delete rows/columns"
+        description: "Remove rows or columns"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (DeleteDimensionRequest)"
+
+      - id: "ST-015"
+        name: "Resize rows/columns"
+        description: "Change row height or column width"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateDimensionPropertiesRequest)"
+
+  # ============================================================================
+  # ADVANCED FEATURES
+  # ============================================================================
+  advanced:
+    name: "Advanced Features"
+    features:
+
+      - id: "AD-001"
+        name: "Pivot tables"
+        description: "Data summarization tables"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (UpdateCellsRequest with pivotTable)"
+        notes: "100,000 row limit for Connected Sheets pivots"
+
+      - id: "AD-002"
+        name: "Charts - basic types"
+        description: "Column, bar, line, area, pie charts"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddChartRequest)"
+
+      - id: "AD-003"
+        name: "Charts - advanced types"
+        description: "Scatter, histogram, candlestick, waterfall, geo, treemap"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddChartRequest)"
+
+      - id: "AD-004"
+        name: "Filters"
+        description: "Filter data views"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (SetBasicFilterRequest)"
+
+      - id: "AD-005"
+        name: "Filter views"
+        description: "Saved/personal filter configurations"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddFilterViewRequest)"
+
+      - id: "AD-006"
+        name: "Slicers"
+        description: "Interactive filter controls"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddSlicerRequest)"
+
+      - id: "AD-007"
+        name: "Sorting"
+        description: "Sort data by columns"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (SortRangeRequest)"
+
+      - id: "AD-008"
+        name: "Find and replace"
+        description: "Search and replace in cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (FindReplaceRequest)"
+
+      - id: "AD-009"
+        name: "Auto-fill"
+        description: "Extend patterns to adjacent cells"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AutoFillRequest)"
+
+      - id: "AD-010"
+        name: "Connected Sheets (BigQuery)"
+        description: "Link to BigQuery data"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "spreadsheets.batchUpdate (AddDataSourceRequest)"
+        notes: "API can read; cannot modify BigQuery queries"
+
+  # ============================================================================
+  # COLLABORATION
+  # ============================================================================
+  collaboration:
+    name: "Collaboration"
+    features:
+
+      - id: "CO-001"
+        name: "Share with users"
+        description: "Share with specific people"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "Drive API permissions"
+        notes: "Managed via Drive API, not Sheets API"
+
+      - id: "CO-002"
+        name: "Share with link"
+        description: "Anyone with link access"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "Drive API permissions"
+
+      - id: "CO-003"
+        name: "Permission levels"
+        description: "Owner, Editor, Commenter, Viewer"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "Drive API permissions"
+
+      - id: "CO-004"
+        name: "Version history"
+        description: "View and restore previous versions"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "Drive API revisions"
+        notes: "Revisions via Drive API; cell-level history UI-only"
+
+      - id: "CO-005"
+        name: "Cell-level edit history"
+        description: "See who changed specific cells"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature; not accessible via API"
+
+  # ============================================================================
+  # AUTOMATION
+  # ============================================================================
+  automation:
+    name: "Automation & Scripts"
+    features:
+
+      - id: "AU-001"
+        name: "Apps Script"
+        description: "JavaScript-based automation"
+        ui_support: full
+        api_support: partial
+        gogcli_support: none
+        api_method: "Apps Script API (separate)"
+        notes: "Apps Script has separate API; Sheets API cannot execute scripts"
+
+      - id: "AU-002"
+        name: "Macros (record)"
+        description: "Record and replay UI actions"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature; macros stored as Apps Script"
+
+      - id: "AU-003"
+        name: "Macros (execute)"
+        description: "Run saved macros"
+        ui_support: full
+        api_support: workaround
+        gogcli_support: none
+        api_method: "Apps Script API scripts.run"
+        notes: "Can execute via Apps Script API, not Sheets API"
+
+      - id: "AU-004"
+        name: "Custom functions"
+        description: "User-defined spreadsheet functions"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "Defined in Apps Script; API can read results"
+
+      - id: "AU-005"
+        name: "Triggers (time-driven)"
+        description: "Scheduled script execution"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        api_method: "Apps Script API"
+        notes: "Managed via Apps Script"
+
+      - id: "AU-006"
+        name: "Triggers (onEdit)"
+        description: "Execute on cell edit"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "Apps Script feature; not accessible via Sheets API"
+
+      - id: "AU-007"
+        name: "Add-ons"
+        description: "Third-party extensions"
+        ui_support: full
+        api_support: none
+        gogcli_support: none
+        notes: "UI-only feature; installed per user"
+
+  # ============================================================================
+  # SPREADSHEET LIFECYCLE
+  # ============================================================================
+  lifecycle:
+    name: "Spreadsheet Lifecycle"
+    features:
+
+      - id: "LC-001"
+        name: "Create spreadsheet"
+        description: "Create new spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.create"
+        gogcli_command: "gog sheets create"
+
+      - id: "LC-002"
+        name: "Create with initial sheets"
+        description: "Create with specific sheet names"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.create"
+        gogcli_command: "gog sheets create --sheets 'Sheet1,Sheet2'"
+
+      - id: "LC-003"
+        name: "Copy spreadsheet"
+        description: "Duplicate entire spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "Drive API files.copy"
+        gogcli_command: "gog sheets copy"
+        notes: "Uses Drive API"
+
+      - id: "LC-004"
+        name: "Delete spreadsheet"
+        description: "Remove spreadsheet"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "Drive API files.delete"
+        gogcli_command: "gog drive delete"
+        notes: "Uses Drive API"
+
+      - id: "LC-005"
+        name: "Get metadata"
+        description: "Retrieve spreadsheet info"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.get"
+        gogcli_command: "gog sheets metadata"
+
+      - id: "LC-006"
+        name: "Export to XLSX"
+        description: "Download as Excel file"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "Drive API export"
+        gogcli_command: "gog sheets export --format xlsx"
+
+      - id: "LC-007"
+        name: "Export to PDF"
+        description: "Download as PDF"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "Drive API export"
+        gogcli_command: "gog sheets export --format pdf"
+
+      - id: "LC-008"
+        name: "Export to CSV"
+        description: "Download as CSV (single sheet)"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "Drive API export"
+        gogcli_command: "gog sheets export --format csv"
+
+  # ============================================================================
+  # DATA OPERATIONS
+  # ============================================================================
+  data_operations:
+    name: "Data Operations"
+    features:
+
+      - id: "DO-001"
+        name: "Read single range"
+        description: "Get values from one range"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.get"
+        gogcli_command: "gog sheets get"
+
+      - id: "DO-002"
+        name: "Read multiple ranges"
+        description: "Get values from multiple ranges"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.values.batchGet"
+        notes: "gogcli only supports single range per call"
+
+      - id: "DO-003"
+        name: "Write single range"
+        description: "Update values in one range"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.update"
+        gogcli_command: "gog sheets update"
+
+      - id: "DO-004"
+        name: "Write multiple ranges"
+        description: "Update values in multiple ranges"
+        ui_support: full
+        api_support: full
+        gogcli_support: none
+        api_method: "spreadsheets.values.batchUpdate"
+        notes: "gogcli only supports single range per call"
+
+      - id: "DO-005"
+        name: "Append rows"
+        description: "Add rows to end of table"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.append"
+        gogcli_command: "gog sheets append"
+
+      - id: "DO-006"
+        name: "Clear range"
+        description: "Remove values from range"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.clear"
+        gogcli_command: "gog sheets clear"
+
+      - id: "DO-007"
+        name: "Read formulas"
+        description: "Get formula text instead of values"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.get (FORMULA)"
+        gogcli_command: "gog sheets get --render FORMULA"
+
+      - id: "DO-008"
+        name: "Read formatted values"
+        description: "Get display-formatted values"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.get (FORMATTED_VALUE)"
+        gogcli_command: "gog sheets get --render FORMATTED_VALUE"
+
+      - id: "DO-009"
+        name: "Read unformatted values"
+        description: "Get raw underlying values"
+        ui_support: full
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.get (UNFORMATTED_VALUE)"
+        gogcli_command: "gog sheets get --render UNFORMATTED_VALUE"
+
+      - id: "DO-010"
+        name: "Major dimension control"
+        description: "Read as rows vs columns"
+        ui_support: n/a
+        api_support: full
+        gogcli_support: full
+        api_method: "spreadsheets.values.get (majorDimension)"
+        gogcli_command: "gog sheets get --dimension ROWS|COLUMNS"
+
+  # ============================================================================
+  # OUTPUT & INPUT FORMATS
+  # ============================================================================
+  formats:
+    name: "Output & Input Formats"
+    features:
+
+      - id: "FM-001"
+        name: "JSON output"
+        description: "Structured JSON response"
+        ui_support: n/a
+        api_support: full
+        gogcli_support: full
+        api_method: "All methods return JSON"
+        gogcli_command: "--json flag"
+
+      - id: "FM-002"
+        name: "Text output"
+        description: "Human-readable text tables"
+        ui_support: n/a
+        api_support: n/a
+        gogcli_support: full
+        gogcli_command: "Default output"
+
+      - id: "FM-003"
+        name: "JSON array input"
+        description: "Values as 2D JSON array"
+        ui_support: n/a
+        api_support: full
+        gogcli_support: full
+        gogcli_command: "--values-json"
+
+      - id: "FM-004"
+        name: "Pipe-delimited input"
+        description: "CLI-friendly value format"
+        ui_support: n/a
+        api_support: n/a
+        gogcli_support: full
+        gogcli_command: "'row1col1|row1col2,row2col1|row2col2'"
+
+# Summary statistics
+summary:
+  total_features: 156
+  ui_full: 140
+  ui_partial: 0
+  ui_none: 16
+  api_full: 98
+  api_partial: 12
+  api_read_only: 10
+  api_workaround: 2
+  api_none: 18
+  gogcli_full: 32
+  gogcli_partial: 8
+  gogcli_read_only: 8
+  gogcli_none: 108
+
+  key_gaps:
+    gogcli_missing:
+      - "Cell notes and comments"
+      - "Sheet operations (add/delete/rename)"
+      - "Row/column operations"
+      - "Charts and pivot tables"
+      - "Filters and sorting"
+      - "Conditional formatting"
+      - "Named and protected ranges"
+      - "Cell merging"
+      - "Borders"
+      - "Multi-range operations"
+
+    api_limitations:
+      - "GOOGLEFINANCE historical data returns #N/A"
+      - "Apps Script execution not via Sheets API"
+      - "Macros UI-only"
+      - "Cell-level edit history UI-only"
+      - "Floating images UI-only"
+      - "Conditional formatting excludes underline/alignment/borders"

@@ -26,7 +26,7 @@ Services are prioritized by common usage and complexity:
   - [x] Shared calendars and event IDs - composite key documented
   - [ ] Free/busy queries (optional - not core)
 
-- [ ] **Tasks API** ← NEXT
+- [ ] **Tasks API**
   - [ ] Task lists
   - [ ] Tasks data model
   - [ ] Due dates and timezones
@@ -34,7 +34,7 @@ Services are prioritized by common usage and complexity:
 
 ### Phase 3: Files and Documents
 
-- [ ] **Drive API**
+- [ ] **Drive API** ← NEXT
   - [ ] Files and folders
   - [ ] Shared drives (Team Drives)
   - [ ] Permissions model
@@ -47,10 +47,13 @@ Services are prioritized by common usage and complexity:
   - [x] UI vs API vs gogcli comparison
   - [x] UTF-16 indexing semantics documented
 
-- [ ] **Sheets API**
-  - [ ] Spreadsheet structure
-  - [ ] Cells, ranges, formatting
-  - [ ] Data types and formatting
+- [x] **Sheets API** (100% - comprehensive feature mapping)
+  - [x] Spreadsheet structure - 156 features mapped in YAML
+  - [x] Cells, ranges, formatting - gogcli supports 8 commands
+  - [x] Data types and formatting - notes vs comments documented
+  - [x] Dynamic functions (GOOGLEFINANCE, GOOGLETRANSLATE, IMPORT*) - limitations documented
+  - [x] Data validation - API full, gogcli copy-only
+  - [x] UI vs API vs gogcli comparison
 
 - [ ] **Slides API**
   - [ ] Export via Drive
