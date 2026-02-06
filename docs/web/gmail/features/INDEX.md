@@ -53,7 +53,7 @@ This directory contains archived research on Gmail API features that are either 
 Each research topic has three files:
 
 * `{topic}.url` - Source URL (single line)
-* `{topic}.meta.json` - Metadata including extraction method, date, description
+* `{topic}.yaml` - Metadata including extraction method, date, description
 * `{topic}.md` - Clean markdown content with analysis
 
 Some topics also include:
@@ -103,7 +103,7 @@ All materials gathered using:
 When updating this research:
 
 1. Download new source materials
-2. Create .url, .meta.json, and .md files
+2. Create .url, .yaml, and .md files
 3. Update synthesis document `docs/datamodel/gmail/advanced-features.md`
 4. Commit batch with descriptive message
 5. Update this INDEX.md

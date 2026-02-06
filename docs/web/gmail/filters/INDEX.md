@@ -107,7 +107,7 @@ yq '.source_url' *.yaml
 ## Related Documentation
 
 * `../labels/` - Label management (required for filter label resolution)
-* `../../datamodel/gmail/filters.md` - Synthesized data model documentation
+* `filters-api-vs-xml.md` - Synthesized comparison of API vs XML filter formats (this directory)
 * `../../../research/gmail-filter-tools-ecosystem.md` - Tool analysis
 
 ## Archival Notes

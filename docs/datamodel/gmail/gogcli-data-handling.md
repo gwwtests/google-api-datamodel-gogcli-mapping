@@ -3,7 +3,7 @@
 How the gogcli tool handles Gmail API data structures.
 
 **Source**: Analysis of https://github.com/steipete/gogcli source code
-**Analysis Date**: 2025-01-29
+**Analysis Date**: 2026-02-06 (updated from 2025-01-29)
 
 ## ID Handling
 
@@ -56,6 +56,25 @@ svc.Users.Messages.Get("me", messageID)
   "messageCount": 5
 }
 ```
+
+**Note**: `messageCount` was added in Feb 2026 (PR #99) and is shown in thread search output.
+
+**Message Search Item** (`gog gmail messages search`, added Feb 2026):
+```json
+{
+  "id": "18d1234567890abc",
+  "threadId": "18d1234567890abc",
+  "date": "2025-01-29 14:30",
+  "from": "sender@example.com",
+  "subject": "Email subject",
+  "labels": ["INBOX", "UNREAD"],
+  "body": "Message body text (if --include-body)"
+}
+```
+
+**Note**: `gog gmail messages search` is distinct from `gog gmail search`:
+- `gog gmail search <query>` → returns **threads**
+- `gog gmail messages search <query>` → returns **individual messages** with optional `--include-body` flag
 
 **Full Message** (`gmail_get.go`):
 ```json

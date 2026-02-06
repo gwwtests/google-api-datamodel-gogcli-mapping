@@ -1,6 +1,6 @@
 # Current Work
 
-**Last Updated**: 2026-02-05
+**Last Updated**: 2026-02-06
 
 ## Current Focus: Google Docs API Data Model
 
@@ -112,8 +112,8 @@ Gmail research is ~95% complete. Calendar API core research is ~100% complete. N
 
 See: `research/RESEARCH_REQUESTS.md`
 
-**Gmail**: 12 completed, 4 partial, 9 need testing
-**Calendar**: 19 completed, 1 partial, 0 need testing
+**Gmail**: 17 completed, 4 partial, 9 need testing
+**Calendar**: 20 completed, 0 partial, 0 need testing
 **Google Docs**: 92 features mapped (7 gogcli full, 73 API full, 5 UI-only)
 
 ### Key Gmail Files

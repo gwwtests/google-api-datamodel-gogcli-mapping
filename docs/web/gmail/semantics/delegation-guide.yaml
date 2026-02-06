@@ -1,0 +1,18 @@
+source_url: "https://developers.google.com/gmail/api/guides/delegate_settings"
+download_timestamp: "2026-01-29T00:00:00Z"
+document_title: "Managing Delegates"
+covered_api_calls:
+  - "users.settings.delegates.create"
+  - "users.settings.delegates.list"
+  - "users.settings.delegates.get"
+  - "users.settings.delegates.delete"
+key_concepts:
+  - "delegation"
+  - "delegator"
+  - "delegate"
+  - "mailbox_sharing"
+  - "service_account"
+  - "domain_wide_delegation"
+  - "multi_account"
+notes: |
+  Gmail API guide on managing delegates - mailbox sharing within Google Workspace organizations

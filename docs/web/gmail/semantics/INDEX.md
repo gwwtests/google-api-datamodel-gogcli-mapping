@@ -9,7 +9,7 @@
 Each archived resource consists of:
 * `.md` - Clean, readable markdown content
 * `.url` - Source URL (single line)
-* `.meta.json` - Metadata including API calls covered, key concepts, and research questions addressed
+* `.yaml` - Metadata including API calls covered, key concepts, and research questions addressed
 
 ## Archived Resources
 
@@ -85,7 +85,7 @@ Each archived resource consists of:
 
 ```bash
 # Search metadata for specific API call
-grep -r "messages.list" *.meta.json
+grep -r "messages.list" *.yaml
 
 # Example output shows which docs cover that call
 ```
@@ -94,7 +94,7 @@ grep -r "messages.list" *.meta.json
 
 ```bash
 # Search metadata for concepts
-grep -r "rate_limiting" *.meta.json
+grep -r "rate_limiting" *.yaml
 
 # Or search content
 grep -r "thread" *.md
@@ -104,7 +104,7 @@ grep -r "thread" *.md
 
 ```bash
 # Find which docs address specific research questions
-grep -r "GM-LB-001" *.meta.json
+grep -r "GM-LB-001" *.yaml
 ```
 
 ## Key Findings Summary
@@ -139,7 +139,7 @@ grep -r "GM-LB-001" *.meta.json
 When adding new semantic documentation:
 
 1. Use jina.ai_reader to fetch clean markdown
-2. Create `.md`, `.url`, and `.meta.json` files
+2. Create `.md`, `.url`, and `.yaml` files
 3. Update this INDEX.md with key findings
 4. Link to research questions in RESEARCH_REQUESTS.md
 5. Commit with descriptive message including key findings

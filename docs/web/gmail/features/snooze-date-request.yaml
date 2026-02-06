@@ -1,0 +1,5 @@
+source_url: "https://issuetracker.google.com/issues/287304309"
+download_timestamp: "T00:00:00Z"
+document_title: "Gmail API should indicate the message's snoozed date"
+notes: |
+  Feature request for Gmail API to expose when snoozed messages will reenter the inbox

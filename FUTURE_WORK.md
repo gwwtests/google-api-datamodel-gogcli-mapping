@@ -4,29 +4,29 @@
 
 Services are prioritized by common usage and complexity:
 
-### Phase 1: Core Communication (Current Focus)
+### Phase 1: Core Communication (95% Complete)
 
 - [x] Repository setup and methodology
-- [ ] **Gmail API** ← START HERE
-  - [ ] Messages data model
-  - [ ] Threads data model (messages vs threads relationship)
-  - [ ] Labels (system vs user labels)
+- [~] **Gmail API** (95% - needs empirical testing)
+  - [x] Messages data model
+  - [x] Threads data model (messages vs threads relationship)
+  - [x] Labels (system vs user labels)
   - [x] Filters (import/export format, API vs WebUI)
-  - [ ] Identifiers (message ID, thread ID uniqueness)
-  - [ ] Multi-account considerations
-  - [ ] History and sync
+  - [x] Identifiers (message ID, thread ID uniqueness) - documented, needs testing
+  - [x] Multi-account considerations - documented composite key approach
+  - [x] History and sync
 
 ### Phase 2: Productivity Suite
 
-- [ ] **Calendar API**
-  - [ ] Events data model
-  - [ ] Calendars and ACLs
-  - [ ] Timezone handling (critical!)
-  - [ ] Recurring events
-  - [ ] Shared calendars and event IDs
-  - [ ] Free/busy queries
+- [x] **Calendar API** (100% - documentation complete)
+  - [x] Events data model
+  - [x] Calendars and ACLs
+  - [x] Timezone handling (critical!) - comprehensive docs in datamodel/calendar/timezones.md
+  - [x] Recurring events
+  - [x] Shared calendars and event IDs - composite key documented
+  - [ ] Free/busy queries (optional - not core)
 
-- [ ] **Tasks API**
+- [ ] **Tasks API** ← NEXT
   - [ ] Task lists
   - [ ] Tasks data model
   - [ ] Due dates and timezones
@@ -41,9 +41,11 @@ Services are prioritized by common usage and complexity:
   - [ ] File IDs and uniqueness
   - [ ] Export formats
 
-- [ ] **Docs API**
-  - [ ] Document structure
-  - [ ] Export via Drive
+- [x] **Docs API** (100% - comprehensive feature mapping)
+  - [x] Document structure - 104 features mapped in YAML
+  - [x] Export via Drive - gogcli gap analysis complete
+  - [x] UI vs API vs gogcli comparison
+  - [x] UTF-16 indexing semantics documented
 
 - [ ] **Sheets API**
   - [ ] Spreadsheet structure
@@ -88,12 +90,12 @@ Services are prioritized by common usage and complexity:
 
 To be documented across all services:
 
-- [ ] **Identifier Patterns**: Common patterns across Google APIs
+- [~] **Identifier Patterns**: Documented for Gmail, Calendar - use composite keys
 - [ ] **Pagination**: How each API paginates
-- [ ] **Rate Limits**: Quotas and backoff strategies
-- [ ] **Timestamps**: RFC3339 patterns, timezone handling
+- [~] **Rate Limits**: Gmail quotas documented in docs/web/gmail/semantics/
+- [~] **Timestamps**: Gmail (epoch ms), Calendar (RFC3339) documented
 - [ ] **Error Responses**: Common error codes and handling
-- [ ] **Multi-Account**: Patterns for combining data safely
+- [~] **Multi-Account**: Composite key pattern documented for Gmail/Calendar
 
 ## gogcli Feature Proposals
 

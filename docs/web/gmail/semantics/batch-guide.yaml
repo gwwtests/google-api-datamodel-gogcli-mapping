@@ -1,0 +1,13 @@
+source_url: "https://developers.google.com/gmail/api/guides/batch"
+download_timestamp: "2026-01-29T00:00:00Z"
+document_title: "Batching Requests"
+key_concepts:
+  - "batch_requests"
+  - "multipart_mixed"
+  - "request_limits"
+  - "rate_limiting"
+  - "execution_order"
+  - "content_id"
+  - "nested_http_requests"
+notes: |
+  Gmail API guide on batching multiple API calls into a single HTTP request for improved performance

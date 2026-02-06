@@ -137,7 +137,7 @@ Tracking questions that need official documentation to answer.
 | ID | Question | Status | Source |
 |----|----------|--------|--------|
 | CA-MA-001 | Can eventIds collide across calendars? | 🟢 COMPLETED | Yes, eventId only unique per-calendar. Use (calendarId, eventId) - `docs/datamodel/calendar/identifiers.md` |
-| CA-MA-002 | For meeting invitations, do organizer and attendee have same eventId? | ⚠️ PARTIAL | Different calendars = different events. Use iCalUID for correlation - `docs/datamodel/calendar/identifiers.md` |
+| CA-MA-002 | For meeting invitations, do organizer and attendee have same eventId? | 🟢 COMPLETED | No - different calendars = different events with different eventIds. Use iCalUID for correlation across accounts - `docs/datamodel/calendar/identifiers.md` |
 | CA-MA-003 | How to correlate same meeting across accounts? | 🟢 COMPLETED | Use `iCalUID` field - shared across all copies of same meeting - `docs/datamodel/calendar/identifiers.md` |
 
 ### Event Types
@@ -153,8 +153,8 @@ Tracking questions that need official documentation to answer.
 
 | Status | Count |
 |--------|-------|
-| 🟢 COMPLETED | 19 |
-| ⚠️ PARTIAL | 1 |
+| 🟢 COMPLETED | 20 |
+| ⚠️ PARTIAL | 0 |
 | 🔵 NEEDS_TESTING | 0 |
 | 🔴 PENDING | 0 |
 

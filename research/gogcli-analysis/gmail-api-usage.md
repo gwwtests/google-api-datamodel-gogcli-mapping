@@ -3,7 +3,7 @@
 Analysis of how gogcli uses the Gmail API, based on source code review.
 
 **Source Repository**: https://github.com/steipete/gogcli
-**Analysis Date**: 2025-01-29
+**Analysis Date**: 2026-02-06 (updated from 2025-01-29)
 
 ## API Version
 
@@ -28,11 +28,14 @@ Note: `--readonly` flag can limit to read-only scopes.
 | Command | API Call | Notes |
 |---------|----------|-------|
 | `gog gmail messages` | `users.messages.list` | With query support |
+| `gog gmail messages search <query>` | `users.messages.list` + `get` | **NEW** Message-level search with optional body decoding (`--include-body`) |
 | `gog gmail get <id>` | `users.messages.get` | Supports format param |
 | `gog gmail attachment` | `users.messages.attachments.get` | |
-| `gog gmail search <query>` | `users.messages.list` | Gmail search syntax |
+| `gog gmail search <query>` | `users.threads.list` | Thread-level search (Gmail search syntax) |
 | `gog gmail send` | `users.messages.send` | Compose and send |
 | `gog gmail batch` | Batch operations | Multiple message ops |
+
+**Note**: `gog gmail search` returns threads, while `gog gmail messages search` returns individual messages with optional decoded bodies.
 
 ### Thread Operations
 
@@ -111,6 +114,7 @@ Key fields:
 - `historyId`
 - `messages` - Array of Message objects
 - `snippet`
+- `messageCount` - **NEW** (2026-02) Number of messages in thread (shown in search output)
 
 ### Label
 

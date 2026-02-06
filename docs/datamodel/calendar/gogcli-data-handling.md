@@ -3,7 +3,7 @@
 How the gogcli tool handles Google Calendar API data structures.
 
 **Source**: Analysis of https://github.com/steipete/gogcli source code
-**Analysis Date**: 2025-01-29
+**Analysis Date**: 2026-02-06 (updated from 2025-01-29)
 
 ## Calendar Commands Overview
 
@@ -137,11 +137,16 @@ type eventWithDays struct {
 }
 ```
 
-### Computed Fields
+### Computed Fields (added Feb 2026, PR #92)
 - `StartDayOfWeek` / `EndDayOfWeek` - Monday, Tuesday, etc.
 - `Timezone` - Calendar timezone (if different from event)
 - `EventTimezone` - Event-specific timezone
 - `StartLocal` / `EndLocal` - RFC3339 in calendar's timezone
+
+**Timezone Control** (Feb 2026):
+- `--timezone TZ` flag for calendar commands
+- `GOG_TIMEZONE` environment variable for default
+- `config.json` can set `default_timezone`
 
 ### Text Output Fields
 ```
@@ -246,6 +251,8 @@ type EventReminder struct {
     Minutes int64  // 0 to 40320
 }
 ```
+
+**Note** (Feb 2026): gogcli uses `ForceSendFields` to ensure reminders are properly serialized in API payloads, even when setting empty overrides to clear default reminders.
 
 ## Implications for Data Model
 

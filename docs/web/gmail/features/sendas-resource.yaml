@@ -1,0 +1,5 @@
+source_url: "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs"
+download_timestamp: "T00:00:00Z"
+document_title: "REST Resource: users.settings.sendAs"
+notes: |
+  Official Gmail API documentation for SendAs resource

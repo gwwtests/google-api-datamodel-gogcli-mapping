@@ -123,7 +123,7 @@ These questions remain UNANSWERED in official documentation.
 
 ## Research Status
 
-See `/home/gw-t490/github/gwwtests/gogcli-api-datamodel/research/RESEARCH_REQUESTS.md` for tracking of specific questions answered by this archive.
+See `../../../research/RESEARCH_REQUESTS.md` for tracking of specific questions answered by this archive.
 
 ## Extraction Method
 

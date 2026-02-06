@@ -1,0 +1,11 @@
+source_url: "https://developers.google.com/gmail/api/reference/quota"
+download_timestamp: "2026-01-29T00:00:00Z"
+document_title: "Gmail API Usage Limits"
+key_concepts:
+  - "quota_units"
+  - "rate_limiting"
+  - "per_project_limits"
+  - "per_user_limits"
+  - "method_costs"
+notes: |
+  Complete quota limits and per-method usage costs for Gmail API

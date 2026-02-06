@@ -1,0 +1,12 @@
+source_url: "https://support.google.com/a/answer/1071518"
+download_timestamp: "2026-01-29T00:00:00Z"
+document_title: "Gmail Bandwidth Limits"
+key_concepts:
+  - "bandwidth_limits"
+  - "imap_limits"
+  - "pop_limits"
+  - "smtp_limits"
+  - "web_client_limits"
+  - "account_suspension"
+notes: |
+  Google Workspace admin documentation on Gmail bandwidth limits for web client, IMAP, and POP access
