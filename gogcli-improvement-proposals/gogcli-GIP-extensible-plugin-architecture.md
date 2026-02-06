@@ -5,6 +5,7 @@
 **Type:** Architecture / Design
 **Effort:** Medium-High (phased)
 **Value:** Strategic
+**GitHub Issue:** https://github.com/steipete/gogcli/issues/188
 
 ---
 

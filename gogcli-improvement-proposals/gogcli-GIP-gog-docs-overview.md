@@ -4,7 +4,8 @@
 **Status:** Proposal
 **Target Repository:** https://github.com/steipete/gogcli
 **Research Repository:** https://github.com/gwwtests/google-api-datamodel-gogcli-mapping
-**Last Updated:** 2026-02-05
+**Related Issue:** https://github.com/steipete/gogcli/issues/188 (Extensible Plugin Architecture)
+**Last Updated:** 2026-02-06
 
 ---
 
