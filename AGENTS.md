@@ -201,9 +201,32 @@ The gogcli tool uses these 14 Google APIs (study in order per FUTURE_WORK.md):
 11. **Cloud Identity API** (v1) - Groups
 12. **Keep API** (v1)
 
+## Maintenance & Coherence
+
+**IMPORTANT**: This repository requires consistent maintenance to stay useful.
+
+See **`MAINTENANCE.md`** for detailed procedures on:
+
+* Adding new archived documentation (file naming, YAML metadata)
+* Updating gogcli analysis when new features are added
+* Completing research questions and updating counts
+* Verifying cross-references and fixing broken links
+* Periodic coherence checks
+
+### Quick Coherence Checklist
+
+Before completing any work session:
+
+- [ ] `CURRENT_WORK.md` date is updated
+- [ ] Research counts match `RESEARCH_REQUESTS.md`
+- [ ] `FUTURE_WORK.md` checkboxes reflect completion status
+- [ ] New `.md` files have corresponding `.yaml` metadata
+- [ ] No broken cross-references introduced
+
 ## See Also
 
 * `REPO_OBJECTIVES.md` - Why this repository exists
 * `CURRENT_WORK.md` - What we're working on now
 * `FUTURE_WORK.md` - Roadmap of what's next
+* `MAINTENANCE.md` - How to maintain repository coherence
 * `research/RESEARCH_REQUESTS.md` - Pending research questions
