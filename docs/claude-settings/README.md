@@ -37,6 +37,27 @@ cp allow-readonly-gmail.claude.settings.json .claude/settings.local.json
 cp allow-readonly-gmail.claude.settings.json ~/.claude/settings.json
 ```
 
+### Generate Custom Settings with Multiple Clients
+
+If you use multiple client names (e.g., `default`, `prod`, `staging`), use the settings generator:
+
+```bash
+# Expand default template for your client names
+./scripts/generate-claude-settings.py \
+  --template default-all-tiers.claude.settings.json \
+  --clients default,prod,staging \
+  --add-variants with-client \
+  --output .claude/settings.json
+```
+
+This generates rules for all combinations of your clients and variants:
+- `gog gmail search` (base)
+- `gog --client default gmail search` (with your clients)
+- `gog --client prod gmail search`
+- `gog --client staging gmail search`
+
+See [GENERATION.md](GENERATION.md) for complete guide to customizing settings for your environment.
+
 ## File Naming Convention
 
 ```
@@ -292,6 +313,11 @@ jq -s '.[0].permissions.allow = ([.[].permissions.allow] | add | unique | sort) 
 
 ## See Also
 
+* **[GENERATION.md](GENERATION.md)** - Complete guide to generating customized settings
+* **[scripts/](scripts/)** - Settings generator tool:
+  - `generate-claude-settings.py` - Main script for transforming/regenerating settings
+  - `generate-claude-settings.README.md` - User guide with examples
+  - `generate-claude-settings.DEV_NOTES.md` - Implementation details
 * [Claude Code Official Documentation](https://docs.anthropic.com/en/docs/claude-code/settings)
 * [gogcli Repository](https://github.com/steipete/gogcli)
 * [gogcli Commands Classification](../gogcli-commands-classification.yaml)
