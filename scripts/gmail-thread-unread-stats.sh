@@ -102,8 +102,8 @@ log "Searching threads with query: $QUERY (max: $MAX)"
 search_json=$(gog "${GOG_FLAGS[@]}" gmail search "$QUERY" --max "$MAX" 2>/dev/null)
 
 # Extract thread IDs and message counts
-# gogcli --json gmail search returns an array of thread objects
-thread_count=$(echo "$search_json" | jq 'length')
+# gogcli --json gmail search returns {"threads": [...], "nextPageToken": "..."}
+thread_count=$(echo "$search_json" | jq '.threads | length')
 log "Found $thread_count threads"
 
 if [[ "$thread_count" -eq 0 ]]; then
@@ -116,23 +116,24 @@ processed=0
 skipped_single=0
 
 for i in $(seq 0 $((thread_count - 1))); do
-    thread_id=$(echo "$search_json" | jq -r ".[$i].id")
-    msg_count=$(echo "$search_json" | jq -r ".[$i].messageCount // 0")
-    subject=$(echo "$search_json" | jq -r '.[$i].subject // "(no subject)"' --argjson i "$i")
-    date_val=$(echo "$search_json" | jq -r '.[$i].date // ""' --argjson i "$i")
-    from_val=$(echo "$search_json" | jq -r '.[$i].from // ""' --argjson i "$i")
+    thread_id=$(echo "$search_json" | jq -r ".threads[$i].id")
+    msg_count=$(echo "$search_json" | jq -r ".threads[$i].messageCount // 0")
+    subject=$(echo "$search_json" | jq -r ".threads[$i].subject // \"(no subject)\"")
+    date_val=$(echo "$search_json" | jq -r ".threads[$i].date // \"\"")
+    from_val=$(echo "$search_json" | jq -r ".threads[$i].from // \"\"")
 
     # Skip single-message threads (ratio is trivially 0 or 1)
     if [[ "$msg_count" -le 1 ]]; then
         skipped_single=$((skipped_single + 1))
 
         # Still output them for completeness — fetch to check UNREAD
+        # gogcli --json gmail thread get returns {"thread": {"messages": [...]}, "downloaded": ...}
         thread_json=$(gog "${GOG_FLAGS[@]}" gmail thread get "$thread_id" 2>/dev/null)
-        total=$(echo "$thread_json" | jq '[.messages // [] | length] | add // 0')
+        total=$(echo "$thread_json" | jq '.thread.messages | length')
         if [[ "$total" -eq 0 ]]; then
             total=1
         fi
-        unread=$(echo "$thread_json" | jq '[.messages // [] | .[] | select(.labelIds != null) | select(.labelIds | index("UNREAD"))] | length')
+        unread=$(echo "$thread_json" | jq '[.thread.messages[] | select(.labelIds != null) | select(.labelIds | index("UNREAD"))] | length')
         ratio=$(awk "BEGIN {printf \"%.4f\", $unread / $total}")
 
         # Sanitize subject: remove commas, newlines, quotes for CSV safety
@@ -153,11 +154,12 @@ for i in $(seq 0 $((thread_count - 1))); do
     thread_json=$(gog "${GOG_FLAGS[@]}" gmail thread get "$thread_id" 2>/dev/null)
 
     # Count total messages and unread messages
-    total=$(echo "$thread_json" | jq '[.messages // [] | length] | add // 0')
+    # gogcli --json gmail thread get returns {"thread": {"messages": [...]}, "downloaded": ...}
+    total=$(echo "$thread_json" | jq '.thread.messages | length')
     if [[ "$total" -eq 0 ]]; then
         total="$msg_count"
     fi
-    unread=$(echo "$thread_json" | jq '[.messages // [] | .[] | select(.labelIds != null) | select(.labelIds | index("UNREAD"))] | length')
+    unread=$(echo "$thread_json" | jq '[.thread.messages[] | select(.labelIds != null) | select(.labelIds | index("UNREAD"))] | length')
 
     # Compute ratio
     if [[ "$total" -gt 0 ]]; then
